@@ -65,18 +65,36 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="game\Element.cpp" />
+    <ClCompile Include="game\LaserBeamBullet.cpp" />
+    <ClCompile Include="game\Ship.cpp" />
+    <ClCompile Include="game\Weapon.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="services\NullControls.cpp" />
+    <ClCompile Include="services\NullGraphics.cpp" />
+    <ClCompile Include="services\NullSound.cpp" />
+    <ClCompile Include="structs\Point.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="game\Element.h" />
+    <ClInclude Include="game\LaserBeam.h" />
+    <ClInclude Include="game\LaserBeamBullet.h" />
+    <ClInclude Include="game\Ship.h" />
+    <ClInclude Include="game\Weapon.h" />
+    <ClInclude Include="patterns\Cloneable.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="services\IControls.h" />
     <ClInclude Include="services\IGraphics.h" />
     <ClInclude Include="services\ISound.h" />
     <ClInclude Include="services\NullControls.h" />
-    <ClInclude Include="services\Ship.h" />
+    <ClInclude Include="services\NullGraphics.h" />
+    <ClInclude Include="services\NullSound.h" />
+    <ClInclude Include="structs\Point.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

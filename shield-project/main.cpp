@@ -14,6 +14,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 */
 int main()
 {
+	// NEED MENU
 	Engine e;
 	e.run();
 	system("pause");

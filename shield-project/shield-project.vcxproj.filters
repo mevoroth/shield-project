@@ -13,8 +13,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Game">
+    <Filter Include="game">
       <UniqueIdentifier>{e00bc316-c459-4aa7-af43-86f1dbe2b394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="structs">
+      <UniqueIdentifier>{0023588d-3df3-4540-98fd-3d124c62978d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="patterns">
+      <UniqueIdentifier>{e394724a-2831-4282-b7a4-9f5e6e516233}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\elements">
+      <UniqueIdentifier>{14875bb8-b36a-4db7-b6f2-35a8c9dd5ab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\weapons">
+      <UniqueIdentifier>{f060c3ba-f498-472c-9577-1f1d94264268}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -29,6 +41,27 @@
     </ClCompile>
     <ClCompile Include="services\NullControls.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="services\NullGraphics.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="structs\Point.cpp">
+      <Filter>structs</Filter>
+    </ClCompile>
+    <ClCompile Include="services\NullSound.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="game\Weapon.cpp">
+      <Filter>game\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="game\Element.cpp">
+      <Filter>game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\Ship.cpp">
+      <Filter>game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\LaserBeamBullet.cpp">
+      <Filter>game\elements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,8 +83,35 @@
     <ClInclude Include="services\NullControls.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="services\Ship.h">
-      <Filter>Game</Filter>
+    <ClInclude Include="services\NullGraphics.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="structs\Point.h">
+      <Filter>structs</Filter>
+    </ClInclude>
+    <ClInclude Include="services\NullSound.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="patterns\Cloneable.h">
+      <Filter>patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Weapon.h">
+      <Filter>game\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="game\LaserBeam.h">
+      <Filter>game\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Element.h">
+      <Filter>game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Ship.h">
+      <Filter>game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\LaserBeamBullet.h">
+      <Filter>game\elements</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
