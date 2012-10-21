@@ -17,7 +17,7 @@ namespace game {
 		Ship( structs::Point*, Weapon*, int );
 		Ship( const Ship& );
 		~Ship();
-		const std::vector<Element>& shoot() const;
+		const std::vector<Element*>& shoot() const;
 		int getHpMax( void ) const;
 		int getHp( void ) const;
 

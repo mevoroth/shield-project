@@ -1,6 +1,8 @@
 #ifndef _ELEMENT_H_
 #define _ELEMENT_H_
 
+#include <Windows.h>
+
 #include "..\structs\Point.h"
 
 namespace shield {
@@ -11,18 +13,18 @@ namespace game {
 		Element( structs::Point* );
 		Element( const Element& );
 		~Element();
-		void spawn( double );
-		void refresh( double );
-		double getCurrentTime() const;
-		double getSpawnTime() const;
-		const structs::Point* getSpawn();
+		void spawn( void );
+		void refresh( void );
+		unsigned long long getCurrentTime( void ) const;
+		unsigned long long getSpawnTime( void ) const;
+		const structs::Point* getSpawn( void ) const;
 
 		virtual bool hit( const structs::Point* ) const = 0;
 
 	private:
 		structs::Point* _spawn;
-		double _spawnTime;
-		double _currentTime;
+		unsigned long long _spawnTime;
+		unsigned long long _currentTime;
 	};
 };
 };

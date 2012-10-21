@@ -21,9 +21,9 @@ game::Ship::~Ship()
 {
 	delete _w;
 };
-const std::vector<game::Element>& game::Ship::shoot() const
+const std::vector<game::Element*>& game::Ship::shoot() const
 {
-	return _w->shoot();
+	return _w->shoot( &getSpawn()->clone() );
 };
 int game::Ship::getHp( void ) const
 {

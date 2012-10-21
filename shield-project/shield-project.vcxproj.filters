@@ -63,6 +63,9 @@
     <ClCompile Include="game\LaserBeamBullet.cpp">
       <Filter>game\elements</Filter>
     </ClCompile>
+    <ClCompile Include="game\LaserBeam.cpp">
+      <Filter>game\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="services\ISound.h">

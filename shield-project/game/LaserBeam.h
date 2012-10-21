@@ -8,7 +8,8 @@ namespace game {
 	class LaserBeam : public Weapon
 	{
 	public:
-		const std::vector<Element>& shoot() const;
+		//LaserBeam& clone() const;
+		const std::vector<Element*>& shoot( structs::Point* ) const;
 	};
 };
 };

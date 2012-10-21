@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="game\Element.cpp" />
+    <ClCompile Include="game\LaserBeam.cpp" />
     <ClCompile Include="game\LaserBeamBullet.cpp" />
     <ClCompile Include="game\Ship.cpp" />
     <ClCompile Include="game\Weapon.cpp" />
