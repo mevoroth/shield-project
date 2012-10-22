@@ -2,7 +2,6 @@
 #define _ELEMENT_H_
 
 #include <Windows.h>
-
 #include "..\structs\Point.h"
 
 namespace shield {

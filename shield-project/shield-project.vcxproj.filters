@@ -66,6 +66,12 @@
     <ClCompile Include="game\LaserBeam.cpp">
       <Filter>game\weapons</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="game\Hope.cpp">
+      <Filter>game\elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="services\ISound.h">
@@ -112,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="game\LaserBeamBullet.h">
       <Filter>game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Hope.h">
+      <Filter>game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

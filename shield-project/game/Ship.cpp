@@ -25,6 +25,18 @@ const std::vector<game::Element*>& game::Ship::shoot() const
 {
 	return _w->shoot( &getSpawn()->clone() );
 };
+void game::Ship::setWeapon( Weapon* w )
+{
+	if (!_w)
+	{
+		delete _w;
+	}
+	_w = w;
+};
+const game::Weapon* game::Ship::getWeapon() const
+{
+	return _w;
+};
 int game::Ship::getHp( void ) const
 {
 	return _hp;

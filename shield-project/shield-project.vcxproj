@@ -65,7 +65,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="game\Element.cpp" />
+    <ClCompile Include="game\Hope.cpp" />
     <ClCompile Include="game\LaserBeam.cpp" />
     <ClCompile Include="game\LaserBeamBullet.cpp" />
     <ClCompile Include="game\Ship.cpp" />
@@ -79,7 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="game\Element.h" />
+    <ClInclude Include="game\Hope.h" />
     <ClInclude Include="game\LaserBeam.h" />
     <ClInclude Include="game\LaserBeamBullet.h" />
     <ClInclude Include="game\Ship.h" />
@@ -92,6 +96,7 @@
     <ClInclude Include="services\NullControls.h" />
     <ClInclude Include="services\NullGraphics.h" />
     <ClInclude Include="services\NullSound.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="structs\Point.h" />
   </ItemGroup>
   <ItemGroup>

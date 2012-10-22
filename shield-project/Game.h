@@ -3,10 +3,12 @@
 
 #include <list>
 #include "game\Element.h"
+#include "game\Hope.h"
 
-using namespace game;
+using namespace shield::game;
 
-namespace shield {
+namespace shield
+{
 	class Game
 	{
 	public:
@@ -15,7 +17,8 @@ namespace shield {
 		/**
 		 * Charger une partie
 		 */
-		void load();
+		void load( Hope* );
+		void create();
 
 	private:
 		std::list<Element*>* _elements;

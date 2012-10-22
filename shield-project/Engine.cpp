@@ -5,6 +5,8 @@
 #include "services\NullGraphics.h"
 #include "services\NullSound.h"
 
+#include "Game.h"
+
 using namespace shield;
 
 Engine::Engine()
@@ -17,4 +19,6 @@ Engine::Engine()
 void Engine::run()
 {
 	// Load menu
+	Game g;
+	g.create();
 };
