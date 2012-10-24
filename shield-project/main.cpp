@@ -4,14 +4,14 @@
 #include <iostream>
 
 using namespace shield;
-/*
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
+
+int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow )
 {
-	Engine e = Engine();
+	Engine e = Engine( hInstance, nCmdShow );
 	e.run();
 	return 0;
 };
-*/
+/*
 int main()
 {
 	// NEED MENU
@@ -20,3 +20,4 @@ int main()
 	system("pause");
 	return 0;
 }
+*/

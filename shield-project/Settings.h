@@ -9,6 +9,9 @@ namespace settings {
 	namespace player {
 		const int BASE_LIFE = 3;
 	};
+	namespace game {
+		const char WINDOW[] = "Shield";
+	};
 };
 };
 

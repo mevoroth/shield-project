@@ -3,7 +3,7 @@
 
 using namespace shield;
 
-services::NullControls::NullControls()
+services::NullControls::NullControls( void )
 {
 	std::cout << "NullControls initialized" << std::endl;
 };

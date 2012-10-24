@@ -28,6 +28,30 @@
     <Filter Include="game\weapons">
       <UniqueIdentifier>{f060c3ba-f498-472c-9577-1f1d94264268}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\services">
+      <UniqueIdentifier>{3a8f4f79-cddf-429f-a21e-9f1e0dd36916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\services\controls">
+      <UniqueIdentifier>{d3a25096-de55-4ece-bac1-1e6c5b932110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\services\graphics">
+      <UniqueIdentifier>{3dde8fc0-924e-4470-8ee4-6b5b95e201eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\services\sound">
+      <UniqueIdentifier>{a53d36b8-0db8-4a69-a450-1de0145b6a41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\services">
+      <UniqueIdentifier>{c1117ca5-f3fc-4d25-a3d8-f8c152c7f884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\services\controls">
+      <UniqueIdentifier>{a05726a1-12f7-464e-b0cb-6f317fd43c4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\services\graphics">
+      <UniqueIdentifier>{1ea2d0ea-35e0-471f-8286-a848a46ebb5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\services\sound">
+      <UniqueIdentifier>{c070f968-7c91-4138-91a9-625914191836}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,17 +63,8 @@
     <ClCompile Include="Service.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="services\NullControls.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="services\NullGraphics.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="structs\Point.cpp">
       <Filter>structs</Filter>
-    </ClCompile>
-    <ClCompile Include="services\NullSound.cpp">
-      <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="game\Weapon.cpp">
       <Filter>game\weapons</Filter>
@@ -72,34 +87,28 @@
     <ClCompile Include="game\Hope.cpp">
       <Filter>game\elements</Filter>
     </ClCompile>
+    <ClCompile Include="services\NullControls.cpp">
+      <Filter>Fichiers sources\services\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="services\NullGraphics.cpp">
+      <Filter>Fichiers sources\services\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="services\NullSound.cpp">
+      <Filter>Fichiers sources\services\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="services\KeyboardControls.cpp">
+      <Filter>Fichiers sources\services\controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="services\ISound.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="services\IControls.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="services\IGraphics.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Service.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="services\NullControls.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="services\NullGraphics.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="structs\Point.h">
       <Filter>structs</Filter>
-    </ClInclude>
-    <ClInclude Include="services\NullSound.h">
-      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="patterns\Cloneable.h">
       <Filter>patterns</Filter>
@@ -127,6 +136,27 @@
     </ClInclude>
     <ClInclude Include="Settings.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="services\IControls.h">
+      <Filter>Fichiers d%27en-tête\services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\NullControls.h">
+      <Filter>Fichiers d%27en-tête\services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\IGraphics.h">
+      <Filter>Fichiers d%27en-tête\services\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="services\NullGraphics.h">
+      <Filter>Fichiers d%27en-tête\services\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="services\ISound.h">
+      <Filter>Fichiers d%27en-tête\services\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="services\NullSound.h">
+      <Filter>Fichiers d%27en-tête\services\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="services\KeyboardControls.h">
+      <Filter>Fichiers d%27en-tête\services\controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

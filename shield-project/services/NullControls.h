@@ -8,7 +8,7 @@ namespace services {
 	class NullControls : public IControls
 	{
 	public:
-		NullControls();
+		NullControls( void );
 	};
 };
 };

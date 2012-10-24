@@ -74,6 +74,7 @@
     <ClCompile Include="game\Weapon.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Service.cpp" />
+    <ClCompile Include="services\KeyboardControls.cpp" />
     <ClCompile Include="services\NullControls.cpp" />
     <ClCompile Include="services\NullGraphics.cpp" />
     <ClCompile Include="services\NullSound.cpp" />
@@ -90,6 +91,7 @@
     <ClInclude Include="game\Weapon.h" />
     <ClInclude Include="patterns\Cloneable.h" />
     <ClInclude Include="Service.h" />
+    <ClInclude Include="services\KeyboardControls.h" />
     <ClInclude Include="services\IControls.h" />
     <ClInclude Include="services\IGraphics.h" />
     <ClInclude Include="services\ISound.h" />

@@ -19,6 +19,7 @@ namespace shield
 		 */
 		void load( Hope* );
 		void create();
+		void run();
 
 	private:
 		std::list<Element*>* _elements;

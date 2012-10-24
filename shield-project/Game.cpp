@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "game\LaserBeam.h"
+#include "Service.h"
 #include "Settings.h"
+
 
 using namespace shield;
 
@@ -31,4 +33,8 @@ void Game::create()
 			settings::player::BASE_LIFE
 		)
 	);
+};
+void Game::run()
+{
+	//Service::getControls();
 };
