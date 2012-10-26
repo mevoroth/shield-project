@@ -99,6 +99,9 @@
     <ClCompile Include="services\KeyboardControls.cpp">
       <Filter>Fichiers sources\services\controls</Filter>
     </ClCompile>
+    <ClCompile Include="services\Direct3D11Graphics.cpp">
+      <Filter>Fichiers sources\services\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Service.h">
@@ -157,6 +160,15 @@
     </ClInclude>
     <ClInclude Include="services\KeyboardControls.h">
       <Filter>Fichiers d%27en-tête\services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\Action.h">
+      <Filter>Fichiers d%27en-tête\services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\State.h">
+      <Filter>Fichiers d%27en-tête\services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\Direct3D11Graphics.h">
+      <Filter>Fichiers d%27en-tête\services\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

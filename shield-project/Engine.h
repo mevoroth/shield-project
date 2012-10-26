@@ -12,6 +12,7 @@ namespace shield
 		void run();
 
 	private:
+		HWND _window;
 		WNDCLASSEX* _windowClass;
 		HINSTANCE _hInst;
 		int _nCmdShow;

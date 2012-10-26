@@ -48,6 +48,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>D3D11.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -74,6 +75,7 @@
     <ClCompile Include="game\Weapon.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Service.cpp" />
+    <ClCompile Include="services\Direct3D11Graphics.cpp" />
     <ClCompile Include="services\KeyboardControls.cpp" />
     <ClCompile Include="services\NullControls.cpp" />
     <ClCompile Include="services\NullGraphics.cpp" />
@@ -91,6 +93,8 @@
     <ClInclude Include="game\Weapon.h" />
     <ClInclude Include="patterns\Cloneable.h" />
     <ClInclude Include="Service.h" />
+    <ClInclude Include="services\Action.h" />
+    <ClInclude Include="services\Direct3D11Graphics.h" />
     <ClInclude Include="services\KeyboardControls.h" />
     <ClInclude Include="services\IControls.h" />
     <ClInclude Include="services\IGraphics.h" />
@@ -98,6 +102,7 @@
     <ClInclude Include="services\NullControls.h" />
     <ClInclude Include="services\NullGraphics.h" />
     <ClInclude Include="services\NullSound.h" />
+    <ClInclude Include="services\State.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="structs\Point.h" />
   </ItemGroup>

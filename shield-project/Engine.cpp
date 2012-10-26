@@ -1,17 +1,17 @@
 #include "Engine.h"
 #include "Service.h"
 
-#include "services\NullControls.h"
-#include "services\NullGraphics.h"
+#include "services\KeyboardControls.h"
+#include "services\Direct3D11Graphics.h"
 #include "services\NullSound.h"
 
 #include "Game.h"
 #include "Settings.h"
-#include <fstream>
 using namespace shield;
 
 Engine::Engine( HINSTANCE hInst, int nCmdShow )
-	: _windowClass( 0 ),
+	: _window( 0 ),
+	_windowClass( 0 ),
 	_hInst( hInst ),
 	_nCmdShow( nCmdShow )
 {
@@ -22,11 +22,9 @@ Engine::Engine( HINSTANCE hInst, int nCmdShow )
 	}
 	catch (char* err)
 	{
-		std::ofstream fichier("output");
-		fichier << err << std::endl;
 	}
-	//Service::setControls( new services::KeyboardControls( hInst ) );
-	Service::setGraphics( new services::NullGraphics() );
+	Service::setControls( new services::KeyboardControls() );
+	Service::setGraphics( new services::Direct3D11Graphics(_window) );
 	Service::setSound( new services::NullSound() );
 };
 
@@ -38,6 +36,16 @@ void Engine::run()
 	Game g;
 	g.create();
 	g.run();
+
+	MSG msg = {0};
+	while ( msg.message != WM_QUIT )
+	{
+		if ( PeekMessage( &msg, 0, 0, 0, PM_REMOVE ) )
+		{
+			TranslateMessage( &msg );
+			DispatchMessage( &msg );
+		}
+	}
 };
 
 
@@ -65,7 +73,8 @@ void Engine::_registerClass()
 };
 void Engine::_createWindow()
 {
-	HWND window = CreateWindow(
+	// Create window
+	_window = CreateWindow(
 		"ShieldWindow",
 		"Shield",
 		WS_VISIBLE | WS_MAXIMIZE | WS_EX_TOPMOST,
@@ -78,12 +87,11 @@ void Engine::_createWindow()
 		_hInst,
 		0
 	);
-	if ( !window )
+	if ( !_window )
 	{
-		DWORD w = GetLastError();
 		throw "Can't create window";
 	}
-	ShowWindow( window, _nCmdShow );
+	ShowWindow( _window, _nCmdShow );
 };
 LRESULT CALLBACK shield::WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -92,6 +100,14 @@ LRESULT CALLBACK shield::WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM
 
 	switch( message )
 	{
+		case WM_KEYDOWN:
+			Service::getControls()->keyDown( (void*)&wParam, (void*)&lParam );
+			break;
+
+		case WM_KEYUP:
+			Service::getControls()->keyUp( (void*)&wParam, (void*)&lParam );
+			break;
+
 		case WM_PAINT:
 			hdc = BeginPaint( hWnd, &ps );
 			EndPaint( hWnd, &ps );
