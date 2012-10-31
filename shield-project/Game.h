@@ -22,10 +22,37 @@ namespace shield
 		void create();
 		void run();
 
+		/**
+		 * Déplacement
+		 */
 		void Move( const structs::Vector3& );
+		/**
+		 * Déplacement rapide
+		 */
+		void Dash( const structs::Vector3& );
+		/**
+		 * Charge l'arme principal
+		 */
+		void Charge();
+		/**
+		 * Tire avec l'arme principal
+		 */
+		void Shoot();
+		/**
+		 * Tire avec l'arme secondaire
+		 */
+		void Burst();
+		/**
+		 * Frappe avec l'arme corps-à-corps
+		 */
+		void Slash();
+		/**
+		 * Protection
+		 */
+		void Shield();
 
 	private:
-		std::list<Element*>* _elements;
+		std::list<Element*> _elements;
 	};
 };
 

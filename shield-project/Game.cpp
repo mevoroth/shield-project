@@ -8,22 +8,20 @@ using namespace shield;
 
 Game::Game( void )
 {
-	_elements = new std::list<Element*>;
 	//Service::getControls()->bind( 
 };
 Game::~Game( void )
 {
-	for ( std::list<Element*>::iterator it = _elements->begin();
-		it != _elements->end();
+	for ( std::list<Element*>::iterator it = _elements.begin();
+		it != _elements.end();
 		++it )
 	{
 		delete *it;
 	}
-	delete _elements;
 };
 void Game::load( Hope* s )
 {
-	_elements->push_back( s );
+	_elements.push_back( s );
 };
 void Game::create()
 {

@@ -52,6 +52,9 @@
     <Filter Include="Fichiers sources\services\sound">
       <UniqueIdentifier>{c070f968-7c91-4138-91a9-625914191836}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game\actions">
+      <UniqueIdentifier>{6a8b5bad-298a-4f3f-936c-06533ee701ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,6 +104,18 @@
     </ClCompile>
     <ClCompile Include="services\Direct3D11Graphics.cpp">
       <Filter>Fichiers sources\services\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveDown.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveLeft.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveRight.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveUp.cpp">
+      <Filter>game\actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +184,21 @@
     </ClInclude>
     <ClInclude Include="services\Direct3D11Graphics.h">
       <Filter>Fichiers d%27en-tête\services\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveDown.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveLeft.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveRight.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveUp.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\Shoot.h">
+      <Filter>game\actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

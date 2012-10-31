@@ -67,6 +67,10 @@
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="game\actions\MoveDown.cpp" />
+    <ClCompile Include="game\actions\MoveLeft.cpp" />
+    <ClCompile Include="game\actions\MoveRight.cpp" />
+    <ClCompile Include="game\actions\MoveUp.cpp" />
     <ClCompile Include="game\Element.cpp" />
     <ClCompile Include="game\Hope.cpp" />
     <ClCompile Include="game\LaserBeam.cpp" />
@@ -85,6 +89,11 @@
   <ItemGroup>
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="game\actions\MoveDown.h" />
+    <ClInclude Include="game\actions\MoveLeft.h" />
+    <ClInclude Include="game\actions\MoveRight.h" />
+    <ClInclude Include="game\actions\MoveUp.h" />
+    <ClInclude Include="game\actions\Shoot.h" />
     <ClInclude Include="game\Element.h" />
     <ClInclude Include="game\Hope.h" />
     <ClInclude Include="game\LaserBeam.h" />
