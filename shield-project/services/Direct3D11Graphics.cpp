@@ -12,11 +12,8 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 	_device( 0 ),
 	_deviceContext( 0 ),
 	_swapChain( 0 ),
-	_renderTarget( 0 ),
-	_shaders( 0 )
+	_renderTarget( 0 )
 {
-	_shaders = new map<UINT16, ID3D11DeviceChild*>;
-
 	_initDeviceAndSwapChain();
 	_initRenderTarget();
 	_initViewport();
@@ -34,7 +31,7 @@ template<class Shader> void services::Direct3D11Graphics::loadShader( UINT16 key
 	pair<map<UINT16, ID3D11DeviceChild*>::const_iterator, bool> ret;
 
 	_loadShader( shaderBlob, shader );
-	ret = _shaders->insert(
+	ret = _shaders.insert(
 		pair<map<UINT16, ID3D11DeviceChild*>(
 			key,
 			shader
@@ -47,8 +44,8 @@ template<class Shader> void services::Direct3D11Graphics::loadShader( UINT16 key
 };
 template<class Shader> void services::Direct3D11Graphics::useShader( UINT16 key )
 {
-	map<UINT16, ID3D11DeviceChild*>::const_iterator element = _shaders->find( key );
-	if ( element != _shaders->end() )
+	map<UINT16, ID3D11DeviceChild*>::const_iterator element = _shaders.find( key );
+	if ( element != _shaders.end() )
 	{
 		_useShader( dynamic_cast<Shader*>(element->second) );
 	}
@@ -73,14 +70,39 @@ void services::Direct3D11Graphics::_useShader( ID3D11PixelShader* shader )
 {
 	_deviceContext->PSSetShader( shader, 0, 0 );
 };
+void services::Direct3D11Graphics::_createInputLayout( ID3D10Blob* shaderBlob )
+{
+	D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+	{
+		{"SV_Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"SV_Target", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0,
+			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	HRESULT hr = _device->CreateInputLayout(
+		inputElementDesc,
+		sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+		shaderBlob->GetBufferPointer(),
+		shaderBlob->GetBufferSize(),
+		&_inputLayout
+	);
+	if ( FAILED(hr) )
+	{
+		throw "Failed to create input layout";
+	}
+	_deviceContext->IASetInputLayout( _inputLayout );
+};
 void services::Direct3D11Graphics::_loadShader( ID3D10Blob* shaderBlob, ID3D11VertexShader*& shader )
 {
+	
 	_device->CreateVertexShader(
 		shaderBlob->GetBufferPointer(),
 		shaderBlob->GetBufferSize(),
 		0,
 		&shader
 	);
+	_createInputLayout( shaderBlob );
 };
 void services::Direct3D11Graphics::_loadShader( ID3D10Blob* shaderBlob, ID3D11HullShader*& shader )
 {

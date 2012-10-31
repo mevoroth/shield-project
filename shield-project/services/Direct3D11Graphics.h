@@ -38,7 +38,8 @@ namespace services {
 		/**
 		 * Bibliothèque de shaders
 		 */
-		map<UINT16, ID3D11DeviceChild*>* _shaders;
+		map<UINT16, ID3D11DeviceChild*> _shaders;
+		ID3D11InputLayout* _inputLayout;
 
 		IDXGIFactory* _getFactory( void );
 		void _initDeviceAndSwapChain( void );
@@ -84,6 +85,7 @@ namespace services {
 		 * Use pixel shader
 		 */
 		void _useShader( ID3D11PixelShader* );
+		void _createInputLayout( ID3D10Blob* );
 	};
 };
 };

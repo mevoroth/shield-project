@@ -15,14 +15,14 @@ Engine::Engine( HINSTANCE hInst, int nCmdShow )
 	_hInst( hInst ),
 	_nCmdShow( nCmdShow )
 {
-	try
-	{
+	//try
+	//{
 		_registerClass();
 		_createWindow();
-	}
-	catch (char* err)
-	{
-	}
+	//}
+	//catch (char* err)
+	//{
+	//}
 	Service::setControls( new services::KeyboardControls() );
 	Service::setGraphics( new services::Direct3D11Graphics(_window) );
 	Service::setSound( new services::NullSound() );
@@ -47,7 +47,6 @@ void Engine::run()
 		}
 	}
 };
-
 
 void Engine::_registerClass()
 {

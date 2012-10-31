@@ -9,6 +9,7 @@ using namespace shield;
 Game::Game( void )
 {
 	_elements = new std::list<Element*>;
+	//Service::getControls()->bind( 
 };
 Game::~Game( void )
 {
