@@ -117,6 +117,30 @@
     <ClCompile Include="game\actions\MoveUp.cpp">
       <Filter>game\actions</Filter>
     </ClCompile>
+    <ClCompile Include="game\actions\DashLeft.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\DashRight.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\Burst.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\Charge.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\Shield.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\Shoot.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\Slash.cpp">
+      <Filter>game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="structs\Vector3.cpp">
+      <Filter>structs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Service.h">
@@ -199,6 +223,27 @@
     </ClInclude>
     <ClInclude Include="game\actions\Shoot.h">
       <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\Burst.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\Charge.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\DashLeft.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\DashRight.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\Shield.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\Slash.h">
+      <Filter>game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\Vector3.h">
+      <Filter>structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

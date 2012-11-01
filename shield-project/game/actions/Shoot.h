@@ -1,6 +1,11 @@
 #ifndef _SHOOT_H_
 #define _SHOOT_H_
 
+#include "..\..\services\Action.h"
+#include "..\..\Game.h"
+
+using namespace shield;
+
 namespace shield {
 namespace game {
 namespace actions {

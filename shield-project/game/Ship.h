@@ -38,7 +38,7 @@ namespace game {
 		 * Récupérer l'arme
 		 * @return Arme
 		 */
-		const Weapon* getWeapon() const;
+		const Weapon& getWeapon() const;
 		int getHpMax( void ) const;
 		int getHp( void ) const;
 

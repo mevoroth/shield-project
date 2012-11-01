@@ -42,7 +42,7 @@ unsigned long long game::Element::getSpawnTime( void ) const
 {
 	return _spawnTime;
 };
-const structs::Point* game::Element::getSpawn( void ) const
+const structs::Point& game::Element::getSpawn( void ) const
 {
-	return _spawn;
+	return *_spawn;
 };

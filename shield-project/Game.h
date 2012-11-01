@@ -23,36 +23,41 @@ namespace shield
 		void run();
 
 		/**
-		 * Déplacement
+		 * Déplacement (forme mecha)
 		 */
 		void Move( const structs::Vector3& );
 		/**
-		 * Déplacement rapide
+		 * Déplacement rapide (forme mecha)
 		 */
 		void Dash( const structs::Vector3& );
 		/**
-		 * Charge l'arme principal
+		 * Charge l'arme principal (forme mecha)
 		 */
 		void Charge();
 		/**
-		 * Tire avec l'arme principal
+		 * Tire avec l'arme principal (forme mecha)
 		 */
 		void Shoot();
 		/**
-		 * Tire avec l'arme secondaire
+		 * Tire avec l'arme secondaire (forme mecha)
 		 */
 		void Burst();
 		/**
-		 * Frappe avec l'arme corps-à-corps
+		 * Frappe avec l'arme corps-à-corps (forme mecha)
 		 */
 		void Slash();
 		/**
-		 * Protection
+		 * Protection (forme mecha)
 		 */
 		void Shield();
+		/**
+		 * Switch entre forme mecha et forme vaisseau
+		 */
+		void SwapForm();
 
 	private:
 		std::list<Element*> _elements;
+		Hope* _getPlayer();
 	};
 };
 

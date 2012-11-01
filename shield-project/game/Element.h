@@ -16,9 +16,9 @@ namespace game {
 		void refresh( void );
 		unsigned long long getCurrentTime( void ) const;
 		unsigned long long getSpawnTime( void ) const;
-		const structs::Point* getSpawn( void ) const;
+		const structs::Point& getSpawn( void ) const;
 
-		virtual bool hit( const structs::Point* ) const = 0;
+		virtual bool hit( const structs::Point& ) const = 0;
 
 	private:
 		structs::Point* _spawn;
