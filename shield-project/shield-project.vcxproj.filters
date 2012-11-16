@@ -1,252 +1,274 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Fichiers sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Fichiers de ressources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="game">
+    <Filter Include="shield">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="shield.game">
       <UniqueIdentifier>{e00bc316-c459-4aa7-af43-86f1dbe2b394}</UniqueIdentifier>
     </Filter>
-    <Filter Include="structs">
-      <UniqueIdentifier>{0023588d-3df3-4540-98fd-3d124c62978d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="patterns">
-      <UniqueIdentifier>{e394724a-2831-4282-b7a4-9f5e6e516233}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\elements">
+    <Filter Include="shield.game\elements">
       <UniqueIdentifier>{14875bb8-b36a-4db7-b6f2-35a8c9dd5ab0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="game\weapons">
+    <Filter Include="shield.game\weapons">
       <UniqueIdentifier>{f060c3ba-f498-472c-9577-1f1d94264268}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\services">
+    <Filter Include="shield.game\actions">
+      <UniqueIdentifier>{6a8b5bad-298a-4f3f-936c-06533ee701ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shield.patterns">
+      <UniqueIdentifier>{e394724a-2831-4282-b7a4-9f5e6e516233}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shield.services">
       <UniqueIdentifier>{3a8f4f79-cddf-429f-a21e-9f1e0dd36916}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\services\controls">
+    <Filter Include="shield.services\controls">
       <UniqueIdentifier>{d3a25096-de55-4ece-bac1-1e6c5b932110}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\services\graphics">
+    <Filter Include="shield.services\graphics">
       <UniqueIdentifier>{3dde8fc0-924e-4470-8ee4-6b5b95e201eb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\services\sound">
+    <Filter Include="shield.services\sound">
       <UniqueIdentifier>{a53d36b8-0db8-4a69-a450-1de0145b6a41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\services">
-      <UniqueIdentifier>{c1117ca5-f3fc-4d25-a3d8-f8c152c7f884}</UniqueIdentifier>
+    <Filter Include="shield.services\meshloader">
+      <UniqueIdentifier>{10ae251c-d597-4e2a-a1ac-a2d6bf81e4ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\services\controls">
-      <UniqueIdentifier>{a05726a1-12f7-464e-b0cb-6f317fd43c4d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\services\graphics">
-      <UniqueIdentifier>{1ea2d0ea-35e0-471f-8286-a848a46ebb5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\services\sound">
-      <UniqueIdentifier>{c070f968-7c91-4138-91a9-625914191836}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\actions">
-      <UniqueIdentifier>{6a8b5bad-298a-4f3f-936c-06533ee701ad}</UniqueIdentifier>
+    <Filter Include="shield.structs">
+      <UniqueIdentifier>{0023588d-3df3-4540-98fd-3d124c62978d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Service.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="structs\Point.cpp">
-      <Filter>structs</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Weapon.cpp">
-      <Filter>game\weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Element.cpp">
-      <Filter>game\elements</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Ship.cpp">
-      <Filter>game\elements</Filter>
-    </ClCompile>
-    <ClCompile Include="game\LaserBeamBullet.cpp">
-      <Filter>game\elements</Filter>
-    </ClCompile>
-    <ClCompile Include="game\LaserBeam.cpp">
-      <Filter>game\weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Hope.cpp">
-      <Filter>game\elements</Filter>
-    </ClCompile>
-    <ClCompile Include="services\NullControls.cpp">
-      <Filter>Fichiers sources\services\controls</Filter>
-    </ClCompile>
-    <ClCompile Include="services\NullGraphics.cpp">
-      <Filter>Fichiers sources\services\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="services\NullSound.cpp">
-      <Filter>Fichiers sources\services\sound</Filter>
-    </ClCompile>
-    <ClCompile Include="services\KeyboardControls.cpp">
-      <Filter>Fichiers sources\services\controls</Filter>
-    </ClCompile>
-    <ClCompile Include="services\Direct3D11Graphics.cpp">
-      <Filter>Fichiers sources\services\graphics</Filter>
+      <Filter>shield.structs</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\MoveDown.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\MoveLeft.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\MoveRight.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\MoveUp.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\DashLeft.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\DashRight.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\Burst.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\Charge.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\Shield.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\Shoot.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="game\actions\Slash.cpp">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClCompile>
     <ClCompile Include="structs\Vector3.cpp">
-      <Filter>structs</Filter>
+      <Filter>shield.structs</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\ActionFactory.cpp">
+      <Filter>shield.game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\BulletFactory.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Element.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Hope.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\LaserBeamBullet.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Ship.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\weapons\Weapon.cpp">
+      <Filter>shield.game\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>shield</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>shield</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>shield</Filter>
+    </ClCompile>
+    <ClCompile Include="Service.cpp">
+      <Filter>shield</Filter>
+    </ClCompile>
+    <ClCompile Include="services\controls\KeyboardControls.cpp">
+      <Filter>shield.services\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="services\controls\NullControls.cpp">
+      <Filter>shield.services\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="services\graphics\Direct3D11Graphics.cpp">
+      <Filter>shield.services\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="services\graphics\NullGraphics.cpp">
+      <Filter>shield.services\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="services\meshloader\FbxMesh.cpp">
+      <Filter>shield.services\meshloader</Filter>
+    </ClCompile>
+    <ClCompile Include="services\sound\NullSound.cpp">
+      <Filter>shield.services\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="services\meshloader\FbxMeshLoader.cpp">
+      <Filter>shield.services\meshloader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Service.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>shield</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>shield</Filter>
     </ClInclude>
     <ClInclude Include="structs\Point.h">
-      <Filter>structs</Filter>
+      <Filter>shield.structs</Filter>
     </ClInclude>
     <ClInclude Include="patterns\Cloneable.h">
-      <Filter>patterns</Filter>
-    </ClInclude>
-    <ClInclude Include="game\Weapon.h">
-      <Filter>game\weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="game\LaserBeam.h">
-      <Filter>game\weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="game\Element.h">
-      <Filter>game\elements</Filter>
-    </ClInclude>
-    <ClInclude Include="game\Ship.h">
-      <Filter>game\elements</Filter>
-    </ClInclude>
-    <ClInclude Include="game\LaserBeamBullet.h">
-      <Filter>game\elements</Filter>
+      <Filter>shield.patterns</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="game\Hope.h">
-      <Filter>game\elements</Filter>
+      <Filter>shield</Filter>
     </ClInclude>
     <ClInclude Include="Settings.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="services\IControls.h">
-      <Filter>Fichiers d%27en-tête\services\controls</Filter>
-    </ClInclude>
-    <ClInclude Include="services\NullControls.h">
-      <Filter>Fichiers d%27en-tête\services\controls</Filter>
-    </ClInclude>
-    <ClInclude Include="services\IGraphics.h">
-      <Filter>Fichiers d%27en-tête\services\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="services\NullGraphics.h">
-      <Filter>Fichiers d%27en-tête\services\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="services\ISound.h">
-      <Filter>Fichiers d%27en-tête\services\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="services\NullSound.h">
-      <Filter>Fichiers d%27en-tête\services\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="services\KeyboardControls.h">
-      <Filter>Fichiers d%27en-tête\services\controls</Filter>
-    </ClInclude>
-    <ClInclude Include="services\Action.h">
-      <Filter>Fichiers d%27en-tête\services\controls</Filter>
-    </ClInclude>
-    <ClInclude Include="services\State.h">
-      <Filter>Fichiers d%27en-tête\services\controls</Filter>
-    </ClInclude>
-    <ClInclude Include="services\Direct3D11Graphics.h">
-      <Filter>Fichiers d%27en-tête\services\graphics</Filter>
+      <Filter>shield</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\MoveDown.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\MoveLeft.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\MoveRight.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\MoveUp.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\Shoot.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\Burst.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\Charge.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\DashLeft.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\DashRight.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\Shield.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="game\actions\Slash.h">
-      <Filter>game\actions</Filter>
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="structs\Vector3.h">
-      <Filter>structs</Filter>
+      <Filter>shield.structs</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\ActionFactory.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Element.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Hope.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\LaserBeamBullet.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Ship.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\weapons\Weapon.h">
+      <Filter>shield.game\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\BulletFactory.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\Vertex.h">
+      <Filter>shield.structs</Filter>
+    </ClInclude>
+    <ClInclude Include="services\controls\Action.h">
+      <Filter>shield.services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\controls\IControls.h">
+      <Filter>shield.services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\controls\KeyboardControls.h">
+      <Filter>shield.services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\controls\NullControls.h">
+      <Filter>shield.services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\controls\State.h">
+      <Filter>shield.services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\graphics\Direct3D11Graphics.h">
+      <Filter>shield.services\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="services\graphics\IGraphics.h">
+      <Filter>shield.services\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="services\graphics\NullGraphics.h">
+      <Filter>shield.services\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="services\meshloader\FbxMesh.h">
+      <Filter>shield.services\meshloader</Filter>
+    </ClInclude>
+    <ClInclude Include="services\meshloader\FbxMeshLoader.h">
+      <Filter>shield.services\meshloader</Filter>
+    </ClInclude>
+    <ClInclude Include="services\meshloader\IMeshLoader.h">
+      <Filter>shield.services\meshloader</Filter>
+    </ClInclude>
+    <ClInclude Include="services\meshloader\Mesh.h">
+      <Filter>shield.services\meshloader</Filter>
+    </ClInclude>
+    <ClInclude Include="services\sound\ISound.h">
+      <Filter>shield.services\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="services\sound\NullSound.h">
+      <Filter>shield.services\sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="testps.hlsl">
+      <Filter>Fichiers de ressources</Filter>
+    </FxCompile>
+    <FxCompile Include="testvs.hlsl">
+      <Filter>Fichiers de ressources</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

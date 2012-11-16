@@ -1,8 +1,6 @@
 #include <Windows.h>
 #include "Engine.h"
 
-#include <iostream>
-
 using namespace shield;
 
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow )
@@ -11,13 +9,3 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLin
 	e.run();
 	return 0;
 };
-/*
-int main()
-{
-	// NEED MENU
-	Engine e;
-	e.run();
-	system("pause");
-	return 0;
-}
-*/

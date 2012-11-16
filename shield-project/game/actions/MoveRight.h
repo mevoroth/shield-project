@@ -1,7 +1,7 @@
 #ifndef _MOVERIGHT_H_
 #define _MOVERIGHT_H_
 
-#include "..\..\services\Action.h"
+#include "..\..\services\controls\Action.h"
 #include "..\..\Game.h"
 
 using namespace shield;
@@ -12,6 +12,7 @@ namespace actions {
 	class MoveRight : public services::Action
 	{
 	public:
+		MoveRight( Game* );
 		void call();
 
 	private:

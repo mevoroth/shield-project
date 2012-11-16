@@ -1,9 +1,9 @@
 #ifndef _SERVICE_H_
 #define _SERVICE_H_
 
-#include "services\ISound.h"
-#include "services\IControls.h"
-#include "services\IGraphics.h"
+#include "services\sound\ISound.h"
+#include "services\controls\IControls.h"
+#include "services\graphics\IGraphics.h"
 
 namespace shield
 {

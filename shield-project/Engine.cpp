@@ -1,9 +1,9 @@
 #include "Engine.h"
 #include "Service.h"
 
-#include "services\KeyboardControls.h"
-#include "services\Direct3D11Graphics.h"
-#include "services\NullSound.h"
+#include "services\controls\KeyboardControls.h"
+#include "services\graphics\Direct3D11Graphics.h"
+#include "services\sound\NullSound.h"
 
 #include "Game.h"
 #include "Settings.h"
@@ -35,7 +35,7 @@ void Engine::run()
 	// New game
 	Game g;
 	g.create();
-	g.run();
+	//g.run();
 
 	MSG msg = {0};
 	while ( msg.message != WM_QUIT )
@@ -45,9 +45,12 @@ void Engine::run()
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
+		else
+		{
+			g.render();
+		}
 	}
 };
-
 void Engine::_registerClass()
 {
 	// Setting window class struct

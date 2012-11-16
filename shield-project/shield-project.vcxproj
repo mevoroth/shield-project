@@ -45,10 +45,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_51_0;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>D3D11.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>D3D11.lib;DXGI.lib;D3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\boost\boost_1_51_0\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\lib\vs2010\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,25 +83,29 @@
     <ClCompile Include="game\actions\Shield.cpp" />
     <ClCompile Include="game\actions\Shoot.cpp" />
     <ClCompile Include="game\actions\Slash.cpp" />
-    <ClCompile Include="game\Element.cpp" />
-    <ClCompile Include="game\Hope.cpp" />
-    <ClCompile Include="game\LaserBeam.cpp" />
-    <ClCompile Include="game\LaserBeamBullet.cpp" />
-    <ClCompile Include="game\Ship.cpp" />
-    <ClCompile Include="game\Weapon.cpp" />
+    <ClCompile Include="game\actions\ActionFactory.cpp" />
+    <ClCompile Include="game\elements\BulletFactory.cpp" />
+    <ClCompile Include="game\elements\Element.cpp" />
+    <ClCompile Include="game\elements\Hope.cpp" />
+    <ClCompile Include="game\elements\LaserBeamBullet.cpp" />
+    <ClCompile Include="game\elements\Ship.cpp" />
+    <ClCompile Include="game\weapons\Weapon.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Service.cpp" />
-    <ClCompile Include="services\Direct3D11Graphics.cpp" />
-    <ClCompile Include="services\KeyboardControls.cpp" />
-    <ClCompile Include="services\NullControls.cpp" />
-    <ClCompile Include="services\NullGraphics.cpp" />
-    <ClCompile Include="services\NullSound.cpp" />
+    <ClCompile Include="services\controls\KeyboardControls.cpp" />
+    <ClCompile Include="services\controls\NullControls.cpp" />
+    <ClCompile Include="services\graphics\Direct3D11Graphics.cpp" />
+    <ClCompile Include="services\graphics\NullGraphics.cpp" />
+    <ClCompile Include="services\meshloader\FbxMesh.cpp" />
+    <ClCompile Include="services\meshloader\FbxMeshLoader.cpp" />
+    <ClCompile Include="services\sound\NullSound.cpp" />
     <ClCompile Include="structs\Point.cpp" />
     <ClCompile Include="structs\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="game\actions\ActionFactory.h" />
     <ClInclude Include="game\actions\Burst.h" />
     <ClInclude Include="game\actions\Charge.h" />
     <ClInclude Include="game\actions\DashLeft.h" />
@@ -108,30 +117,47 @@
     <ClInclude Include="game\actions\Shield.h" />
     <ClInclude Include="game\actions\Shoot.h" />
     <ClInclude Include="game\actions\Slash.h" />
-    <ClInclude Include="game\Element.h" />
-    <ClInclude Include="game\Hope.h" />
-    <ClInclude Include="game\LaserBeam.h" />
-    <ClInclude Include="game\LaserBeamBullet.h" />
-    <ClInclude Include="game\Ship.h" />
-    <ClInclude Include="game\Weapon.h" />
+    <ClInclude Include="game\elements\BulletFactory.h" />
+    <ClInclude Include="game\elements\Element.h" />
+    <ClInclude Include="game\elements\Hope.h" />
+    <ClInclude Include="game\elements\LaserBeamBullet.h" />
+    <ClInclude Include="game\elements\Ship.h" />
+    <ClInclude Include="game\weapons\Weapon.h" />
     <ClInclude Include="patterns\Cloneable.h" />
     <ClInclude Include="Service.h" />
-    <ClInclude Include="services\Action.h" />
-    <ClInclude Include="services\Direct3D11Graphics.h" />
-    <ClInclude Include="services\KeyboardControls.h" />
-    <ClInclude Include="services\IControls.h" />
-    <ClInclude Include="services\IGraphics.h" />
-    <ClInclude Include="services\ISound.h" />
-    <ClInclude Include="services\NullControls.h" />
-    <ClInclude Include="services\NullGraphics.h" />
-    <ClInclude Include="services\NullSound.h" />
-    <ClInclude Include="services\State.h" />
+    <ClInclude Include="services\controls\Action.h" />
+    <ClInclude Include="services\controls\IControls.h" />
+    <ClInclude Include="services\controls\KeyboardControls.h" />
+    <ClInclude Include="services\controls\NullControls.h" />
+    <ClInclude Include="services\controls\State.h" />
+    <ClInclude Include="services\graphics\Direct3D11Graphics.h" />
+    <ClInclude Include="services\graphics\IGraphics.h" />
+    <ClInclude Include="services\graphics\NullGraphics.h" />
+    <ClInclude Include="services\meshloader\FbxMesh.h" />
+    <ClInclude Include="services\meshloader\FbxMeshLoader.h" />
+    <ClInclude Include="services\meshloader\IMeshLoader.h" />
+    <ClInclude Include="services\meshloader\Mesh.h" />
+    <ClInclude Include="services\sound\ISound.h" />
+    <ClInclude Include="services\sound\NullSound.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="structs\Point.h" />
     <ClInclude Include="structs\Vector3.h" />
+    <ClInclude Include="structs\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="testvs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="testps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

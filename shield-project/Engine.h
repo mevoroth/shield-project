@@ -2,6 +2,7 @@
 #define _ENGINE_H_
 
 #include <Windows.h>
+#include "Game.h"
 
 namespace shield
 {

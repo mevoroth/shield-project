@@ -9,6 +9,7 @@ namespace structs {
 	{
 	public:
 		Point( float, float, float );
+		Point( const Point& );
 		Point& clone() const;
 		float x;
 		float y;

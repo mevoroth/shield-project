@@ -2,8 +2,9 @@
 #define _GAME_H_
 
 #include <list>
-#include "game\Element.h"
-#include "game\Hope.h"
+//#include <boost\thread.hpp>
+#include "game\elements\Element.h"
+#include "game\elements\Hope.h"
 #include "structs\Vector3.h"
 
 using namespace shield::game;
@@ -21,6 +22,7 @@ namespace shield
 		void load( Hope* );
 		void create();
 		void run();
+		void render();
 
 		/**
 		 * Déplacement (forme mecha)
@@ -56,7 +58,10 @@ namespace shield
 		void SwapForm();
 
 	private:
+		Hope* _player;
 		std::list<Element*> _elements;
+		std::list<Element*> _bullets;
+		//std::list<boost::mutex> _elementsMutex;
 		Hope* _getPlayer();
 	};
 };

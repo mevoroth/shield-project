@@ -1,7 +1,7 @@
 #ifndef _DASHLEFT_H_
 #define _DASHLEFT_H_
 
-#include "..\..\services\Action.h"
+#include "..\..\services\controls\Action.h"
 #include "..\..\Game.h"
 
 using namespace shield;
@@ -12,6 +12,7 @@ namespace actions {
 	class DashLeft : public services::Action
 	{
 	public:
+		DashLeft( Game* );
 		void call();
 
 	private:

@@ -4,7 +4,10 @@
 namespace shield {
 namespace settings {
 	namespace weapons {
-		const int LASER_BEAM = 1;
+		const int LASER_BEAM_LV0 = 1;
+		const int LASER_BEAM_LV1 = 3;
+		const int LASER_BEAM_LV2 = 5;
+		const int LASER_BEAM_LVMAX = 10;
 	};
 	namespace player {
 		const int BASE_LIFE = 3;
