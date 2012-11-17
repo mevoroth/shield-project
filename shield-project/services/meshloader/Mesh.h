@@ -1,6 +1,7 @@
 #ifndef _MESH_H_
 #define _MESH_H_
 
+#include <vector>
 #include "..\..\structs\Vertex.h"
 
 namespace shield {
