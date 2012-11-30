@@ -29,6 +29,7 @@ namespace game {
 		 * @return Les tirs
 		 */
 		virtual std::list<Element*>& shoot() const = 0;
+		virtual const Mesh* getMesh() const = 0;
 		int getHpMax( void ) const;
 		int getHp( void ) const;
 

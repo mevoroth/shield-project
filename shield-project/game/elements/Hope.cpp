@@ -1,5 +1,6 @@
 #include "Hope.h"
 #include "BulletFactory.h"
+#include "..\..\Service.h"
 
 using namespace shield;
 
@@ -31,6 +32,10 @@ void game::Hope::refresh( void )
 bool game::Hope::hit( const Element& e ) const
 {
 	return false;
+};
+const Mesh* game::Hope::getMesh() const
+{
+	return Service::getMeshLoader()->load( "test.fbx" );
 };
 void game::Hope::move( const structs::Vector3& direction )
 {

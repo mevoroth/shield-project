@@ -27,7 +27,11 @@ bool game::LaserBeamBullet::hit( const Element& p ) const
 	return _collide(current, p);*/
 	return false;
 };
-
+const Mesh* game::LaserBeamBullet::getMesh() const
+{
+	Mesh* truc;
+	return truc;
+};
 bool game::LaserBeamBullet::_collide(
 	const structs::Point& bullet,
 	const structs::Point& p

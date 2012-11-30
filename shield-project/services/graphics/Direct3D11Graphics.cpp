@@ -3,6 +3,9 @@
 #include <d3d11.h>
 #include <dxgi.h>
 #include <d3dcompiler.h>
+#include <DirectXMath.h>
+
+#include "WVPMatrix.h"
 
 using namespace shield;
 
@@ -17,17 +20,18 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 	_initDeviceAndSwapChain();
 	_initRenderTarget();
 	_initViewport();
+	// TODO: REMOVE SHADERS
 	ID3D10Blob* vertexShader = 0;
 	ID3D10Blob* pixelShader = 0;
 	ID3D10Blob* errors = 0;
-	HRESULT hr = D3DCompileFromFile( L"testvs.hlsl", 0, 0, "main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &vertexShader, &errors );
+	HRESULT hr = D3DCompileFromFile( L"testvs.hlsl", 0, 0, "main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
 	if ( FAILED(hr) )
 	{
 		char* str = (char*)errors->GetBufferPointer();
 		throw "Erreur";
 	}
 	loadShader<ID3D11VertexShader>(0, vertexShader);
-	hr = D3DCompileFromFile( L"testps.hlsl", 0, 0, "main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &pixelShader, &errors );
+	hr = D3DCompileFromFile( L"testps.hlsl", 0, 0, "main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &pixelShader, &errors );
 	if ( FAILED(hr) )
 	{
 		char* str = (char*)errors->GetBufferPointer();
@@ -44,28 +48,17 @@ services::Direct3D11Graphics::~Direct3D11Graphics( void )
 	_device->Release();
 	_deviceContext->Release();
 };
-void services::Direct3D11Graphics::draw( const Vertex vertexes[], int size )
+void services::Direct3D11Graphics::draw( const Vertex vertexes[],
+										int vertexesSize,
+										const int indices[],
+										int indicesSize )
 {
 	float color[] = { 0.f, 0.f, 0.f, 0.f };
-	/*
-	DirectX::XMFLOAT3 ver[] = {
-		DirectX::XMFLOAT3(0.0f, 0.0f, 1.f),
-		DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f),
-		DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f)
-	};
-	*/
-	DirectX::XMFLOAT3 ver[] = {
-		DirectX::XMFLOAT3(0.5f, -0.5f, 0.0f),
-		DirectX::XMFLOAT3(-0.5f, -0.5f, 1.0f),
-		DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f),
-		DirectX::XMFLOAT3(-1.0f, 1.0f, 0.5f),
-		DirectX::XMFLOAT3(1.0f, 1.0f, 0.5f),
-		DirectX::XMFLOAT3(1.0f, -1.0f, 0.5f)
-	};
 	ID3D11Buffer* buffer;
+	WVPMatrix mat; 
 
 	D3D11_BUFFER_DESC bufferDesc;
-	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3)*6;
+	bufferDesc.ByteWidth = sizeof( Vertex )*vertexesSize;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -73,27 +66,96 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[], int size )
 	bufferDesc.StructureByteStride = 0;
 
 	D3D11_SUBRESOURCE_DATA subResDat;
-	subResDat.pSysMem = ver;
+	subResDat.pSysMem = vertexes;
 	subResDat.SysMemPitch = 0;
 	subResDat.SysMemSlicePitch = 0;
 
-	_device->CreateBuffer( &bufferDesc, &subResDat, &buffer );
-	/*
-	D3D11_MAPPED_SUBRESOURCE mappedRes;
-	_deviceContext->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedRes);
-	memcpy(mappedRes.pData, ver, sizeof(DirectX::XMFLOAT3));
-	_deviceContext->Unmap(buffer, 0);
-	*/
-	UINT stride = sizeof( DirectX::XMFLOAT3 );
+	HRESULT hr = _device->CreateBuffer( &bufferDesc, &subResDat, &buffer );
+	if ( FAILED(hr) )
+	{
+		throw "Erreur buffer vertices";
+	}
+
+	UINT stride = sizeof( Vertex );
 	UINT offset = 0;
 	_deviceContext->IASetVertexBuffers( 0, 1, &buffer, &stride, &offset );
+	
+	bufferDesc.ByteWidth = sizeof( int )*indicesSize;
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 0;
+
+	subResDat.pSysMem = indices;
+	subResDat.SysMemPitch = 0;
+	subResDat.SysMemSlicePitch = 0;
+
+	hr = _device->CreateBuffer( &bufferDesc, &subResDat, &buffer );
+	if ( FAILED(hr) )
+	{
+		throw "Erreur buffer indices";
+	}
+	_deviceContext->IASetIndexBuffer( buffer, DXGI_FORMAT_R32_UINT, 0 );
+
+	bufferDesc.ByteWidth = sizeof( WVPMatrix );
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 0;
+	
+	//mat.mat = DirectX::XMMatrixTranspose(_projectionMatrix)*DirectX::XMMatrixTranspose(_viewMatrix);
+	/*
+	subResDat.pSysMem = &mat;
+	subResDat.SysMemPitch = 0;
+	subResDat.SysMemSlicePitch = 0;
+	*/
+	hr = _device->CreateBuffer( &bufferDesc, 0/*&subResDat*/, &buffer );
+
+	if ( FAILED(hr) )
+	{
+		throw "Erreur buffer matrice";
+	}
+
+	//mat.mat = DirectX::XMMatrixTranspose( _viewMatrix*_projectionMatrix );
+	mat.mat = DirectX::XMMatrixTranspose(_projectionMatrix)*DirectX::XMMatrixTranspose(_viewMatrix);
+	/*
+    DirectX::XMVECTOR Eye = DirectX::XMVectorSet( 0.0f, 3.0f, -6.0f, 0.0f );
+    DirectX::XMVECTOR At = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+    DirectX::XMVECTOR Up = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+    mat.mat = XMMatrixLookAtLH( Eye, At, Up )*;
+	*/
+	_deviceContext->VSSetConstantBuffers( 0, 1, &buffer );
+
+	_deviceContext->UpdateSubresource( buffer, 0, 0, &mat, 0, 0 );
+	
 	_deviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	
 	_deviceContext->ClearRenderTargetView( _renderTarget, color );
 
-	_deviceContext->Draw(6, 0);
-	_deviceContext->Draw(6, 3);
+	_deviceContext->DrawIndexed( indicesSize, 0, 0 );
 	_swapChain->Present(0, 0);
+};
+void services::Direct3D11Graphics::setCamera(
+	float eyeX, float eyeY, float eyeZ,
+	float atX, float atY, float atZ,
+	float upX, float upY, float upZ
+)
+{
+	_viewMatrix = DirectX::XMMatrixLookAtLH(
+		DirectX::XMVectorSet( eyeX, eyeY, eyeZ, 0.f ),
+		DirectX::XMVectorSet( atX, atY, atZ, 0.f ),
+		DirectX::XMVectorSet( upX, upY, upZ, 0.f )
+	);
+};
+void services::Direct3D11Graphics::setPerspective(
+	float fovAngleY, float ratio, float nearZ, float farZ
+)
+{
+	_projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(
+		fovAngleY, ratio, nearZ, farZ
+	);
 };
 template<class Shader> void services::Direct3D11Graphics::loadShader( UINT16 key, ID3D10Blob* shaderBlob )
 {
@@ -246,7 +308,7 @@ void services::Direct3D11Graphics::_initDeviceAndSwapChain( void )
 		0,							// Adapter (Carte graphique)
 		D3D_DRIVER_TYPE_HARDWARE,	// Driver
 		0,							// Software rasterizer
-		0,							// Flags
+		D3D11_CREATE_DEVICE_DEBUG,							// Flags
 		features,                   // Liste des versions
 		ARRAYSIZE(features),		// Taille de la liste des versions
 		D3D11_SDK_VERSION,			// SDK

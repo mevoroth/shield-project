@@ -5,6 +5,7 @@ using namespace shield;
 services::ISound* Service::_sound = 0;
 services::IGraphics* Service::_graphics = 0;
 services::IControls* Service::_controls = 0;
+services::IMeshLoader* Service::_meshLoader = 0;
 
 services::ISound* Service::getSound()
 {
@@ -41,4 +42,16 @@ services::IControls* Service::getControls()
 void Service::setControls( services::IControls* c )
 {
 	_controls = c;
+};
+services::IMeshLoader* Service::getMeshLoader()
+{
+	if (_meshLoader == 0)
+	{
+		throw "MeshLoader module not set";
+	}
+	return _meshLoader;
+};
+void Service::setMeshLoader( services::IMeshLoader* m )
+{
+	_meshLoader = m;
 };

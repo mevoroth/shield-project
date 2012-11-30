@@ -108,28 +108,91 @@ void Game::run()
 };
 void Game::render()
 {
-	Vertex buffer[6];
-	/*buffer[0].p = Point(0.0f, 0.5f, 0.5f);
-	buffer[1].p = Point(0.5f, -0.5f, 0.5f);
-	buffer[2].p = Point(-0.5f, -0.5f, 0.5f);
-	buffer[3].p = Point(0.f, 0.f, 0.f);
-	buffer[4].p = Point(10.f, 0.f, 10.f);
-	buffer[5].p = Point(0.f, 0.f, 10.f);*/
-	/*buffer[0].color = DirectX::XMFLOAT4(1.f,1.f,1.f,1.f);
-	buffer[1].color = DirectX::XMFLOAT4(1.f,1.f,1.f,1.f);
-	buffer[2].color = DirectX::XMFLOAT4(1.f,1.f,1.f,1.f);
-	buffer[3].color = DirectX::XMFLOAT4(1.f,1.f,1.f,1.f);
-	buffer[4].color = DirectX::XMFLOAT4(1.f,1.f,1.f,1.f);
-	buffer[5].color = DirectX::XMFLOAT4(1.f,1.f,1.f,1.f);*/
-	/*Vertex buffer[] = {
-		Point(0.f, 0.f, 0.f),
-		Point(1.f, 0.f, 0.f),
-		Point(1.f, 0.f, 1.f),
-		Point(0.f, 0.f, 0.f),
-		Point(1.f, 0.f, 1.f),
-		Point(0.f, 0.f, 0.f)
-	};*/
-	Service::getGraphics()->draw(buffer, 6);
+	Service::getGraphics()->setCamera(
+		-5.f, -5.f, -5.f,
+		0.f, 0.f, 0.f,
+		0.f, 1.f, 0.f
+	);
+	/*Service::getGraphics()->setCamera(
+		0.f, 3.f, -6.f,
+		0.f, 1.f, 0.f,
+		0.f, 1.f, 0.f
+	);*/
+	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, .1f, 10.f );
+	/*Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, .1f, 10.0f );*/
+
+	Vertex buffer[24];
+	//[0] = {pos={x=1.00000000 y=-0.736452997 z=0.413895011 } }
+	//[1] = {pos={x=-1.00000000 y=-0.736452997 z=0.413895011 } }
+	//[2] = {pos={x=1.00000000 y=1.26354694 z=0.413895011 } }
+	//[3] = {pos={x=-1.00000000 y=1.26354694 z=0.413895011 } }
+	buffer[0].pos = DirectX::XMFLOAT3( -1.0f, 1.0f, -1.0f );
+	buffer[1].pos = DirectX::XMFLOAT3( 1.0f, 1.0f, -1.0f );
+	buffer[2].pos = DirectX::XMFLOAT3( 1.0f, 1.0f, 1.0f );
+	buffer[3].pos = DirectX::XMFLOAT3( -1.0f, 1.0f, 1.0f );
+
+	buffer[4].pos = DirectX::XMFLOAT3( -1.0f, -1.0f, -1.0f );
+	buffer[5].pos = DirectX::XMFLOAT3( 1.0f, -1.0f, -1.0f );
+	buffer[6].pos = DirectX::XMFLOAT3( 1.0f, -1.0f, 1.0f );
+	buffer[7].pos = DirectX::XMFLOAT3( -1.0f, -1.0f, 1.0f );
+
+	buffer[8].pos = DirectX::XMFLOAT3( -1.0f, -1.0f, 1.0f );
+	buffer[9].pos = DirectX::XMFLOAT3( -1.0f, -1.0f, -1.0f );
+	buffer[10].pos = DirectX::XMFLOAT3( -1.0f, 1.0f, -1.0f );
+	buffer[11].pos = DirectX::XMFLOAT3( -1.0f, 1.0f, 1.0f );
+
+	buffer[12].pos = DirectX::XMFLOAT3( 1.0f, -1.0f, 1.0f );
+	buffer[13].pos = DirectX::XMFLOAT3( 1.0f, -1.0f, -1.0f );
+	buffer[14].pos = DirectX::XMFLOAT3( 1.0f, 1.0f, -1.0f );
+	buffer[15].pos = DirectX::XMFLOAT3( 1.0f, 1.0f, 1.0f );
+
+	buffer[16].pos = DirectX::XMFLOAT3( -1.0f, -1.0f, -1.0f );
+	buffer[17].pos = DirectX::XMFLOAT3( 1.0f, -1.0f, -1.0f );
+	buffer[18].pos = DirectX::XMFLOAT3( 1.0f, 1.0f, -1.0f );
+	buffer[19].pos = DirectX::XMFLOAT3( -1.0f, 1.0f, -1.0f );
+
+	buffer[20].pos = DirectX::XMFLOAT3( -1.0f, -1.0f, 1.0f );
+	buffer[21].pos = DirectX::XMFLOAT3( 1.0f, -1.0f, 1.0f );
+	buffer[22].pos = DirectX::XMFLOAT3( 1.0f, 1.0f, 1.0f );
+	buffer[23].pos = DirectX::XMFLOAT3( -1.0f, 1.0f, 1.0f );
+	/*buffer[0].pos = DirectX::XMFLOAT3(1.f,-0.736452997f,0.413895011f);
+	buffer[1].pos = DirectX::XMFLOAT3(-1.f,-0.736452997,0.413895011f);
+	buffer[2].pos = DirectX::XMFLOAT3(1.f,1.26354694f,0.413895011f);
+	buffer[3].pos = DirectX::XMFLOAT3(-1.f,1.26354694f,0.413895011);*/
+
+	int indices[] = {
+		3,1,0,
+		2,1,3,
+
+		6,4,5,
+		7,4,6,
+
+		11,9,8,
+		10,9,11,
+
+		14,12,13,
+		15,12,14,
+
+		19,17,16,
+		18,17,19,
+
+		22,20,21,
+		23,20,22
+	};
+
+	const Mesh* mesh = _player->getMesh();
+	Service::getGraphics()->draw(
+		&mesh->getVertexes()[0],
+		mesh->getVertexes().size(),
+		&mesh->getIndices()[0],
+		mesh->getIndices().size()
+	);
+	/*Service::getGraphics()->draw(
+		buffer,
+		24,
+		indices,
+		36
+	);*/
 	// Draw game
 	// Draw HUD
 };

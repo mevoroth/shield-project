@@ -4,6 +4,7 @@
 #include "services\sound\ISound.h"
 #include "services\controls\IControls.h"
 #include "services\graphics\IGraphics.h"
+#include "services\meshloader\IMeshLoader.h"
 
 namespace shield
 {
@@ -27,11 +28,14 @@ namespace shield
 		static void setGraphics( services::IGraphics* );
 		static services::IControls* getControls();
 		static void setControls( services::IControls* );
+		static services::IMeshLoader* getMeshLoader();
+		static void setMeshLoader( services::IMeshLoader* );
 
 	private:
 		static services::ISound* _sound;
 		static services::IGraphics* _graphics;
 		static services::IControls* _controls;
+		static services::IMeshLoader* _meshLoader;
 
 	};
 };

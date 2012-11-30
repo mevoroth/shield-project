@@ -8,8 +8,9 @@ namespace shield {
 namespace structs {
 	struct Vertex
 	{
-		DirectX::XMFLOAT3 p;
-		//DirectX::XMFLOAT4 color;
+		DirectX::XMFLOAT3 pos;
+		//DirectX::XMFLOAT3 norm;
+		//DirectX::XMFLOAT2 tex;
 	};
 };
 };

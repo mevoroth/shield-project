@@ -3,6 +3,9 @@
 
 #include <Windows.h>
 #include "..\..\structs\Point.h"
+#include "..\..\services\meshloader\Mesh.h"
+
+using namespace shield::services;
 
 namespace shield {
 namespace game {
@@ -19,6 +22,7 @@ namespace game {
 		const structs::Point& getPosition( void ) const;
 
 		virtual bool hit( const Element& ) const = 0;
+		virtual const Mesh* getMesh() const = 0;
 
 	private:
 		structs::Point _position;

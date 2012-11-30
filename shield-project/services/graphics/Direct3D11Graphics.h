@@ -25,7 +25,13 @@ namespace services {
 		};
 		Direct3D11Graphics( HWND );
 		~Direct3D11Graphics( void );
-		void draw( const Vertex[], int );
+		void draw( const Vertex[], int, const int[], int );
+		void setCamera(
+			float, float, float,
+			float, float, float,
+			float, float, float
+		);
+		void setPerspective( float, float, float, float );
 		template<class Shader> void loadShader( UINT16, ID3D10Blob* );
 		template<class Shader> void useShader( UINT16 );
 
@@ -41,6 +47,10 @@ namespace services {
 		 */
 		map<UINT16, ID3D11DeviceChild*> _shaders;
 		ID3D11InputLayout* _inputLayout;
+		ID3D11Buffer* _matrixBuffer;
+		DirectX::XMMATRIX _worldMatrix;
+		DirectX::XMMATRIX _viewMatrix;
+		DirectX::XMMATRIX _projectionMatrix;
 
 		IDXGIFactory* _getFactory( void );
 		void _initDeviceAndSwapChain( void );

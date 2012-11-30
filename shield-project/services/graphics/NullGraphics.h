@@ -9,7 +9,13 @@ namespace services {
 	{
 	public:
 		NullGraphics();
-		void draw( const Point[], int );
+		void draw( const Point[], int, const int[], int );
+		void setCamera(
+			float, float, float,
+			float, float, float,
+			float, float, float
+		);
+		void setPerspective( float, float, float, float );
 	};
 };
 };

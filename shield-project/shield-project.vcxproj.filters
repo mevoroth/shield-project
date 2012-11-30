@@ -259,6 +259,9 @@
     <ClInclude Include="services\sound\NullSound.h">
       <Filter>shield.services\sound</Filter>
     </ClInclude>
+    <ClInclude Include="services\graphics\WVPMatrix.h">
+      <Filter>shield.services\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

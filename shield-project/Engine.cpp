@@ -4,6 +4,7 @@
 #include "services\controls\KeyboardControls.h"
 #include "services\graphics\Direct3D11Graphics.h"
 #include "services\sound\NullSound.h"
+#include "services\meshloader\FbxMeshLoader.h"
 
 #include "Game.h"
 #include "Settings.h"
@@ -26,6 +27,7 @@ Engine::Engine( HINSTANCE hInst, int nCmdShow )
 	Service::setControls( new services::KeyboardControls() );
 	Service::setGraphics( new services::Direct3D11Graphics(_window) );
 	Service::setSound( new services::NullSound() );
+	Service::setMeshLoader( new services::FbxMeshLoader() );
 };
 
 void Engine::run()

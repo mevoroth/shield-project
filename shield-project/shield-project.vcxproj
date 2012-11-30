@@ -48,7 +48,7 @@
       <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_51_0;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PreprocessorDefinitions>DEBUG;FBXSDK_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;FBXSDK_SHARED;_XM_NO_INTRINSICS_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,6 +133,7 @@
     <ClInclude Include="services\graphics\Direct3D11Graphics.h" />
     <ClInclude Include="services\graphics\IGraphics.h" />
     <ClInclude Include="services\graphics\NullGraphics.h" />
+    <ClInclude Include="services\graphics\WVPMatrix.h" />
     <ClInclude Include="services\meshloader\FbxMesh.h" />
     <ClInclude Include="services\meshloader\FbxMeshLoader.h" />
     <ClInclude Include="services\meshloader\IMeshLoader.h" />
