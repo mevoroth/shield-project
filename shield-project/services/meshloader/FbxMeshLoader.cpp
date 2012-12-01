@@ -43,11 +43,8 @@ const Mesh* FbxMeshLoader::load( const std::string& filename )
 		{
 			fbxsdk_2013_3::FbxMesh* fbxmesh = (fbxsdk_2013_3::FbxMesh*)scene->GetNode(i)->GetNodeAttribute();
 			FbxVector4* vertexes = fbxmesh->GetControlPoints();
-			FbxVector4 v0 = vertexes[0];
-			FbxVector4 v1 = vertexes[1];
-			FbxVector4 v2 = vertexes[2];
-			FbxVector4 v3 = vertexes[3];
-			//FbxVector4 v4 = vertexes[4];
+			FbxVector4 norm;
+			FbxVector4 bufferNorm;
 			int vertexesCount = fbxmesh->GetControlPointsCount();
 
 			for ( int i = 0; i < vertexesCount; ++i )
@@ -58,18 +55,27 @@ const Mesh* FbxMeshLoader::load( const std::string& filename )
 					vertexes[i].mData[1],
 					vertexes[i].mData[2]
 				);
-				//TODO: NORMALE + TEXTURE
+				norm = FbxVector4();
+				for ( int j = 0;
+					fbxmesh->GetPolygonVertexNormal(j, i, bufferNorm);
+					++j )
+				{
+					norm += bufferNorm;
+				}
+				v.norm = DirectX::XMFLOAT3(
+					norm.mData[0]/*/norm.mData[3]*/,
+					norm.mData[1]/*/norm.mData[3]*/,
+					norm.mData[2]/*/norm.mData[3]*/
+				);
+
+				//TODO: TEXTURE
 				mesh->putVertex( v );
 			}
-
+			
 			int polygonCount = fbxmesh->GetPolygonCount();
 			for ( int j = 0; j < polygonCount; ++j )
 			{
 				int polygonSize = fbxmesh->GetPolygonSize( j );
-				int i0 = fbxmesh->GetPolygonVertex(j, 0);
-				int i1 = fbxmesh->GetPolygonVertex(j, 1);
-				int i2 = fbxmesh->GetPolygonVertex(j, 2);
-				int i3 = fbxmesh->GetPolygonVertex(j, 3);
 				if ( polygonSize == 3 )
 				{
 					mesh->putTriangle(

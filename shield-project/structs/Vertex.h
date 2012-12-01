@@ -9,7 +9,7 @@ namespace structs {
 	struct Vertex
 	{
 		DirectX::XMFLOAT3 pos;
-		//DirectX::XMFLOAT3 norm;
+		DirectX::XMFLOAT3 norm;
 		//DirectX::XMFLOAT2 tex;
 	};
 };
