@@ -35,7 +35,7 @@ bool game::Hope::hit( const Element& e ) const
 };
 const Mesh* game::Hope::getMesh() const
 {
-	return Service::getMeshLoader()->load( "test.fbx" );
+	return Service::getMeshLoader()->load( "hope.fbx" );
 };
 void game::Hope::move( const structs::Vector3& direction )
 {

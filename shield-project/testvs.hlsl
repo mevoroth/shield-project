@@ -5,11 +5,10 @@ struct VIn
 	/*float4 color : COLOR;*/
 };
 
-struct VOut
+struct PIn
 {
 	float4 pos : SV_Position;
 	float4 norm : NORMAL;
-	/*float4 color : COLOR;*/
 };
 
 cbuffer WorldViewProjectionMatrix : register(b0)
@@ -17,11 +16,14 @@ cbuffer WorldViewProjectionMatrix : register(b0)
 	matrix WVPMat;
 };
 
-VOut main(VIn input/*, float4 Color : COLOR*/)
+PIn VS( VIn input )
 {
-	input.pos.x *= 0.5;
-	input.pos.y *= 0.5;
-	input.pos.z *= 0.5;
-	input.pos = mul( input.pos, WVPMat );
-	return input;
+	PIn output = (PIn)0;
+	output.pos = input.pos;
+	output.pos.x *= 0.5;
+	output.pos.y *= 0.5;
+	output.pos.z *= 0.5;
+	output.pos = mul( output.pos, WVPMat );
+	output.norm = float4(0.0f,0.f,1.f,1.f);
+	return output;
 }

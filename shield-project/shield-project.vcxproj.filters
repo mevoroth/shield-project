@@ -273,5 +273,8 @@
     <FxCompile Include="testvs.hlsl">
       <Filter>Fichiers de ressources</Filter>
     </FxCompile>
+    <FxCompile Include="types.hlsli">
+      <Filter>Fichiers de ressources</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

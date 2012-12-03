@@ -18,6 +18,17 @@ namespace services {
 	private:
 		FbxManager* _sdkManager;
 		FbxImporter* _importer;
+
+		/**
+		 * @param[in] Mesh
+		 * @param[in] Index
+		 * @param[out] Normal
+		 */
+		void _getNormal(
+			const fbxsdk_2013_3::FbxMesh*,
+			int,
+			DirectX::XMFLOAT3*
+		) const;
 	};
 };
 };

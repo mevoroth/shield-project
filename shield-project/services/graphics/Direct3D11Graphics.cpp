@@ -24,14 +24,15 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 	ID3D10Blob* vertexShader = 0;
 	ID3D10Blob* pixelShader = 0;
 	ID3D10Blob* errors = 0;
-	HRESULT hr = D3DCompileFromFile( L"testvs.hlsl", 0, 0, "main", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
+	HRESULT hr = D3DCompileFromFile( L"testvs.hlsl", 0, 0, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
 	if ( FAILED(hr) )
 	{
-		char* str = (char*)errors->GetBufferPointer();
+		int strsize = errors->GetBufferSize();
+		std::string str = (char*)errors->GetBufferPointer();
 		throw "Erreur";
 	}
 	loadShader<ID3D11VertexShader>(0, vertexShader);
-	hr = D3DCompileFromFile( L"testps.hlsl", 0, 0, "main", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &pixelShader, &errors );
+	hr = D3DCompileFromFile( L"testps.hlsl", 0, 0, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &pixelShader, &errors );
 	if ( FAILED(hr) )
 	{
 		char* str = (char*)errors->GetBufferPointer();
@@ -98,6 +99,7 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	}
 	_deviceContext->IASetIndexBuffer( buffer, DXGI_FORMAT_R32_UINT, 0 );
 
+	// Bind World View Projection matrix
 	bufferDesc.ByteWidth = sizeof( WVPMatrix );
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -105,35 +107,23 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = 0;
 	
-	//mat.mat = DirectX::XMMatrixTranspose(_projectionMatrix)*DirectX::XMMatrixTranspose(_viewMatrix);
-	/*
-	subResDat.pSysMem = &mat;
-	subResDat.SysMemPitch = 0;
-	subResDat.SysMemSlicePitch = 0;
-	*/
-	hr = _device->CreateBuffer( &bufferDesc, 0/*&subResDat*/, &buffer );
+	hr = _device->CreateBuffer( &bufferDesc, 0, &buffer );
 
 	if ( FAILED(hr) )
 	{
 		throw "Erreur buffer matrice";
 	}
 
-	//mat.mat = DirectX::XMMatrixTranspose( _viewMatrix*_projectionMatrix );
+	//mat.mat = DirectX::XMMatrixTranspose( _projectionMatrix*_viewMatrix );
 	mat.mat = DirectX::XMMatrixTranspose(_projectionMatrix)*DirectX::XMMatrixTranspose(_viewMatrix);
-	/*
-    DirectX::XMVECTOR Eye = DirectX::XMVectorSet( 0.0f, 3.0f, -6.0f, 0.0f );
-    DirectX::XMVECTOR At = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-    DirectX::XMVECTOR Up = DirectX::XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-    mat.mat = XMMatrixLookAtLH( Eye, At, Up )*;
-	*/
-	_deviceContext->VSSetConstantBuffers( 0, 1, &buffer );
 
+	_deviceContext->VSSetConstantBuffers( 0, 1, &buffer );
 	_deviceContext->UpdateSubresource( buffer, 0, 0, &mat, 0, 0 );
 	
 	_deviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	
+	// Draw
 	_deviceContext->ClearRenderTargetView( _renderTarget, color );
-
 	_deviceContext->DrawIndexed( indicesSize, 0, 0 );
 	_swapChain->Present(0, 0);
 };
@@ -207,14 +197,13 @@ void services::Direct3D11Graphics::_createInputLayout( ID3D10Blob* shaderBlob )
 	D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
 	{
 		{"SV_Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		/*{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
 			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}*/
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+			12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
-	int ied = sizeof(inputElementDesc);
-	int sdesc = sizeof(D3D11_INPUT_ELEMENT_DESC);
+
 	HRESULT hr = _device->CreateInputLayout(
 		inputElementDesc,
 		sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
