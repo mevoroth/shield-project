@@ -11,7 +11,20 @@ namespace services {
 	class IGraphics
 	{
 	public:
-		virtual void draw( const Vertex[], int, const int[], int ) = 0;
+		/**
+		 * Begin draw
+		 */
+		virtual void begin( void ) = 0;
+		/**
+		 * End draw
+		 */
+		virtual void end( void ) = 0;
+		/**
+		 * Draw mesh
+		 * @param[in] Vertexes
+		 * @param[in] Vertexes count
+		 */
+		virtual void draw( const Vertex[], int ) = 0;
 		/**
 		 * Look at
 		 * @param[in] Eye X

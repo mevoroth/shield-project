@@ -49,12 +49,18 @@ services::Direct3D11Graphics::~Direct3D11Graphics( void )
 	_device->Release();
 	_deviceContext->Release();
 };
-void services::Direct3D11Graphics::draw( const Vertex vertexes[],
-										int vertexesSize,
-										const int indices[],
-										int indicesSize )
+void services::Direct3D11Graphics::begin( void )
 {
 	float color[] = { 0.f, 0.f, 0.f, 0.f };
+	_deviceContext->ClearRenderTargetView( _renderTarget, color );
+};
+void services::Direct3D11Graphics::end( void )
+{
+	_swapChain->Present(0, 0);
+};
+void services::Direct3D11Graphics::draw( const Vertex vertexes[],
+										int vertexesSize )
+{
 	ID3D11Buffer* buffer;
 	WVPMatrix mat; 
 
@@ -81,7 +87,7 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	UINT offset = 0;
 	_deviceContext->IASetVertexBuffers( 0, 1, &buffer, &stride, &offset );
 	
-	bufferDesc.ByteWidth = sizeof( int )*indicesSize;
+	/*bufferDesc.ByteWidth = sizeof( int )*indicesSize;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -97,7 +103,7 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	{
 		throw "Erreur buffer indices";
 	}
-	_deviceContext->IASetIndexBuffer( buffer, DXGI_FORMAT_R32_UINT, 0 );
+	_deviceContext->IASetIndexBuffer( buffer, DXGI_FORMAT_R32_UINT, 0 );*/
 
 	// Bind World View Projection matrix
 	bufferDesc.ByteWidth = sizeof( WVPMatrix );
@@ -123,9 +129,8 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	_deviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	
 	// Draw
-	_deviceContext->ClearRenderTargetView( _renderTarget, color );
-	_deviceContext->DrawIndexed( indicesSize, 0, 0 );
-	_swapChain->Present(0, 0);
+	_deviceContext->Draw( vertexesSize, 0 );
+	//_deviceContext->DrawIndexed( indicesSize, 0, 0 );
 };
 void services::Direct3D11Graphics::setCamera(
 	float eyeX, float eyeY, float eyeZ,
@@ -197,11 +202,13 @@ void services::Direct3D11Graphics::_createInputLayout( ID3D10Blob* shaderBlob )
 	D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
 	{
 		{"SV_Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		/*{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
 			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}*/
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
+			D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	HRESULT hr = _device->CreateInputLayout(

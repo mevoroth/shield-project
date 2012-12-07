@@ -47,57 +47,117 @@ const Mesh* FbxMeshLoader::load( const std::string& filename )
 		FbxVector4* vertexes = fbxmesh->GetControlPoints();
 		int vertexesCount = fbxmesh->GetControlPointsCount();
 		int polygonCount = fbxmesh->GetPolygonCount();
+		DirectX::XMFLOAT3* normals = new DirectX::XMFLOAT3[vertexesCount];
+		
+		int uvcount = fbxmesh->GetElementUVCount();
+		FbxGeometryElementUV* uv = fbxmesh->GetElementUV(0);
+		FbxLayerElement::EMappingMode chouette = uv->GetMappingMode();
+		FbxLayerElement::EReferenceMode truc = uv->GetReferenceMode();
+		/*FbxVector2 v2 = uv->GetDirectArray().GetAt(
+			uv->GetIndexArray().GetAt(0)
+		);*/
+		
+		//structs::Vertex v;
+		//
+		//// Get vertex
+		//v.pos = DirectX::XMFLOAT3(
+		//	vertexes[vertexIndex][0],
+		//	vertexes[vertexIndex][1],
+		//	vertexes[vertexIndex][2]
+		//);
+		
+		//TODO: TEXTURE
+		//mesh->putVertex( v );
 
 		for ( int vertexIndex = 0; vertexIndex < vertexesCount; ++vertexIndex )
 		{
-			structs::Vertex v;
-			
-			// Get vertex
-			v.pos = DirectX::XMFLOAT3(
-				vertexes[vertexIndex][0],
-				vertexes[vertexIndex][1],
-				vertexes[vertexIndex][2]
+			// Get normals
+			_getNormal( fbxmesh, vertexIndex, normals[vertexIndex] );
+		}
+		
+		for ( int p = 0; p < polygonCount; ++p )
+		{
+			int polygonSize = fbxmesh->GetPolygonSize( p );
+			structs::Vertex* polygonVertexes = new structs::Vertex[polygonSize];
+			for ( int v = 0; v < polygonSize; ++v )
+			{
+				FbxVector2 uv;
+
+				_getUV( fbxmesh, p, v, uv );
+				_createVertex(
+					vertexes,
+					normals,
+					fbxmesh->GetPolygonVertex(p, v),
+					uv,
+					polygonVertexes[v]
+				);
+			}
+			mesh->putTriangle(
+				polygonVertexes[0],
+				polygonVertexes[1],
+				polygonVertexes[2]
 			);
 
-			// Get normals
-			_getNormal(fbxmesh, vertexIndex, &v.norm);
-
-			//TODO: TEXTURE
-			mesh->putVertex( v );
-		}
-			
-		for ( int j = 0; j < polygonCount; ++j )
-		{
-			int polygonSize = fbxmesh->GetPolygonSize( j );
-			if ( polygonSize == 3 )
+			if ( polygonSize == 4 ) // Quadrilatère
 			{
 				mesh->putTriangle(
-					fbxmesh->GetPolygonVertex(j, 0),
-					fbxmesh->GetPolygonVertex(j, 1),
-					fbxmesh->GetPolygonVertex(j, 2)
+					polygonVertexes[0],
+					polygonVertexes[2],
+					polygonVertexes[3]
 				);
 			}
-			else // Quadrilatère
-			{
-				mesh->putTriangle(
-					fbxmesh->GetPolygonVertex(j, 0),
-					fbxmesh->GetPolygonVertex(j, 1),
-					fbxmesh->GetPolygonVertex(j, 2)
-				);
-				mesh->putTriangle(
-					fbxmesh->GetPolygonVertex(j, 0),
-					fbxmesh->GetPolygonVertex(j, 2),
-					fbxmesh->GetPolygonVertex(j, 3)
-				);
-			}
+			delete polygonVertexes;
 		}
+		delete normals;
 	}
 	return mesh;
+};
+void FbxMeshLoader::_createVertex(
+	const FbxVector4* vertexes,
+	const DirectX::XMFLOAT3* normals,
+	int vertexIndex,
+	const FbxVector2& uv,
+	shield::structs::Vertex& v
+) const
+{
+	v.pos = DirectX::XMFLOAT3(
+		vertexes[vertexIndex][0],
+		vertexes[vertexIndex][1],
+		vertexes[vertexIndex][2]
+	);
+	v.norm = normals[vertexIndex];
+	v.tex = DirectX::XMFLOAT2(
+		uv[0],
+		uv[1]
+	);
+};
+void FbxMeshLoader::_getUV(
+	fbxsdk_2013_3::FbxMesh* mesh,
+	int polygon,
+	int vertex,
+	FbxVector2& uv
+) const
+{
+	if ( mesh->GetElementUVCount() <= 0 )
+	{
+		throw;
+	}
+	FbxGeometryElementUV* elUV = mesh->GetElementUV(0);
+	if ( elUV->GetMappingMode() == FbxGeometryElement::eByPolygonVertex )
+	{
+		int texIndex = mesh->GetTextureUVIndex(polygon, vertex);
+		switch ( elUV->GetReferenceMode() )
+		{
+		case FbxGeometryElement::eDirect:
+		case FbxGeometryElement::eIndexToDirect:
+			uv = elUV->GetDirectArray().GetAt( texIndex );
+		}
+	}
 };
 void FbxMeshLoader::_getNormal(
 	const fbxsdk_2013_3::FbxMesh* mesh,
 	int vertex,
-	DirectX::XMFLOAT3* normal
+	DirectX::XMFLOAT3& normal
 ) const
 {
 	const FbxGeometryElementNormal* normalEl = mesh->GetElementNormal();
@@ -118,7 +178,7 @@ void FbxMeshLoader::_getNormal(
 			normalIndex = normalEl->GetIndexArray().GetAt( vertex );
 		}
 		
-		if ( normalIndex > 0 )
+		if ( normalIndex >= 0 )
 		{
 			FbxVector4 fbxNormal = normalEl->GetDirectArray()
 				.GetAt( normalIndex );
@@ -131,9 +191,9 @@ void FbxMeshLoader::_getNormal(
 			
 			length = DirectX::XMVector3Length( length );
 
-			normal->x = fbxNormal[0]/length.vector4_f32[0];
-			normal->y = fbxNormal[1]/length.vector4_f32[0];
-			normal->z = fbxNormal[2]/length.vector4_f32[0];
+			normal.x = fbxNormal[0]/length.vector4_f32[0];
+			normal.y = fbxNormal[1]/length.vector4_f32[0];
+			normal.z = fbxNormal[2]/length.vector4_f32[0];
 		}
 	}
 	else if ( normalEl->GetMappingMode()

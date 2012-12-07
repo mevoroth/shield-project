@@ -8,6 +8,14 @@ services::NullGraphics::NullGraphics()
 {
 	cout << "NullGraphics initialized" << endl;
 };
+void services::NullGraphics::begin( void )
+{
+	cout << "Begin draw ..." << endl;
+};
+void services::NullGraphics::end( void )
+{
+	cout << "End draw ..." << endl;
+};
 void services::NullGraphics::draw( const Point vertexes[], int vertexesSize,
 								  const int indices[], int indicesSize )
 {

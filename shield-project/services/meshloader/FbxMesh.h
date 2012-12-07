@@ -10,9 +10,13 @@ namespace services {
 	{
 	public:
 		const std::vector<structs::Vertex>& getVertexes() const;
-		const std::vector<int>& getIndices() const;
-		void putVertex( const structs::Vertex& );
-		void putTriangle( int, int, int );
+		//const std::vector<int>& getIndices() const;
+		//void putVertex( const structs::Vertex& );
+		void putTriangle(
+			const structs::Vertex&,
+			const structs::Vertex&,
+			const structs::Vertex&
+		);
 
 	private:
 		std::vector<int> _indices;

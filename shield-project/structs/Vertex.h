@@ -10,7 +10,7 @@ namespace structs {
 	{
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT3 norm;
-		//DirectX::XMFLOAT2 tex;
+		DirectX::XMFLOAT2 tex;
 	};
 };
 };

@@ -9,6 +9,8 @@ namespace services {
 	{
 	public:
 		NullGraphics();
+		void begin( void );
+		void end( void );
 		void draw( const Point[], int, const int[], int );
 		void setCamera(
 			float, float, float,

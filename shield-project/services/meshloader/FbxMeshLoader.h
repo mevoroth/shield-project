@@ -27,7 +27,33 @@ namespace services {
 		void _getNormal(
 			const fbxsdk_2013_3::FbxMesh*,
 			int,
-			DirectX::XMFLOAT3*
+			DirectX::XMFLOAT3&
+		) const;
+		/**
+		 * @param[in] Mesh
+		 * @param[in] Polygon
+		 * @param[in] Vertex
+		 * @param[out] UV
+		 */
+		void FbxMeshLoader::_getUV(
+			fbxsdk_2013_3::FbxMesh*,
+			int,
+			int,
+			FbxVector2&
+		) const;
+		/**
+		 * @param[in] Vertex position
+		 * @param[in] Normal
+		 * @param[in] Vertex index
+		 * @param[in] UV
+		 * @param[out] Vertex
+		 */
+		void _createVertex(
+			const FbxVector4*,
+			const DirectX::XMFLOAT3*,
+			int,
+			const FbxVector2&,
+			structs::Vertex&
 		) const;
 	};
 };

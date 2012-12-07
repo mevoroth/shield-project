@@ -25,7 +25,9 @@ namespace services {
 		};
 		Direct3D11Graphics( HWND );
 		~Direct3D11Graphics( void );
-		void draw( const Vertex[], int, const int[], int );
+		void begin( void );
+		void end( void );
+		void draw( const Vertex[], int );
 		void setCamera(
 			float, float, float,
 			float, float, float,

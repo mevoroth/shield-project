@@ -2,6 +2,7 @@ struct VIn
 {
 	float4 pos : SV_Position;
 	float4 norm : NORMAL;
+	float2 tex : TEXCOORD0;
 	/*float4 color : COLOR;*/
 };
 
@@ -9,6 +10,7 @@ struct PIn
 {
 	float4 pos : SV_Position;
 	float4 norm : NORMAL;
+	float2 tex : TEXCOORD0;
 };
 
 cbuffer WorldViewProjectionMatrix : register(b0)

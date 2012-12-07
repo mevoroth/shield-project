@@ -181,12 +181,12 @@ void Game::render()
 	};
 
 	const Mesh* mesh = _player->getMesh();
+	Service::getGraphics()->begin();
 	Service::getGraphics()->draw(
 		&mesh->getVertexes()[0],
-		mesh->getVertexes().size(),
-		&mesh->getIndices()[0],
-		mesh->getIndices().size()
+		mesh->getVertexes().size()
 	);
+	Service::getGraphics()->end();
 	/*Service::getGraphics()->draw(
 		buffer,
 		24,

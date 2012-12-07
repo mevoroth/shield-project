@@ -2,6 +2,7 @@ struct PIn
 {
 	float4 pos : SV_Position;
 	float4 norm : NORMAL;
+	float2 tex : TEXCOORD0;
 };
 
 float4 PS( PIn input ) : SV_TARGET
