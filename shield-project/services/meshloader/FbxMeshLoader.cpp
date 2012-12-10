@@ -24,10 +24,10 @@ FbxMeshLoader::~FbxMeshLoader()
 	_importer->Destroy();
 	_sdkManager->Destroy();
 };
-const Mesh* FbxMeshLoader::load( const std::string& filename )
+const std::vector<Mesh*>& FbxMeshLoader::load( const std::string& filename )
 {
 	FbxScene* scene = FbxScene::Create( _sdkManager, "scene" );
-	FbxMesh* mesh = new FbxMesh();
+	std::vector<Mesh*>* meshes = new std::vector<Mesh*>;
 
 	_importer->Initialize(
 		filename.c_str(),
@@ -43,32 +43,15 @@ const Mesh* FbxMeshLoader::load( const std::string& filename )
 		{
 			continue;
 		}
+		FbxMesh* mesh = new FbxMesh();
+		mesh->setTexture( scene->GetNode(i)->GetName() );
+
 		fbxsdk_2013_3::FbxMesh* fbxmesh = (fbxsdk_2013_3::FbxMesh*)scene->GetNode(i)->GetNodeAttribute();
 		FbxVector4* vertexes = fbxmesh->GetControlPoints();
 		int vertexesCount = fbxmesh->GetControlPointsCount();
 		int polygonCount = fbxmesh->GetPolygonCount();
 		DirectX::XMFLOAT3* normals = new DirectX::XMFLOAT3[vertexesCount];
 		
-		int uvcount = fbxmesh->GetElementUVCount();
-		FbxGeometryElementUV* uv = fbxmesh->GetElementUV(0);
-		FbxLayerElement::EMappingMode chouette = uv->GetMappingMode();
-		FbxLayerElement::EReferenceMode truc = uv->GetReferenceMode();
-		/*FbxVector2 v2 = uv->GetDirectArray().GetAt(
-			uv->GetIndexArray().GetAt(0)
-		);*/
-		
-		//structs::Vertex v;
-		//
-		//// Get vertex
-		//v.pos = DirectX::XMFLOAT3(
-		//	vertexes[vertexIndex][0],
-		//	vertexes[vertexIndex][1],
-		//	vertexes[vertexIndex][2]
-		//);
-		
-		//TODO: TEXTURE
-		//mesh->putVertex( v );
-
 		for ( int vertexIndex = 0; vertexIndex < vertexesCount; ++vertexIndex )
 		{
 			// Get normals
@@ -108,9 +91,10 @@ const Mesh* FbxMeshLoader::load( const std::string& filename )
 			}
 			delete polygonVertexes;
 		}
+		meshes->push_back( mesh );
 		delete normals;
 	}
-	return mesh;
+	return *meshes;
 };
 void FbxMeshLoader::_createVertex(
 	const FbxVector4* vertexes,

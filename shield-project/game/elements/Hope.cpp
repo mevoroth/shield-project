@@ -33,7 +33,7 @@ bool game::Hope::hit( const Element& e ) const
 {
 	return false;
 };
-const Mesh* game::Hope::getMesh() const
+const std::vector<Mesh*>& game::Hope::getMesh() const
 {
 	return Service::getMeshLoader()->load( "hope.fbx" );
 };

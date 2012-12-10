@@ -14,7 +14,7 @@ namespace services {
 	public:
 		FbxMeshLoader();
 		~FbxMeshLoader();
-		const Mesh* load( const std::string& );
+		const std::vector<Mesh*>& load( const std::string& );
 	private:
 		FbxManager* _sdkManager;
 		FbxImporter* _importer;

@@ -32,6 +32,11 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 		throw "Erreur";
 	}
 	loadShader<ID3D11VertexShader>(0, vertexShader);
+	createConstantBuffer(
+		0,
+		0,
+		sizeof(WVPMatrix)
+	);
 	hr = D3DCompileFromFile( L"testps.hlsl", 0, 0, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &pixelShader, &errors );
 	if ( FAILED(hr) )
 	{
@@ -59,78 +64,25 @@ void services::Direct3D11Graphics::end( void )
 	_swapChain->Present(0, 0);
 };
 void services::Direct3D11Graphics::draw( const Vertex vertexes[],
-										int vertexesSize )
+										int vertexesSize,
+										const std::string& texture )
 {
-	ID3D11Buffer* buffer;
-	WVPMatrix mat; 
+	ID3D11Buffer* vertexBuffer;
+	WVPMatrix mat;
 
-	D3D11_BUFFER_DESC bufferDesc;
-	bufferDesc.ByteWidth = sizeof( Vertex )*vertexesSize;
-	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bufferDesc.MiscFlags = 0;
-	bufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA subResDat;
-	subResDat.pSysMem = vertexes;
-	subResDat.SysMemPitch = 0;
-	subResDat.SysMemSlicePitch = 0;
-
-	HRESULT hr = _device->CreateBuffer( &bufferDesc, &subResDat, &buffer );
-	if ( FAILED(hr) )
-	{
-		throw "Erreur buffer vertices";
-	}
-
-	UINT stride = sizeof( Vertex );
-	UINT offset = 0;
-	_deviceContext->IASetVertexBuffers( 0, 1, &buffer, &stride, &offset );
-	
-	/*bufferDesc.ByteWidth = sizeof( int )*indicesSize;
-	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bufferDesc.MiscFlags = 0;
-	bufferDesc.StructureByteStride = 0;
-
-	subResDat.pSysMem = indices;
-	subResDat.SysMemPitch = 0;
-	subResDat.SysMemSlicePitch = 0;
-
-	hr = _device->CreateBuffer( &bufferDesc, &subResDat, &buffer );
-	if ( FAILED(hr) )
-	{
-		throw "Erreur buffer indices";
-	}
-	_deviceContext->IASetIndexBuffer( buffer, DXGI_FORMAT_R32_UINT, 0 );*/
-
-	// Bind World View Projection matrix
-	bufferDesc.ByteWidth = sizeof( WVPMatrix );
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-	bufferDesc.MiscFlags = 0;
-	bufferDesc.StructureByteStride = 0;
-	
-	hr = _device->CreateBuffer( &bufferDesc, 0, &buffer );
-
-	if ( FAILED(hr) )
-	{
-		throw "Erreur buffer matrice";
-	}
+	_createVertexBuffer( vertexes, vertexesSize, vertexBuffer );
 
 	//mat.mat = DirectX::XMMatrixTranspose( _projectionMatrix*_viewMatrix );
 	mat.mat = DirectX::XMMatrixTranspose(_projectionMatrix)*DirectX::XMMatrixTranspose(_viewMatrix);
-
-	_deviceContext->VSSetConstantBuffers( 0, 1, &buffer );
-	_deviceContext->UpdateSubresource( buffer, 0, 0, &mat, 0, 0 );
+	updateConstantBuffer( 0, 0, &mat );
 	
 	_deviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	
 	// Draw
 	_deviceContext->Draw( vertexesSize, 0 );
-	//_deviceContext->DrawIndexed( indicesSize, 0, 0 );
+
+	// Clean
+	vertexBuffer->Release();
 };
 void services::Direct3D11Graphics::setCamera(
 	float eyeX, float eyeY, float eyeZ,
@@ -152,6 +104,77 @@ void services::Direct3D11Graphics::setPerspective(
 		fovAngleY, ratio, nearZ, farZ
 	);
 };
+void services::Direct3D11Graphics::updateConstantBuffer(
+	UINT16 shader,
+	UINT16 slot,
+	void* resource
+)
+{
+	map<UINT16, map<UINT16, ID3D11Buffer*>>::const_iterator constBuffer =
+		_constantsBuffers.find( shader );
+	if ( constBuffer == _constantsBuffers.end() )
+	{
+		throw;
+	}
+	map<UINT16, ID3D11Buffer*>::const_iterator bufferSlot =
+		constBuffer->second.find( slot );
+	if ( bufferSlot == constBuffer->second.end() )
+	{
+		throw;
+	}
+	_deviceContext->UpdateSubresource(
+		bufferSlot->second,
+		0,
+		0,
+		resource,
+		0,
+		0
+	);
+};
+void services::Direct3D11Graphics::createConstantBuffer(
+	UINT16 shader,
+	UINT16 slot,
+	int size
+)
+{
+	D3D11_BUFFER_DESC bufferDesc;
+	HRESULT hr;
+	ID3D11Buffer* buffer;
+	pair<map<UINT16, ID3D11Buffer*>::const_iterator, bool> ret;
+
+	map<UINT16, map<UINT16, ID3D11Buffer*>>::iterator constBuffer =
+		_constantsBuffers.find( shader );
+	if ( constBuffer == _constantsBuffers.end() )
+	{
+		throw;
+	}
+	
+	bufferDesc.ByteWidth = size;
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 0;
+	
+	hr = _device->CreateBuffer( &bufferDesc, 0, &buffer );
+
+	if ( FAILED(hr) )
+	{
+		throw "Erreur buffer matrice";
+	}
+
+	ret = constBuffer->second.insert(
+		pair<UINT16, ID3D11Buffer*>(
+			slot,
+			buffer
+		)
+	);
+	if ( !ret.second )
+	{
+		buffer->Release();
+		throw;
+	}
+};
 template<class Shader> void services::Direct3D11Graphics::loadShader( UINT16 key, ID3D10Blob* shaderBlob )
 {
 	Shader* shader = 0;
@@ -168,34 +191,101 @@ template<class Shader> void services::Direct3D11Graphics::loadShader( UINT16 key
 	{
 		throw "Shader already inserted";
 	}
+	_constantsBuffers.insert(
+		pair<UINT16, map<UINT16, ID3D11Buffer*>>(
+			key,
+			map<UINT16, ID3D11Buffer*>()
+		)
+	);
 };
-template<class Shader> void services::Direct3D11Graphics::useShader( UINT16 key )
+template<class Shader> void services::Direct3D11Graphics::useShader(
+	UINT16 key
+)
 {
-	map<UINT16, ID3D11DeviceChild*>::const_iterator element = _shaders.find( key );
-	if ( element != _shaders.end() )
+	map<UINT16, ID3D11DeviceChild*>::const_iterator element =
+		_shaders.find( key );
+	map<UINT16, map<UINT16, ID3D11Buffer*>>::const_iterator constBuffers =
+		_constantsBuffers.find( key );
+	
+	if ( element != _shaders.end() && constBuffers != _constantsBuffers.end() )
 	{
-		_useShader( (Shader*)(element->second) );
+		_useShader( (Shader*)(element->second), constBuffers->second );
 	}
 };
-void services::Direct3D11Graphics::_useShader( ID3D11VertexShader* shader )
+void services::Direct3D11Graphics::_useShader(
+	ID3D11VertexShader* shader,
+	const map<UINT16, ID3D11Buffer*>& buffers
+)
 {
 	_deviceContext->VSSetShader( shader, 0, 0 );
+	for (
+		map<UINT16, ID3D11Buffer*>::const_iterator it = buffers.begin();
+		it != buffers.end();
+		++it
+	)
+	{
+		_deviceContext->VSSetConstantBuffers( it->first, 1, &it->second );
+	}
 };
-void services::Direct3D11Graphics::_useShader( ID3D11HullShader* shader )
+void services::Direct3D11Graphics::_useShader(
+	ID3D11HullShader* shader,
+	const map<UINT16, ID3D11Buffer*>& buffers
+)
 {
 	_deviceContext->HSSetShader( shader, 0, 0 );
+	for (
+		map<UINT16, ID3D11Buffer*>::const_iterator it = buffers.begin();
+		it != buffers.end();
+		++it
+	)
+	{
+		_deviceContext->HSSetConstantBuffers( it->first, 1, &it->second );
+	}
 };
-void services::Direct3D11Graphics::_useShader( ID3D11DomainShader* shader )
+void services::Direct3D11Graphics::_useShader(
+	ID3D11DomainShader* shader,
+	const map<UINT16, ID3D11Buffer*>& buffers
+)
 {
 	_deviceContext->DSSetShader( shader, 0, 0 );
+	for (
+		map<UINT16, ID3D11Buffer*>::const_iterator it = buffers.begin();
+		it != buffers.end();
+		++it
+	)
+	{
+		_deviceContext->DSSetConstantBuffers( it->first, 1, &it->second );
+	}
 };
-void services::Direct3D11Graphics::_useShader( ID3D11GeometryShader* shader )
+void services::Direct3D11Graphics::_useShader(
+	ID3D11GeometryShader* shader,
+	const map<UINT16, ID3D11Buffer*>& buffers
+)
 {
 	_deviceContext->GSSetShader( shader, 0, 0 );
+	for (
+		map<UINT16, ID3D11Buffer*>::const_iterator it = buffers.begin();
+		it != buffers.end();
+		++it
+	)
+	{
+		_deviceContext->GSSetConstantBuffers( it->first, 1, &it->second );
+	}
 };
-void services::Direct3D11Graphics::_useShader( ID3D11PixelShader* shader )
+void services::Direct3D11Graphics::_useShader(
+	ID3D11PixelShader* shader,
+	const map<UINT16, ID3D11Buffer*>& buffers
+)
 {
 	_deviceContext->PSSetShader( shader, 0, 0 );
+	for (
+		map<UINT16, ID3D11Buffer*>::const_iterator it = buffers.begin();
+		it != buffers.end();
+		++it
+	)
+	{
+		_deviceContext->PSSetConstantBuffers( it->first, 1, &it->second );
+	}
 };
 void services::Direct3D11Graphics::_createInputLayout( ID3D10Blob* shaderBlob )
 {
@@ -377,4 +467,36 @@ IDXGIFactory* services::Direct3D11Graphics::_getFactory( void )
 		);
 	}
 	return _factory;
+};
+void services::Direct3D11Graphics::_createVertexBuffer(
+	const Vertex vertexes[],
+	int vertexesSize,
+	ID3D11Buffer*& buffer
+)
+{
+	D3D11_BUFFER_DESC bufferDesc;
+	D3D11_SUBRESOURCE_DATA subResDat;
+	
+	UINT stride = sizeof( Vertex );
+	UINT offset = 0;
+	HRESULT hr;
+
+	bufferDesc.ByteWidth = sizeof( Vertex )*vertexesSize;
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 0;
+
+	subResDat.pSysMem = vertexes;
+	subResDat.SysMemPitch = 0;
+	subResDat.SysMemSlicePitch = 0;
+
+	hr = _device->CreateBuffer( &bufferDesc, &subResDat, &buffer );
+	if ( FAILED(hr) )
+	{
+		throw "Erreur buffer vertices";
+	}
+
+	_deviceContext->IASetVertexBuffers( 0, 1, &buffer, &stride, &offset );
 };

@@ -23,8 +23,9 @@ namespace services {
 		 * Draw mesh
 		 * @param[in] Vertexes
 		 * @param[in] Vertexes count
+		 * @param[in] Texture
 		 */
-		virtual void draw( const Vertex[], int ) = 0;
+		virtual void draw( const Vertex[], int, const std::string& ) = 0;
 		/**
 		 * Look at
 		 * @param[in] Eye X

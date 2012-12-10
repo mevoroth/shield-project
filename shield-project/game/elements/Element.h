@@ -22,7 +22,7 @@ namespace game {
 		const structs::Point& getPosition( void ) const;
 
 		virtual bool hit( const Element& ) const = 0;
-		virtual const Mesh* getMesh() const = 0;
+		virtual const std::vector<Mesh*>& getMesh() const = 0;
 
 	private:
 		structs::Point _position;

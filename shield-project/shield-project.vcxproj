@@ -48,11 +48,11 @@
       <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_51_0;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PreprocessorDefinitions>DEBUG;FBXSDK_SHARED;_XM_NO_INTRINSICS_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;FBXSDK_SHARED;_XM_NO_INTRINSICS_;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>D3D11.lib;DXGI.lib;D3dcompiler.lib;fbxsdk-2013.3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>D3D11.lib;DXGI.lib;D3dcompiler.lib;fbxsdk-2013.3d.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files\boost\boost_1_51_0\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\lib\vs2010\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
@@ -93,6 +93,8 @@
     <ClCompile Include="game\elements\LaserBeamBullet.cpp" />
     <ClCompile Include="game\elements\Ship.cpp" />
     <ClCompile Include="game\weapons\Weapon.cpp" />
+    <ClCompile Include="libs\DDSTextureLoader.cpp" />
+    <ClCompile Include="libs\pch.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="services\controls\KeyboardControls.cpp" />
@@ -126,6 +128,10 @@
     <ClInclude Include="game\elements\LaserBeamBullet.h" />
     <ClInclude Include="game\elements\Ship.h" />
     <ClInclude Include="game\weapons\Weapon.h" />
+    <ClInclude Include="libs\dds.h" />
+    <ClInclude Include="libs\DDSTextureLoader.h" />
+    <ClInclude Include="libs\pch.h" />
+    <ClInclude Include="libs\PlatformHelpers.h" />
     <ClInclude Include="patterns\Cloneable.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="services\controls\Action.h" />
@@ -147,14 +153,6 @@
     <ClInclude Include="structs\Point.h" />
     <ClInclude Include="structs\Vector3.h" />
     <ClInclude Include="structs\Vertex.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <FxCompile Include="types.hlsli">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="testvs.hlsl">

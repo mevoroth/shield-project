@@ -34,7 +34,7 @@ namespace game {
 		Hope( const structs::Point&, int );
 		void refresh( void );
 		bool hit( const Element& ) const;
-		const Mesh* getMesh() const;
+		const std::vector<Mesh*>& getMesh() const;
 		void move( const structs::Vector3& );
 		void dash( const structs::Vector3& );
 		void charge();

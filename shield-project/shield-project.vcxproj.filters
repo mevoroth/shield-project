@@ -42,6 +42,9 @@
     <Filter Include="shield.structs">
       <UniqueIdentifier>{0023588d-3df3-4540-98fd-3d124c62978d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libs">
+      <UniqueIdentifier>{f584f4f7-ce38-43d5-aaac-cfe1f5fd76a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="structs\Point.cpp">
@@ -136,6 +139,12 @@
     </ClCompile>
     <ClCompile Include="services\meshloader\FbxMeshLoader.cpp">
       <Filter>shield.services\meshloader</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\DDSTextureLoader.cpp">
+      <Filter>libs</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\pch.cpp">
+      <Filter>libs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,18 +271,24 @@
     <ClInclude Include="services\graphics\WVPMatrix.h">
       <Filter>shield.services\graphics</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="libs\DDSTextureLoader.h">
+      <Filter>libs</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\dds.h">
+      <Filter>libs</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\pch.h">
+      <Filter>libs</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\PlatformHelpers.h">
+      <Filter>libs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="testps.hlsl">
       <Filter>Fichiers de ressources</Filter>
     </FxCompile>
     <FxCompile Include="testvs.hlsl">
-      <Filter>Fichiers de ressources</Filter>
-    </FxCompile>
-    <FxCompile Include="types.hlsli">
       <Filter>Fichiers de ressources</Filter>
     </FxCompile>
   </ItemGroup>

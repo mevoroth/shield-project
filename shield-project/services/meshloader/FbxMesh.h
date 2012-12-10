@@ -10,6 +10,7 @@ namespace services {
 	{
 	public:
 		const std::vector<structs::Vertex>& getVertexes() const;
+		const std::string& getTexture() const;
 		//const std::vector<int>& getIndices() const;
 		//void putVertex( const structs::Vertex& );
 		void putTriangle(
@@ -17,10 +18,12 @@ namespace services {
 			const structs::Vertex&,
 			const structs::Vertex&
 		);
+		void setTexture( const std::string& );
 
 	private:
 		std::vector<int> _indices;
 		std::vector<structs::Vertex> _vertexes;
+		std::string _texture;
 	};
 };
 };

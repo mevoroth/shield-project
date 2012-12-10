@@ -10,6 +10,7 @@ namespace services {
 	{
 	public:
 		virtual const std::vector<structs::Vertex>& getVertexes() const = 0;
+		virtual const std::string& getTexture() const = 0;
 		/*virtual const std::vector<int>& getIndices() const = 0;*/
 	};
 };

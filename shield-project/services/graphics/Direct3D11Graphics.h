@@ -27,13 +27,27 @@ namespace services {
 		~Direct3D11Graphics( void );
 		void begin( void );
 		void end( void );
-		void draw( const Vertex[], int );
+		void draw( const Vertex[], int, const std::string& );
 		void setCamera(
 			float, float, float,
 			float, float, float,
 			float, float, float
 		);
 		void setPerspective( float, float, float, float );
+		/**
+		 * Create constant buffer
+		 * @param[in] Shader
+		 * @param[in] Slot
+		 * @param[in] Size of buffer
+		 */
+		void createConstantBuffer( UINT16, UINT16, int );
+		/**
+		 * Update constant buffer value
+		 * @param[in] Shader
+		 * @param[in] Slot
+		 * @param[in] Value
+		 */
+		void updateConstantBuffer( UINT16, UINT16, void* );
 		template<class Shader> void loadShader( UINT16, ID3D10Blob* );
 		template<class Shader> void useShader( UINT16 );
 
@@ -48,12 +62,18 @@ namespace services {
 		 * Bibliothèque de shaders
 		 */
 		map<UINT16, ID3D11DeviceChild*> _shaders;
+		/**
+		 * Variables de shaders
+		 */
+		map<UINT16, map<UINT16, ID3D11Buffer*>> _constantsBuffers;
 		ID3D11InputLayout* _inputLayout;
 		ID3D11Buffer* _matrixBuffer;
 		DirectX::XMMATRIX _worldMatrix;
 		DirectX::XMMATRIX _viewMatrix;
 		DirectX::XMMATRIX _projectionMatrix;
 
+		void _createVertexBuffer( const Vertex[], int, ID3D11Buffer*& );
+		//void _createMatrixBuffer(  );
 		IDXGIFactory* _getFactory( void );
 		void _initDeviceAndSwapChain( void );
 		void _initRenderTarget( void );
@@ -81,23 +101,38 @@ namespace services {
 		/**
 		 * Use vertex shader
 		 */
-		void _useShader( ID3D11VertexShader* );
+		void _useShader(
+			ID3D11VertexShader*,
+			const map<UINT16, ID3D11Buffer*>&
+		);
 		/**
 		 * Use hull shader
 		 */
-		void _useShader( ID3D11HullShader* );
+		void _useShader(
+			ID3D11HullShader*,
+			const map<UINT16, ID3D11Buffer*>&
+		);
 		/**
 		 * Use domain shader
 		 */
-		void _useShader( ID3D11DomainShader* );
+		void _useShader(
+			ID3D11DomainShader*,
+			const map<UINT16, ID3D11Buffer*>&
+		);
 		/**
 		 * Use geometry shader
 		 */
-		void _useShader( ID3D11GeometryShader* );
+		void _useShader(
+			ID3D11GeometryShader*,
+			const map<UINT16, ID3D11Buffer*>&
+		);
 		/**
 		 * Use pixel shader
 		 */
-		void _useShader( ID3D11PixelShader* );
+		void _useShader(
+			ID3D11PixelShader*,
+			const map<UINT16, ID3D11Buffer*>&
+		);
 		void _createInputLayout( ID3D10Blob* );
 	};
 };
