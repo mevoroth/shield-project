@@ -117,8 +117,13 @@ int game::Hope::getMaxEnergy()
 };
 istream& game::operator>>( istream& is, game::Hope& h )
 {
-	h._shield;
-	h._shieldLastTick;
+	if( is.fail() )
+	{
+		throw;
+	}
+
+	h._shield = 0;
+	h._shieldLastTick = 0;
 	h._accumulator = 0;
 	
 	is >> h._maxEnergy;

@@ -45,8 +45,8 @@
     <Filter Include="libs">
       <UniqueIdentifier>{f584f4f7-ce38-43d5-aaac-cfe1f5fd76a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="shield\savegame">
-      <UniqueIdentifier>{aa0a5a5b-7e72-4f18-b63e-914df3b94424}</UniqueIdentifier>
+    <Filter Include="shield.savegame">
+      <UniqueIdentifier>{9516b429-f100-4238-aaeb-0d28afba786f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="structs\GameCallable.cpp">
       <Filter>shield.structs</Filter>
+    </ClCompile>
+    <ClCompile Include="savegame\ElementBlock.cpp">
+      <Filter>shield.savegame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,6 +297,9 @@
     </ClInclude>
     <ClInclude Include="structs\GameCallable.h">
       <Filter>shield.structs</Filter>
+    </ClInclude>
+    <ClInclude Include="savegame\ElementBlock.h">
+      <Filter>shield.savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

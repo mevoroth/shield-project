@@ -96,6 +96,7 @@
     <ClCompile Include="libs\DDSTextureLoader.cpp" />
     <ClCompile Include="libs\pch.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="savegame\ElementBlock.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="services\controls\KeyboardControls.cpp" />
     <ClCompile Include="services\controls\NullControls.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="libs\pch.h" />
     <ClInclude Include="libs\PlatformHelpers.h" />
     <ClInclude Include="patterns\Cloneable.h" />
+    <ClInclude Include="savegame\ElementBlock.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="services\controls\Action.h" />
     <ClInclude Include="services\controls\IControls.h" />
