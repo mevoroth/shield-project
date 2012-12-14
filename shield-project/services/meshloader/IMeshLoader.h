@@ -9,7 +9,7 @@ namespace services {
 	class IMeshLoader
 	{
 	public:
-		virtual const std::vector<Mesh*>& load( const std::string& ) = 0;
+		virtual std::vector<Mesh*> load( const std::string& ) = 0;
 	};
 };
 };

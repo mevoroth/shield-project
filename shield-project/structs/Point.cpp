@@ -14,7 +14,16 @@ Point::Point( const Point& p )
 	y = p.y;
 	z = p.z;
 };
-Point& Point::clone() const
+Point Point::clone() const
 {
 	return Point(*this);
+};
+Point& Point::operator+( const Vector3& dir ) const
+{
+	Point* p = new Point(*this);
+	p->x += dir.dx;
+	p->y += dir.dy;
+	p->z += dir.dz;
+
+	return *p;
 };

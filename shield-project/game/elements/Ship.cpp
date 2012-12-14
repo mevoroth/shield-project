@@ -17,7 +17,7 @@ game::Ship::Ship( const Ship& s )
 game::Ship::~Ship()
 {
 };
-std::list<game::Element*>& game::Ship::shoot() const
+std::list<game::Element*> game::Ship::shoot() const
 {
 	std::list<game::Element*> bidule;
 	return bidule;

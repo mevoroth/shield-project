@@ -12,7 +12,7 @@ namespace game {
 	public:
 		Weapon( int );
 		int getDamage( void ) const;
-		virtual std::list<Element*>& shoot( const structs::Point& ) const = 0;
+		virtual std::list<Element*> shoot( const structs::Point& ) const = 0;
 
 	private:
 		int _damage;

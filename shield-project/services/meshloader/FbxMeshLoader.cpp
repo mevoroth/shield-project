@@ -24,10 +24,10 @@ FbxMeshLoader::~FbxMeshLoader()
 	_importer->Destroy();
 	_sdkManager->Destroy();
 };
-const std::vector<Mesh*>& FbxMeshLoader::load( const std::string& filename )
+std::vector<Mesh*> FbxMeshLoader::load( const std::string& filename )
 {
 	FbxScene* scene = FbxScene::Create( _sdkManager, "scene" );
-	std::vector<Mesh*>* meshes = new std::vector<Mesh*>;
+	std::vector<Mesh*> meshes;
 
 	_importer->Initialize(
 		filename.c_str(),
@@ -91,10 +91,10 @@ const std::vector<Mesh*>& FbxMeshLoader::load( const std::string& filename )
 			}
 			delete polygonVertexes;
 		}
-		meshes->push_back( mesh );
+		meshes.push_back( mesh );
 		delete normals;
 	}
-	return *meshes;
+	return meshes;
 };
 void FbxMeshLoader::_createVertex(
 	const FbxVector4* vertexes,

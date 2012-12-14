@@ -1,9 +1,12 @@
 #include "Game.h"
+
 #include <map>
+#include <fstream>
 #include "Service.h"
 #include "Settings.h"
 #include "game\actions\ActionFactory.h"
 #include "services\controls\State.h"
+#include "savegame\ElementBlock.h"
 
 using namespace std;
 using namespace shield;
@@ -63,59 +66,147 @@ Game::~Game( void )
 {
 	// TODO: Dealloc
 };
-void Game::load( Hope* s )
+void Game::load( const std::string& save )
 {
-	_player = s;
-	//_elements.push_back( s );
-	//_elementsMutex.push_back( boost::mutex() );
+	//_player = s;
+
+	ifstream savegame( save );
+	if ( !savegame )
+	{
+		throw;
+	}
+
+	// Memory blocks
+	UINT16 elementsCount = 0;
+	savegame::ElementBlock element;
+
+	// Read player
+	savegame >> *_player;
+
+	for ( UINT16 i = 0; i < elementsCount; ++i )
+	{
+		// Read other elements
+		savegame >> element;
+
+		Element* el;
+
+		switch ( element.type )
+		{
+		case savegame::ElementBlock::ANGEL:
+			el = new Angel( hp, hpmax );
+			break;
+		case savegame::ElementBlock::ARCHANGEL:
+			el = new Archangel( hp, hpmax );
+			break;
+		case savegame::ElementBlock::RULER:
+			el = new Ruler( hp, hpmax );
+			break;
+		case savegame::ElementBlock::AUTHORITY:
+			el = new Authority( hp, hpmax );
+			break;
+		case savegame::ElementBlock::VIRTUE:
+			el = new Virtue( hp, hpmax );
+			break;
+		case savegame::ElementBlock::DOMINION:
+			el = new Dominion( hp, hpmax );
+			break;
+		case savegame::ElementBlock::THRONE:
+			el = new Throne( hp, hpmax );
+			break;
+		case savegame::ElementBlock::CHERUB:
+			el = new Cherub( hp, hpmax );
+			break;
+		case savegame::ElementBlock::SERAPH:
+			el = new Seraph( hp, hpmax );
+			break;
+		}
+
+		_elements.push_back( el );
+	}
 };
 void Game::create()
 {
 	load(
-		new game::Hope(
+		"test"
+		/*new game::Hope(
 			structs::Point( 0.f, 0.f, 0.f ),
 			settings::player::BASE_LIFE
-		)
+		)*/
 	);
 };
-void Game::run()
+void Game::reset( void )
 {
-	//Service::getControls();
-	std::list<Element*>::iterator elIt;
-	//std::list<boost::mutex>::iterator mutIt;
-
+	// Reset
+};
+void Game::run( void )
+{
 	while ( true )
 	{
-#ifdef DEBUG
-		/*if ( _elements.size() != _elementsMutex.size() )
-		{
-			throw "Elements mal initialisés";
-		}*/
-#endif
-		elIt = _elements.begin();
-		//mutIt = _elementsMutex.begin();
+		ULONGLONG currentTick = GetTickCount64();
+		ULONGLONG elapsedTime = currentTick - _lastTick;
 		
-		while ( elIt != _elements.end() )
-		{
-			//mutIt->lock();
-			(*elIt)->refresh();
-			//mutIt->unlock();
+		_input( elapsedTime );
+		_update( elapsedTime );
+		_draw( elapsedTime );
 
-			//++mutIt;
-			++elIt;
+		_lastTick = currentTick;
+	}
+};
+void Game::_input( ULONGLONG elapsedTime )
+{
+	while ( !_actionsQueue.empty() )
+	{
+		Action a = _actionsQueue.front();
+		_actionsQueue.pop();
+		switch ( a )
+		{
+		case MOVE_LEFT:
+			_getPlayer()->move( structs::Vector3(-1.f, 0.f, 0.f) );
+			break;
+		case MOVE_RIGHT:
+			_getPlayer()->move( structs::Vector3(1.f, 0.f, 0.f) );
+			break;
+		case MOVE_UP:
+			_getPlayer()->move( structs::Vector3(0.f, 1.f, 0.f) );
+			break;
+		case MOVE_DOWN:
+			_getPlayer()->move( structs::Vector3(0.f, -1.f, 0.f) );
+			break;
+		case DASH_LEFT:
+			_getPlayer()->dash( structs::Vector3(-1.f, 0.f, 0.f) );
+			break;
+		case DASH_RIGHT:
+			_getPlayer()->dash( structs::Vector3(1.f, 0.f, 0.f) );
+			break;
+		case CHARGE:
+		case SHOOT:
+		case BURST:
+		case SLASH:
+		case SHIELD:
+			break;
 		}
 	}
+};
+void Game::_update( ULONGLONG elapsedTime )
+{
+	// Faire avancer le vaisseau
+	// Faire avancer la camera
+};
+void Game::_draw( ULONGLONG elapsedTime )
+{
+	render();
 };
 void Game::render()
 {
 	Service::getGraphics()->setCamera(
-		-5.f, -5.f, -5.f,
+		0.f, 5.f, -5.f,
 		0.f, 0.f, 0.f,
-		0.f, 1.f, 0.f
+		0.f, 0.f, 1.f
 	);
-	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, .1f, 10.f );
+	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, .1f, 100.f );
 	
 	std::vector<Mesh*> mesh = _player->getMesh();
+
 	Service::getGraphics()->begin();
 	for ( std::vector<Mesh*>::const_iterator it = mesh.begin();
 		it != mesh.end();
@@ -132,41 +223,58 @@ void Game::render()
 	// Draw game
 	// Draw HUD
 };
-void Game::Move( const structs::Vector3& direction )
+void Game::MoveLeft()
 {
-	// TODO: Collision
-	_getPlayer()->move( direction );
+	_actionsQueue.push( MOVE_LEFT );
 };
-void Game::Dash( const structs::Vector3& direction )
+void Game::MoveRight()
 {
-	// TODO: Collision
-	_getPlayer()->dash( direction );
+	_actionsQueue.push( MOVE_RIGHT );
+};
+void Game::MoveUp()
+{
+	_actionsQueue.push( MOVE_UP );
+};
+void Game::MoveDown()
+{
+	_actionsQueue.push( MOVE_DOWN );
+};
+void Game::DashLeft( void )
+{
+	_actionsQueue.push( DASH_LEFT );
+};
+void Game::DashRight( void )
+{
+	_actionsQueue.push( DASH_RIGHT );
 };
 void Game::Charge()
 {
-	_getPlayer()->charge();
+	_actionsQueue.push( CHARGE );
+	//_getPlayer()->charge();
 };
 void Game::Shoot()
 {
-	_bullets.splice(
+	_actionsQueue.push( SHOOT );
+	/*_bullets.splice(
 		_bullets.end(),
 		_getPlayer()->shoot()
-	);
+	);*/
 };
 void Game::Burst()
 {
-	_bullets.splice(
+	_actionsQueue.push( BURST );
+	/*_bullets.splice(
 		_bullets.end(),
 		_getPlayer()->burst()
-	);
+	);*/
 };
 void Game::Slash()
 {
-	_getPlayer()->slash();
+	_actionsQueue.push( SLASH );
 };
 void Game::Shield()
 {
-	_getPlayer()->shield();
+	_actionsQueue.push( SHIELD );
 };
 void Game::SwapForm()
 {

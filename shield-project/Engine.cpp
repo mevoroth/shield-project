@@ -1,6 +1,6 @@
 #include "Engine.h"
-#include "Service.h"
 
+#include "Service.h"
 #include "services\controls\KeyboardControls.h"
 #include "services\graphics\Direct3D11Graphics.h"
 #include "services\sound\NullSound.h"
@@ -8,6 +8,10 @@
 
 #include "Game.h"
 #include "Settings.h"
+#include "structs\GameCallable.h"
+
+#include <boost\thread.hpp>
+
 using namespace shield;
 
 Engine::Engine( HINSTANCE hInst, int nCmdShow )
@@ -36,8 +40,10 @@ void Engine::run()
 
 	// New game
 	Game g;
+	structs::GameCallable callable = structs::GameCallable( &g );
+
 	g.create();
-	//g.run();
+	boost::thread th = boost::thread( callable );
 
 	MSG msg = {0};
 	while ( msg.message != WM_QUIT )
@@ -46,10 +52,6 @@ void Engine::run()
 		{
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
-		}
-		else
-		{
-			g.render();
 		}
 	}
 };

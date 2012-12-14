@@ -8,7 +8,7 @@ namespace patterns {
 	{
 	public:
 		virtual ~Cloneable() {};
-		virtual Class& clone() const = 0;
+		virtual Class clone() const = 0;
 	};
 };
 };

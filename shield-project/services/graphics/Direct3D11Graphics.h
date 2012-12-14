@@ -63,7 +63,7 @@ namespace services {
 		 */
 		map<UINT16, ID3D11DeviceChild*> _shaders;
 		/**
-		 * Variables de shaders
+		 * Buffers constants de shaders
 		 */
 		map<UINT16, map<UINT16, ID3D11Buffer*>> _constantsBuffers;
 		ID3D11InputLayout* _inputLayout;

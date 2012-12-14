@@ -10,7 +10,8 @@ game::Hope::Hope( const structs::Point& p, int damage )
 	_shieldLastTick( 0l ),
 	_energy( DEFAULT_ENERGY ),
 	_maxEnergy( DEFAULT_MAX_ENERGY ),
-	_currentWeapon( 0 )
+	_currentWeapon( 0 ),
+	_meshes( Service::getMeshLoader()->load("resources/meshes/AlphaHope.fbx") )
 {
 };
 void game::Hope::refresh( void )
@@ -33,12 +34,19 @@ bool game::Hope::hit( const Element& e ) const
 {
 	return false;
 };
-const std::vector<Mesh*>& game::Hope::getMesh() const
+std::vector<Mesh*> game::Hope::getMesh()
 {
-	return Service::getMeshLoader()->load( "hope.fbx" );
+	return _meshes;
 };
 void game::Hope::move( const structs::Vector3& direction )
 {
+	_moveTo( getPosition() + direction );
+	for ( std::vector<Mesh*>::iterator it = _meshes.begin();
+		it != _meshes.end();
+		++it )
+	{
+		**it += direction;
+	}
 };
 void game::Hope::dash( const structs::Vector3& direction )
 {
@@ -51,7 +59,7 @@ void game::Hope::charge()
 		++_accumulator;
 	}
 };
-std::list<game::Element*>& game::Hope::shoot( void ) const
+std::list<game::Element*> game::Hope::shoot( void ) const
 {
 	std::list<game::Element*> bullets;
 	// TODO: Rendu énergie
@@ -81,7 +89,7 @@ std::list<game::Element*>& game::Hope::shoot( void ) const
 	}
 	return bullets;
 };
-std::list<game::Element*>& game::Hope::burst( void ) const
+std::list<game::Element*> game::Hope::burst( void ) const
 {
 	return _weapons[_currentWeapon].shoot( getPosition() );
 };
@@ -106,4 +114,16 @@ int game::Hope::getEnergy()
 int game::Hope::getMaxEnergy()
 {
 	return _maxEnergy;
+};
+istream& game::operator>>( istream& is, game::Hope& h )
+{
+	h._shield;
+	h._shieldLastTick;
+	h._accumulator = 0;
+	
+	is >> h._maxEnergy;
+	is >> h._energy;
+	is >> h._currentWeapon;
+
+	return is;
 };

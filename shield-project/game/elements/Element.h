@@ -19,10 +19,13 @@ namespace game {
 		void refresh( void );
 		unsigned long long getCurrentTime( void ) const;
 		unsigned long long getSpawnTime( void ) const;
-		const structs::Point& getPosition( void ) const;
+		structs::Point getPosition( void ) const;
 
 		virtual bool hit( const Element& ) const = 0;
-		virtual const std::vector<Mesh*>& getMesh() const = 0;
+		virtual std::vector<Mesh*> getMesh() = 0;
+
+	protected:
+		void _moveTo( const structs::Point& );
 
 	private:
 		structs::Point _position;

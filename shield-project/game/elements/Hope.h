@@ -1,10 +1,13 @@
 #ifndef _HOPE_H_
 #define _HOPE_H_
 
+#include <istream>
 #include <vector>
 #include <list>
 #include "Ship.h"
 #include "..\..\structs\Vector3.h"
+
+using namespace std;
 
 namespace shield {
 namespace game {
@@ -34,26 +37,30 @@ namespace game {
 		Hope( const structs::Point&, int );
 		void refresh( void );
 		bool hit( const Element& ) const;
-		const std::vector<Mesh*>& getMesh() const;
+		vector<Mesh*> getMesh();
 		void move( const structs::Vector3& );
 		void dash( const structs::Vector3& );
 		void charge();
-		std::list<Element*>& shoot( void ) const;
-		std::list<Element*>& burst( void ) const;
+		list<Element*> shoot( void ) const;
+		list<Element*> burst( void ) const;
 		void slash();
 		void shield();
 		int getMaxEnergy();
 		int getEnergy();
+		friend istream& operator>>( istream&, Hope& );
 
 	private:
-		unsigned long long _shield;
-		unsigned long long _shieldLastTick;
+		ULONGLONG _shield;
+		ULONGLONG _shieldLastTick;
 		int _maxEnergy;
 		int _energy;
 		int _accumulator;
 		int _currentWeapon;
-		std::vector<Weapon> _weapons;
+		vector<Weapon> _weapons;
+
+		vector<Mesh*> _meshes;
 	};
+	istream& operator>>( istream&, Hope& );
 };
 };
 

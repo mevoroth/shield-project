@@ -18,7 +18,7 @@ namespace game {
 		LaserBeamBullet( const structs::Point& p, int, int, int );
 		LaserBeamBullet( const LaserBeamBullet& );
 		bool hit( const Element& ) const;
-		const std::vector<Mesh*>& getMesh() const;
+		std::vector<Mesh*> getMesh();
 	private:
 		/**
 		 * Vérifie la collision

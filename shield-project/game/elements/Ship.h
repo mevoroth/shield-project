@@ -28,8 +28,8 @@ namespace game {
 		 * Tire
 		 * @return Les tirs
 		 */
-		virtual std::list<Element*>& shoot() const = 0;
-		virtual const std::vector<Mesh*>& getMesh() const = 0;
+		virtual std::list<Element*> shoot() const = 0;
+		virtual std::vector<Mesh*> getMesh() = 0;
 		int getHpMax( void ) const;
 		int getHp( void ) const;
 

@@ -3,6 +3,7 @@
 
 #include "..\..\structs\Point.h"
 #include "..\..\structs\Vertex.h"
+#include <string>
 
 using namespace shield::structs;
 

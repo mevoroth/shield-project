@@ -73,7 +73,7 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	_createVertexBuffer( vertexes, vertexesSize, vertexBuffer );
 
 	//mat.mat = DirectX::XMMatrixTranspose( _projectionMatrix*_viewMatrix );
-	mat.mat = DirectX::XMMatrixTranspose(_projectionMatrix)*DirectX::XMMatrixTranspose(_viewMatrix);
+	mat.mat = _projectionMatrix*_viewMatrix;
 	updateConstantBuffer( 0, 0, &mat );
 	
 	_deviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
@@ -90,18 +90,22 @@ void services::Direct3D11Graphics::setCamera(
 	float upX, float upY, float upZ
 )
 {
-	_viewMatrix = DirectX::XMMatrixLookAtLH(
-		DirectX::XMVectorSet( eyeX, eyeY, eyeZ, 0.f ),
-		DirectX::XMVectorSet( atX, atY, atZ, 0.f ),
-		DirectX::XMVectorSet( upX, upY, upZ, 0.f )
+	_viewMatrix = DirectX::XMMatrixTranspose(
+		DirectX::XMMatrixLookAtLH(
+			DirectX::XMVectorSet( eyeX, eyeY, eyeZ, 0.f ),
+			DirectX::XMVectorSet( atX, atY, atZ, 0.f ),
+			DirectX::XMVectorSet( upX, upY, upZ, 0.f )
+		)
 	);
 };
 void services::Direct3D11Graphics::setPerspective(
 	float fovAngleY, float ratio, float nearZ, float farZ
 )
 {
-	_projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(
-		fovAngleY, ratio, nearZ, farZ
+	_projectionMatrix = DirectX::XMMatrixTranspose(
+		DirectX::XMMatrixPerspectiveFovLH(
+			fovAngleY, ratio, nearZ, farZ
+		)
 	);
 };
 void services::Direct3D11Graphics::updateConstantBuffer(

@@ -45,6 +45,9 @@
     <Filter Include="libs">
       <UniqueIdentifier>{f584f4f7-ce38-43d5-aaac-cfe1f5fd76a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shield\savegame">
+      <UniqueIdentifier>{aa0a5a5b-7e72-4f18-b63e-914df3b94424}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="structs\Point.cpp">
@@ -145,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="libs\pch.cpp">
       <Filter>libs</Filter>
+    </ClCompile>
+    <ClCompile Include="structs\GameCallable.cpp">
+      <Filter>shield.structs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -282,6 +288,12 @@
     </ClInclude>
     <ClInclude Include="libs\PlatformHelpers.h">
       <Filter>libs</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\Callable.h">
+      <Filter>shield.structs</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\GameCallable.h">
+      <Filter>shield.structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
