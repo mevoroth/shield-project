@@ -1,10 +1,20 @@
 #include "LaserBeamBullet.h"
+#include "..\..\Service.h"
 
 using namespace shield;
 
-game::LaserBeamBullet::LaserBeamBullet( const structs::Point& p, int ray,
-									   int len, int damage )
-	: Element( p ),
+game::LaserBeamBullet::LaserBeamBullet(
+	const structs::Point& p,
+	const structs::Vector3& dir,
+	int ray,
+	int len,
+	int damage
+)
+	: Element(
+		p + dir,
+		dir,
+		Service::getMeshLoader()->load("resources/meshes/AlphaBullet.fbx")
+	),
 	_ray( ray ),
 	_length( len ),
 	_damage( damage )
@@ -26,11 +36,6 @@ bool game::LaserBeamBullet::hit( const Element& p ) const
 	// Collision
 	return _collide(current, p);*/
 	return false;
-};
-std::vector<Mesh*> game::LaserBeamBullet::getMesh()
-{
-	std::vector<Mesh*> truc;
-	return truc;
 };
 bool game::LaserBeamBullet::_collide(
 	const structs::Point& bullet,

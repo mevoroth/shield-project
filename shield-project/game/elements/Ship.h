@@ -12,10 +12,19 @@ namespace game {
 	public:
 		/**
 		 * Crée un vaisseau
-		 * @param Spawn
-		 * @param HP
+		 * @param[in] Spawn*
+		 * @param[in] Direction
+		 * @param[in] Mesh
+		 * @param[in] HP
+		 * @param[in] HP Max
 		 */
-		Ship( const structs::Point&, int );
+		Ship(
+			const structs::Point&,
+			const structs::Vector3&,
+			const std::vector<Mesh*>&,
+			int,
+			int
+		);
 		/**
 		 * Constructeur par copie
 		 */
@@ -29,12 +38,11 @@ namespace game {
 		 * @return Les tirs
 		 */
 		virtual std::list<Element*> shoot() const = 0;
-		virtual std::vector<Mesh*> getMesh() = 0;
 		int getHpMax( void ) const;
 		int getHp( void ) const;
 
 	private:
-		int _hpmax;
+		int _maxHp;
 		int _hp;
 	};
 };

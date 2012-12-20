@@ -31,6 +31,12 @@ namespace savegame {
 		int hp;
 		int hpmax;
 		Weapon weapon;
+		float x;
+		float y;
+		float z;
+		float dx;
+		float dy;
+		float dz;
 	};
 	istream& operator>>( istream&, ElementBlock& );
 };

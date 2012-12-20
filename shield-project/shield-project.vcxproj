@@ -53,7 +53,8 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>D3D11.lib;DXGI.lib;D3dcompiler.lib;fbxsdk-2013.3d.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files\boost\boost_1_51_0\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\lib\vs2010\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\boost\boost_1_51_0\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\lib\vs2010\x86;C:\Users\skana\Documents\Visual Studio 2012\Libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
     <FxCompile>
       <EntryPointName>main</EntryPointName>
@@ -80,23 +81,39 @@
     <ClCompile Include="game\actions\DashLeft.cpp" />
     <ClCompile Include="game\actions\DashRight.cpp" />
     <ClCompile Include="game\actions\MoveDown.cpp" />
+    <ClCompile Include="game\actions\MoveDownUp.cpp" />
     <ClCompile Include="game\actions\MoveLeft.cpp" />
+    <ClCompile Include="game\actions\MoveLeftUp.cpp" />
     <ClCompile Include="game\actions\MoveRight.cpp" />
+    <ClCompile Include="game\actions\MoveRightUp.cpp" />
     <ClCompile Include="game\actions\MoveUp.cpp" />
+    <ClCompile Include="game\actions\MoveUpUp.cpp" />
     <ClCompile Include="game\actions\Shield.cpp" />
     <ClCompile Include="game\actions\Shoot.cpp" />
     <ClCompile Include="game\actions\Slash.cpp" />
     <ClCompile Include="game\actions\ActionFactory.cpp" />
+    <ClCompile Include="game\elements\Angel.cpp" />
+    <ClCompile Include="game\elements\Archangel.cpp" />
+    <ClCompile Include="game\elements\Authority.cpp" />
     <ClCompile Include="game\elements\BulletFactory.cpp" />
+    <ClCompile Include="game\elements\Cherub.cpp" />
+    <ClCompile Include="game\elements\Dominion.cpp" />
     <ClCompile Include="game\elements\Element.cpp" />
+    <ClCompile Include="game\elements\ElementFactory.cpp" />
+    <ClCompile Include="game\elements\Enemy.cpp" />
     <ClCompile Include="game\elements\Hope.cpp" />
     <ClCompile Include="game\elements\LaserBeamBullet.cpp" />
+    <ClCompile Include="game\elements\Ruler.cpp" />
+    <ClCompile Include="game\elements\Seraph.cpp" />
     <ClCompile Include="game\elements\Ship.cpp" />
+    <ClCompile Include="game\elements\Throne.cpp" />
+    <ClCompile Include="game\elements\Virtue.cpp" />
     <ClCompile Include="game\weapons\Weapon.cpp" />
     <ClCompile Include="libs\DDSTextureLoader.cpp" />
     <ClCompile Include="libs\pch.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="savegame\ElementBlock.cpp" />
+    <ClCompile Include="savegame\HopeBlock.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="services\controls\KeyboardControls.cpp" />
     <ClCompile Include="services\controls\NullControls.cpp" />
@@ -118,17 +135,32 @@
     <ClInclude Include="game\actions\DashLeft.h" />
     <ClInclude Include="game\actions\DashRight.h" />
     <ClInclude Include="game\actions\MoveDown.h" />
+    <ClInclude Include="game\actions\MoveDownUp.h" />
     <ClInclude Include="game\actions\MoveLeft.h" />
+    <ClInclude Include="game\actions\MoveLeftUp.h" />
     <ClInclude Include="game\actions\MoveRight.h" />
+    <ClInclude Include="game\actions\MoveRightUp.h" />
     <ClInclude Include="game\actions\MoveUp.h" />
+    <ClInclude Include="game\actions\MoveUpUp.h" />
     <ClInclude Include="game\actions\Shield.h" />
     <ClInclude Include="game\actions\Shoot.h" />
     <ClInclude Include="game\actions\Slash.h" />
+    <ClInclude Include="game\elements\Angel.h" />
+    <ClInclude Include="game\elements\Archangel.h" />
+    <ClInclude Include="game\elements\Authority.h" />
     <ClInclude Include="game\elements\BulletFactory.h" />
+    <ClInclude Include="game\elements\Cherub.h" />
+    <ClInclude Include="game\elements\Dominion.h" />
     <ClInclude Include="game\elements\Element.h" />
+    <ClInclude Include="game\elements\ElementFactory.h" />
+    <ClInclude Include="game\elements\Enemy.h" />
     <ClInclude Include="game\elements\Hope.h" />
     <ClInclude Include="game\elements\LaserBeamBullet.h" />
+    <ClInclude Include="game\elements\Ruler.h" />
+    <ClInclude Include="game\elements\Seraph.h" />
     <ClInclude Include="game\elements\Ship.h" />
+    <ClInclude Include="game\elements\Throne.h" />
+    <ClInclude Include="game\elements\Virtue.h" />
     <ClInclude Include="game\weapons\Weapon.h" />
     <ClInclude Include="libs\dds.h" />
     <ClInclude Include="libs\DDSTextureLoader.h" />
@@ -136,6 +168,7 @@
     <ClInclude Include="libs\PlatformHelpers.h" />
     <ClInclude Include="patterns\Cloneable.h" />
     <ClInclude Include="savegame\ElementBlock.h" />
+    <ClInclude Include="savegame\HopeBlock.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="services\controls\Action.h" />
     <ClInclude Include="services\controls\IControls.h" />

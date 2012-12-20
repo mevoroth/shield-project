@@ -10,6 +10,10 @@
 #include "Shield.h"
 #include "Shoot.h"
 #include "Slash.h"
+#include "MoveDownUp.h"
+#include "MoveLeftUp.h"
+#include "MoveRightUp.h"
+#include "MoveUpUp.h"
 
 using namespace shield::game;
 
@@ -62,4 +66,20 @@ services::Action* ActionFactory::getShoot()
 services::Action* ActionFactory::getSlash()
 {
 	return new actions::Slash( _g );
+};
+services::Action* ActionFactory::getMoveLeftUp()
+{
+	return new actions::MoveLeftUp( _g );
+};
+services::Action* ActionFactory::getMoveRightUp()
+{
+	return new actions::MoveRightUp( _g );
+};
+services::Action* ActionFactory::getMoveDownUp()
+{
+	return new actions::MoveDownUp( _g );
+};
+services::Action* ActionFactory::getMoveUpUp()
+{
+	return new actions::MoveUpUp( _g );
 };

@@ -30,14 +30,23 @@ namespace game {
 		};
 		/**
 		 * Crée un vaisseau
-		 * @param Spawn
-		 * @param Arme
-		 * @param HP
+		 * @param[in] Spawn
+		 * @param[in] Direction
+		 * @param[in] HP
+		 * @param[in] HP Max
+		 * @param[in] Energie
+		 * @param[in] Energie max
 		 */
-		Hope( const structs::Point&, int );
+		Hope(
+			const structs::Point&,
+			const structs::Vector3&,
+			int,
+			int,
+			int,
+			int
+		);
 		void refresh( void );
 		bool hit( const Element& ) const;
-		vector<Mesh*> getMesh();
 		void move( const structs::Vector3& );
 		void dash( const structs::Vector3& );
 		void charge();
@@ -47,7 +56,8 @@ namespace game {
 		void shield();
 		int getMaxEnergy();
 		int getEnergy();
-		friend istream& operator>>( istream&, Hope& );
+		void addWeapon( Weapon* );
+		void setCurrentWeapon( int );
 
 	private:
 		ULONGLONG _shield;
@@ -56,11 +66,8 @@ namespace game {
 		int _energy;
 		int _accumulator;
 		int _currentWeapon;
-		vector<Weapon> _weapons;
-
-		vector<Mesh*> _meshes;
+		vector<Weapon*> _weapons;
 	};
-	istream& operator>>( istream&, Hope& );
 };
 };
 

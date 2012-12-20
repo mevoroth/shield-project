@@ -30,6 +30,13 @@ namespace shield
 			SLASH,
 			SHIELD
 		};
+		enum
+		{
+			UP = 0,
+			DOWN = 1,
+			LEFT = 2,
+			RIGHT = 3
+		};
 		Game( void );
 		~Game( void );
 		/**
@@ -49,6 +56,13 @@ namespace shield
 		void MoveRight( void );
 		void MoveUp( void );
 		void MoveDown( void );
+		/**
+		 * Déplacement (forme mecha) stop
+		 */
+		void MoveLeftUp( void );
+		void MoveRightUp( void );
+		void MoveUpUp( void );
+		void MoveDownUp( void );
 		/**
 		 * Déplacement rapide (forme mecha)
 		 */
@@ -87,19 +101,23 @@ namespace shield
 		//std::list<boost::mutex> _elementsMutex;
 		Hope* _getPlayer();
 		ULONGLONG _lastTick;
+		bool _moves[4];
 
 		/**
 		 * @param[in] Elapsed time
 		 */
-		void _input( unsigned long long );
+		void _input( ULONGLONG );
 		/**
 		 * @param[in] Elapsed time
 		 */
-		void _update( unsigned long long );
+		void _update( ULONGLONG );
 		/**
 		 * @param[in] Elapsed time
 		 */
 		void _draw( unsigned long long );
+		void _drawElements( const std::list<Element*>& );
+		void _drawMeshes( const std::vector<Mesh*>& );
+		void _updateElements( ULONGLONG, std::list<Element*>& );
 	};
 };
 

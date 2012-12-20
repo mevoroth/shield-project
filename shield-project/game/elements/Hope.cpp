@@ -4,14 +4,26 @@
 
 using namespace shield;
 
-game::Hope::Hope( const structs::Point& p, int damage )
-	: Ship( p, damage ),
+game::Hope::Hope(
+	const structs::Point& p,
+	const structs::Vector3& dir,
+	int hp,
+	int hpmax,
+	int energy,
+	int maxEnergy
+)
+	: Ship(
+		p,
+		dir,
+		Service::getMeshLoader()->load("resources/meshes/AlphaHope.fbx"),
+		hp,
+		hpmax
+	),
 	_shield( 0l ),
 	_shieldLastTick( 0l ),
-	_energy( DEFAULT_ENERGY ),
-	_maxEnergy( DEFAULT_MAX_ENERGY ),
-	_currentWeapon( 0 ),
-	_meshes( Service::getMeshLoader()->load("resources/meshes/AlphaHope.fbx") )
+	_energy( energy ),
+	_maxEnergy( maxEnergy ),
+	_currentWeapon( 0 )
 {
 };
 void game::Hope::refresh( void )
@@ -34,15 +46,12 @@ bool game::Hope::hit( const Element& e ) const
 {
 	return false;
 };
-std::vector<Mesh*> game::Hope::getMesh()
-{
-	return _meshes;
-};
 void game::Hope::move( const structs::Vector3& direction )
 {
 	_moveTo( getPosition() + direction );
-	for ( std::vector<Mesh*>::iterator it = _meshes.begin();
-		it != _meshes.end();
+	std::vector<Mesh*> mesh = getMesh();
+	for ( std::vector<Mesh*>::iterator it = mesh.begin();
+		it != mesh.end();
 		++it )
 	{
 		**it += direction;
@@ -50,6 +59,8 @@ void game::Hope::move( const structs::Vector3& direction )
 };
 void game::Hope::dash( const structs::Vector3& direction )
 {
+	// Change
+	move(direction);
 };
 void game::Hope::charge()
 {
@@ -91,7 +102,7 @@ std::list<game::Element*> game::Hope::shoot( void ) const
 };
 std::list<game::Element*> game::Hope::burst( void ) const
 {
-	return _weapons[_currentWeapon].shoot( getPosition() );
+	return _weapons[_currentWeapon]->shoot( getPosition() );
 };
 void game::Hope::slash()
 {
@@ -115,20 +126,11 @@ int game::Hope::getMaxEnergy()
 {
 	return _maxEnergy;
 };
-istream& game::operator>>( istream& is, game::Hope& h )
+void game::Hope::addWeapon( Weapon* w )
 {
-	if( is.fail() )
-	{
-		throw;
-	}
-
-	h._shield = 0;
-	h._shieldLastTick = 0;
-	h._accumulator = 0;
-	
-	is >> h._maxEnergy;
-	is >> h._energy;
-	is >> h._currentWeapon;
-
-	return is;
+	_weapons.push_back( w );
+};
+void game::Hope::setCurrentWeapon( int weapon )
+{
+	_currentWeapon = weapon;
 };

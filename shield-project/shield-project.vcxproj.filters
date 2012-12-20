@@ -155,6 +155,54 @@
     <ClCompile Include="savegame\ElementBlock.cpp">
       <Filter>shield.savegame</Filter>
     </ClCompile>
+    <ClCompile Include="game\elements\ElementFactory.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="savegame\HopeBlock.cpp">
+      <Filter>shield.savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Angel.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Archangel.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Authority.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Cherub.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Dominion.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Ruler.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Seraph.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Throne.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Virtue.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\elements\Enemy.cpp">
+      <Filter>shield.game\elements</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveUpUp.cpp">
+      <Filter>shield.game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveDownUp.cpp">
+      <Filter>shield.game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveLeftUp.cpp">
+      <Filter>shield.game\actions</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actions\MoveRightUp.cpp">
+      <Filter>shield.game\actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Service.h">
@@ -300,6 +348,54 @@
     </ClInclude>
     <ClInclude Include="savegame\ElementBlock.h">
       <Filter>shield.savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\ElementFactory.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="savegame\HopeBlock.h">
+      <Filter>shield.savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Angel.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Archangel.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Authority.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Cherub.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Dominion.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Enemy.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Ruler.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Seraph.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Throne.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\elements\Virtue.h">
+      <Filter>shield.game\elements</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveLeftUp.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveRightUp.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveUpUp.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\MoveDownUp.h">
+      <Filter>shield.game\actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

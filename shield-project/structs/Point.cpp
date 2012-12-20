@@ -18,12 +18,20 @@ Point Point::clone() const
 {
 	return Point(*this);
 };
-Point& Point::operator+( const Vector3& dir ) const
+Point& Point::operator+=( const Vector3& dir )
 {
-	Point* p = new Point(*this);
-	p->x += dir.dx;
-	p->y += dir.dy;
-	p->z += dir.dz;
+	x += dir.dx;
+	y += dir.dy;
+	z += dir.dz;
 
-	return *p;
+	return *this;
+};
+Point Point::operator+( const Vector3& dir ) const
+{
+	Point p = *this;
+	p.x += dir.dx;
+	p.y += dir.dy;
+	p.z += dir.dz;
+
+	return p;
 };

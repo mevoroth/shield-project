@@ -10,12 +10,19 @@ namespace game {
 	{
 	public:
 		/**
-		 * @param Spawn
-		 * @param Rayon
-		 * @param Longueur
-		 * @param Dégâts
+		 * @param[in] Spawn
+		 * @param[in] Direction
+		 * @param[in] Rayon
+		 * @param[in] Longueur
+		 * @param[in] Dégâts
 		 */
-		LaserBeamBullet( const structs::Point& p, int, int, int );
+		LaserBeamBullet(
+			const structs::Point&,
+			const structs::Vector3&,
+			int,
+			int,
+			int
+		);
 		LaserBeamBullet( const LaserBeamBullet& );
 		bool hit( const Element& ) const;
 		std::vector<Mesh*> getMesh();

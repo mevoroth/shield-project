@@ -15,7 +15,8 @@ namespace structs {
 		float x;
 		float y;
 		float z;
-		Point& operator+( const Vector3& ) const;
+		Point operator+( const Vector3& ) const;
+		Point& operator+=( const Vector3& );
 	};
 };
 };
