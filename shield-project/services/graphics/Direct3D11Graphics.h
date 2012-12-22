@@ -50,6 +50,14 @@ namespace services {
 		void updateConstantBuffer( UINT16, UINT16, void* );
 		void setShaderResource( UINT16, UINT16, ID3D11ShaderResourceView* );
 		void setSamplerState( UINT16, UINT16, const D3D11_SAMPLER_DESC& );
+		/**
+		 * @param[in] Chemin texture
+		 * @param[out] Ressource
+		 */
+		void loadTexture(
+			const wchar_t*,
+			ID3D11ShaderResourceView*&
+		);
 		template<class Shader> void loadShader( UINT16, ID3D10Blob* );
 		template<class Shader> void useShader( UINT16 );
 
@@ -76,6 +84,10 @@ namespace services {
 		 * Options de shaders
 		 */
 		map<UINT16, map<UINT16, ID3D11SamplerState*>> _samplerStates;
+		/**
+		 * Bibliothèque de textures
+		 */
+		map<const wchar_t*, ID3D11ShaderResourceView*> _textures;
 		ID3D11InputLayout* _inputLayout;
 		ID3D11Buffer* _matrixBuffer;
 		DirectX::XMMATRIX _worldMatrix;

@@ -10,10 +10,10 @@ FBXHeaderExtension:  {
 		Version: 1000
 		Year: 2012
 		Month: 12
-		Day: 13
-		Hour: 20
-		Minute: 21
-		Second: 36
+		Day: 22
+		Hour: 10
+		Minute: 25
+		Second: 03
 		Millisecond: 0
 	}
 	Creator: "FBX SDK/FBX Plugins build 20070228"
@@ -21,7 +21,7 @@ FBXHeaderExtension:  {
 		FlagPLE: 0
 	}
 }
-CreationTime: "2012-12-13 20:21:36:000"
+CreationTime: "2012-12-22 10:25:03:000"
 Creator: "Blender version 2.63 (sub 0)"
 
 ; Object definitions
@@ -401,7 +401,7 @@ Objects:  {
 		TypeFlags: "Light"
 		GeometryVersion: 124
 	}
-	Model: "Model::AlphaEnnemy", "Mesh" {
+	Model: "Model::AlphaEnemy", "Mesh" {
 		Version: 232
 		Properties60:  {
 			Property: "QuaternionInterpolate", "bool", "",0
@@ -1662,7 +1662,7 @@ Objects:  {
 		}
 		NbPoseNodes: 1
 		PoseNode:  {
-			Node: "Model::AlphaEnnemy"
+			Node: "Model::AlphaEnemy"
 			Matrix: 1.000000000000000,0.000000000000000,0.000000000000000,0.000000000000000,0.000000000000000,0.690543234348297,-0.723291099071503,0.000000000000000,0.000000000000000,0.723291099071503,0.690543234348297,0.000000000000000,0.000000000000000,0.705044746398926,0.000000000000000,1.000000000000000
 		}
 	}
@@ -1684,7 +1684,7 @@ Objects:  {
 ;------------------------------------------------------------------
 
 Relations:  {
-	Model: "Model::AlphaEnnemy", "Mesh" {
+	Model: "Model::AlphaEnemy", "Mesh" {
 	}
 	Model: "Model::Camera", "Camera" {
 	}
@@ -1714,10 +1714,10 @@ Relations:  {
 ;------------------------------------------------------------------
 
 Connections:  {
-	Connect: "OO", "Model::AlphaEnnemy", "Model::Scene"
+	Connect: "OO", "Model::AlphaEnemy", "Model::Scene"
 	Connect: "OO", "Model::Lamp", "Model::Scene"
 	Connect: "OO", "Model::Camera", "Model::Scene"
-	Connect: "OO", "Material::Material", "Model::AlphaEnnemy"
+	Connect: "OO", "Material::Material", "Model::AlphaEnemy"
 }
 ;Takes and animation section
 ;----------------------------------------------------
@@ -1731,7 +1731,7 @@ Takes:  {
 
 		;Models animation
 		;----------------------------------------------------
-		Model: "Model::AlphaEnnemy" {
+		Model: "Model::AlphaEnemy" {
 			Version: 1.1
 			Channel: "Transform" {
 				Channel: "T" {

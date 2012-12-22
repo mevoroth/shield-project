@@ -70,8 +70,8 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	ID3D11Buffer* vertexBuffer;
 	WVPMatrix mat;
 	ID3D11ShaderResourceView* texResource;
-
-	DirectX::CreateDDSTextureFromFile( _device, texture, 0, &texResource );
+	
+	loadTexture( texture, texResource );
 	setShaderResource( 1, 0, texResource );
 
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -98,7 +98,9 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	mat.mat = _projectionMatrix*_viewMatrix;
 	updateConstantBuffer( 0, 0, &mat );
 
-	_deviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	_deviceContext->IASetPrimitiveTopology(
+		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+	);
 	
 	// Draw
 	_deviceContext->Draw( vertexesSize, 0 );
@@ -106,6 +108,39 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	// Clean
 	vertexBuffer->Release();
 };
+void services::Direct3D11Graphics::loadTexture(
+	const wchar_t* texture,
+	ID3D11ShaderResourceView*& resource
+)
+{
+	map<const wchar_t*, ID3D11ShaderResourceView*>::iterator texResource =
+		_textures.find( texture );
+
+	if ( texResource == _textures.end() )
+	{
+		wchar_t* path = new wchar_t[24 + wcslen(texture)];
+		wcscpy( path, L"resources\\textures\\" );
+		wcscat( path, texture );
+		wcscat( path, L".dds" );
+
+		HRESULT hr = DirectX::CreateDDSTextureFromFile( _device, path, 0, &resource );
+		delete path;
+		if ( FAILED(hr) )
+		{
+			throw;
+		}
+		_textures.insert(
+			pair<const wchar_t*, ID3D11ShaderResourceView*>(
+				texture,
+				resource
+			)
+		);
+	}
+	else
+	{
+		resource = texResource->second;
+	}
+}
 void services::Direct3D11Graphics::setSamplerState(
 	UINT16 shader,
 	UINT16 slot,
@@ -113,7 +148,7 @@ void services::Direct3D11Graphics::setSamplerState(
 )
 {
 	ID3D11SamplerState* state;
-	_device->CreateSamplerState( &samplerDesc, &state );
+	HRESULT hr = _device->CreateSamplerState( &samplerDesc, &state );
 	
 	map<
 		UINT16,
@@ -168,7 +203,6 @@ void services::Direct3D11Graphics::setShaderResource(
 	}
 	else
 	{
-		resourceSlot->second->Release();
 		resourceSlot->second = resource;
 	}
 };
