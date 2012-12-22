@@ -25,11 +25,11 @@ void FbxMesh::putTriangle(
 	_vertexes.push_back( v2 );
 	_vertexes.push_back( v3 );
 };
-std::string FbxMesh::getTexture() const
+const wchar_t* FbxMesh::getTexture() const
 {
 	return _texture;
 };
-void FbxMesh::setTexture( const std::string& texture )
+void FbxMesh::setTexture( wchar_t* texture )
 {
 	_texture = texture;
 };

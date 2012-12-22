@@ -27,7 +27,7 @@ namespace services {
 		~Direct3D11Graphics( void );
 		void begin( void );
 		void end( void );
-		void draw( const Vertex[], int, const std::string& );
+		void draw( const Vertex[], int, const wchar_t* );
 		void setCamera(
 			float, float, float,
 			float, float, float,
@@ -35,19 +35,21 @@ namespace services {
 		);
 		void setPerspective( float, float, float, float );
 		/**
-		 * Create constant buffer
+		 * Crée un buffer constant
 		 * @param[in] Shader
 		 * @param[in] Slot
 		 * @param[in] Size of buffer
 		 */
 		void createConstantBuffer( UINT16, UINT16, int );
 		/**
-		 * Update constant buffer value
+		 * Update un buffer constant
 		 * @param[in] Shader
 		 * @param[in] Slot
 		 * @param[in] Value
 		 */
 		void updateConstantBuffer( UINT16, UINT16, void* );
+		void setShaderResource( UINT16, UINT16, ID3D11ShaderResourceView* );
+		void setSamplerState( UINT16, UINT16, const D3D11_SAMPLER_DESC& );
 		template<class Shader> void loadShader( UINT16, ID3D10Blob* );
 		template<class Shader> void useShader( UINT16 );
 
@@ -59,13 +61,21 @@ namespace services {
 		IDXGISwapChain* _swapChain;
 		ID3D11RenderTargetView* _renderTarget;
 		/**
-		 * Bibliothèque de shaders
+		 * Bibliothèques de shaders
 		 */
 		map<UINT16, ID3D11DeviceChild*> _shaders;
 		/**
 		 * Buffers constants de shaders
 		 */
-		map<UINT16, map<UINT16, ID3D11Buffer*>> _constantsBuffers;
+		map<UINT16, map<UINT16, ID3D11Buffer*>> _constantBuffers;
+		/**
+		 * Ressources shaders
+		 */
+		map<UINT16, map<UINT16, ID3D11ShaderResourceView*>> _shaderResources;
+		/**
+		 * Options de shaders
+		 */
+		map<UINT16, map<UINT16, ID3D11SamplerState*>> _samplerStates;
 		ID3D11InputLayout* _inputLayout;
 		ID3D11Buffer* _matrixBuffer;
 		DirectX::XMMATRIX _worldMatrix;
@@ -103,35 +113,45 @@ namespace services {
 		 */
 		void _useShader(
 			ID3D11VertexShader*,
-			const map<UINT16, ID3D11Buffer*>&
+			const map<UINT16, ID3D11Buffer*>&,
+			const map<UINT16, ID3D11ShaderResourceView*>&,
+			const map<UINT16, ID3D11SamplerState*>&
 		);
 		/**
 		 * Use hull shader
 		 */
 		void _useShader(
 			ID3D11HullShader*,
-			const map<UINT16, ID3D11Buffer*>&
+			const map<UINT16, ID3D11Buffer*>&,
+			const map<UINT16, ID3D11ShaderResourceView*>&,
+			const map<UINT16, ID3D11SamplerState*>&
 		);
 		/**
 		 * Use domain shader
 		 */
 		void _useShader(
 			ID3D11DomainShader*,
-			const map<UINT16, ID3D11Buffer*>&
+			const map<UINT16, ID3D11Buffer*>&,
+			const map<UINT16, ID3D11ShaderResourceView*>&,
+			const map<UINT16, ID3D11SamplerState*>&
 		);
 		/**
 		 * Use geometry shader
 		 */
 		void _useShader(
 			ID3D11GeometryShader*,
-			const map<UINT16, ID3D11Buffer*>&
+			const map<UINT16, ID3D11Buffer*>&,
+			const map<UINT16, ID3D11ShaderResourceView*>&,
+			const map<UINT16, ID3D11SamplerState*>&
 		);
 		/**
 		 * Use pixel shader
 		 */
 		void _useShader(
 			ID3D11PixelShader*,
-			const map<UINT16, ID3D11Buffer*>&
+			const map<UINT16, ID3D11Buffer*>&,
+			const map<UINT16, ID3D11ShaderResourceView*>&,
+			const map<UINT16, ID3D11SamplerState*>&
 		);
 		void _createInputLayout( ID3D10Blob* );
 	};

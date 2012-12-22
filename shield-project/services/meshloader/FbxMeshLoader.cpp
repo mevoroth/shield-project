@@ -44,7 +44,11 @@ std::vector<Mesh*> FbxMeshLoader::load( const std::string& filename )
 			continue;
 		}
 		FbxMesh* mesh = new FbxMesh();
-		mesh->setTexture( scene->GetNode(i)->GetName() );
+
+		std::string fname = std::string( scene->GetNode(i)->GetName() );
+		wchar_t* fnamewide = new wchar_t[fname.size() + 1];
+		mbstowcs( fnamewide, fname.c_str(), 255 );
+		mesh->setTexture( fnamewide );
 
 		fbxsdk_2013_3::FbxMesh* fbxmesh = (fbxsdk_2013_3::FbxMesh*)scene->GetNode(i)->GetNodeAttribute();
 		FbxVector4* vertexes = fbxmesh->GetControlPoints();

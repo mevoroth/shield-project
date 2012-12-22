@@ -47,8 +47,6 @@ namespace shield
 		void run( void );
 		void reset( void );
 
-		void render( void );
-
 		/**
 		 * Déplacement (forme mecha)
 		 */
@@ -99,25 +97,25 @@ namespace shield
 		std::list<Element*> _bullets;
 		std::queue<Action> _actionsQueue;
 		//std::list<boost::mutex> _elementsMutex;
-		Hope* _getPlayer();
-		ULONGLONG _lastTick;
+		LARGE_INTEGER _lastTick;
 		bool _moves[4];
 
+		Hope* _getPlayer();
 		/**
 		 * @param[in] Elapsed time
 		 */
-		void _input( ULONGLONG );
+		void _input( LONGLONG );
 		/**
 		 * @param[in] Elapsed time
 		 */
-		void _update( ULONGLONG );
+		void _update( LONGLONG );
 		/**
 		 * @param[in] Elapsed time
 		 */
-		void _draw( unsigned long long );
+		void _draw( LONGLONG );
 		void _drawElements( const std::list<Element*>& );
 		void _drawMeshes( const std::vector<Mesh*>& );
-		void _updateElements( ULONGLONG, std::list<Element*>& );
+		void _updateElements( LONGLONG, std::list<Element*>& );
 	};
 };
 

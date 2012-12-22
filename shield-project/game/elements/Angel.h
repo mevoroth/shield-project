@@ -9,7 +9,7 @@ namespace game {
 	{
 	public:
 		Angel( const structs::Point&, const structs::Vector3&, int, int );
-		void update( ULONGLONG );
+		void update( LONGLONG );
 		bool hit( const Element& ) const;
 		std::vector<Mesh*> getMesh();
 

@@ -49,19 +49,19 @@ namespace game {
 		bool hit( const Element& ) const;
 		void move( const structs::Vector3& );
 		void dash( const structs::Vector3& );
-		void charge();
+		void charge( void );
 		list<Element*> shoot( void ) const;
 		list<Element*> burst( void ) const;
-		void slash();
-		void shield();
-		int getMaxEnergy();
-		int getEnergy();
+		void slash( void );
+		void shield( LONGLONG );
+		int getMaxEnergy( void );
+		int getEnergy( void );
 		void addWeapon( Weapon* );
 		void setCurrentWeapon( int );
 
 	private:
-		ULONGLONG _shield;
-		ULONGLONG _shieldLastTick;
+		LONGLONG _shield;
+		LONGLONG _shieldLastTick;
 		int _maxEnergy;
 		int _energy;
 		int _accumulator;

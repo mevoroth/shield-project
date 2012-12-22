@@ -26,7 +26,7 @@ Angel::Angel(
 	_hp = hp;
 	_maxHp = maxHp;
 };
-void Angel::update( ULONGLONG elapsedTime )
+void Angel::update( LONGLONG elapsedTime )
 {
 	Element::update( elapsedTime );
 };

@@ -10,7 +10,7 @@ namespace services {
 	{
 	public:
 		std::vector<structs::Vertex> getVertexes() const;
-		std::string getTexture() const;
+		const wchar_t* getTexture() const;
 		//const std::vector<int>& getIndices() const;
 		//void putVertex( const structs::Vertex& );
 		void putTriangle(
@@ -18,13 +18,13 @@ namespace services {
 			const structs::Vertex&,
 			const structs::Vertex&
 		);
-		void setTexture( const std::string& );
+		void setTexture( wchar_t* );
 		FbxMesh& operator+=( const structs::Vector3& );
 
 	private:
 		//std::vector<int> _indices;
 		std::vector<structs::Vertex> _vertexes;
-		std::string _texture;
+		wchar_t* _texture;
 	};
 };
 };

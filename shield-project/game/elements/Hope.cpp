@@ -62,7 +62,7 @@ void game::Hope::dash( const structs::Vector3& direction )
 	// Change
 	move(direction);
 };
-void game::Hope::charge()
+void game::Hope::charge( void )
 {
 	if ( _energy > 0 && _accumulator < LV_MAX_CHARGE )
 	{
@@ -107,7 +107,7 @@ std::list<game::Element*> game::Hope::burst( void ) const
 void game::Hope::slash()
 {
 };
-void game::Hope::shield()
+void game::Hope::shield( LONGLONG elapsedTime )
 {
 	unsigned long long prevTick = _shieldLastTick;
 	_shieldLastTick = GetTickCount64();
@@ -118,11 +118,11 @@ void game::Hope::shield()
 	}
 	_energy -= _shieldLastTick - prevTick;
 };
-int game::Hope::getEnergy()
+int game::Hope::getEnergy( void )
 {
 	return _energy;
 };
-int game::Hope::getMaxEnergy()
+int game::Hope::getMaxEnergy( void )
 {
 	return _maxEnergy;
 };

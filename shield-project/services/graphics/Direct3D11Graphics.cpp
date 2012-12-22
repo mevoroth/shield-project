@@ -7,6 +7,8 @@
 
 #include "WVPMatrix.h"
 
+#include "..\..\libs\DDSTextureLoader.h"
+
 using namespace shield;
 
 services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
@@ -44,8 +46,6 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 		throw "Erreur";
 	}
 	loadShader<ID3D11PixelShader>(1, pixelShader);
-	useShader<ID3D11VertexShader>(0);
-	useShader<ID3D11PixelShader>(1);
 };
 services::Direct3D11Graphics::~Direct3D11Graphics( void )
 {
@@ -65,17 +65,39 @@ void services::Direct3D11Graphics::end( void )
 };
 void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 										int vertexesSize,
-										const std::string& texture )
+										const wchar_t* texture )
 {
 	ID3D11Buffer* vertexBuffer;
 	WVPMatrix mat;
+	ID3D11ShaderResourceView* texResource;
+
+	DirectX::CreateDDSTextureFromFile( _device, texture, 0, &texResource );
+	setShaderResource( 1, 0, texResource );
+
+	D3D11_SAMPLER_DESC samplerDesc;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0;
+	samplerDesc.MaxAnisotropy = 0;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.BorderColor[0] = 0.f;
+	samplerDesc.BorderColor[1] = 0.f;
+	samplerDesc.BorderColor[2] = 0.f;
+	samplerDesc.BorderColor[3] = 0.f;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	setSamplerState( 1, 0, samplerDesc );
+
+	useShader<ID3D11VertexShader>(0);
+	useShader<ID3D11PixelShader>(1);
 
 	_createVertexBuffer( vertexes, vertexesSize, vertexBuffer );
 
-	//mat.mat = DirectX::XMMatrixTranspose( _projectionMatrix*_viewMatrix );
 	mat.mat = _projectionMatrix*_viewMatrix;
 	updateConstantBuffer( 0, 0, &mat );
-	
+
 	_deviceContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	
 	// Draw
@@ -83,6 +105,72 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 
 	// Clean
 	vertexBuffer->Release();
+};
+void services::Direct3D11Graphics::setSamplerState(
+	UINT16 shader,
+	UINT16 slot,
+	const D3D11_SAMPLER_DESC& samplerDesc
+)
+{
+	ID3D11SamplerState* state;
+	_device->CreateSamplerState( &samplerDesc, &state );
+	
+	map<
+		UINT16,
+		map<UINT16, ID3D11SamplerState*>
+	>::iterator samplerState = _samplerStates.find( shader );
+	if ( samplerState == _samplerStates.end() )
+	{
+		throw;
+	}
+
+	map<UINT16, ID3D11SamplerState*>::iterator samplerSlot =
+		samplerState->second.find( slot );
+	if ( samplerSlot == samplerState->second.end() )
+	{
+		samplerState->second.insert(
+			pair<UINT16, ID3D11SamplerState*>(
+				slot,
+				state
+			)
+		);
+	}
+	else
+	{
+		samplerSlot->second->Release();
+		samplerSlot->second = state;
+	}
+};
+void services::Direct3D11Graphics::setShaderResource(
+	UINT16 shader,
+	UINT16 slot,
+	ID3D11ShaderResourceView* resource
+)
+{
+	map<
+		UINT16,
+		map<UINT16, ID3D11ShaderResourceView*>
+	>::iterator shaderResource = _shaderResources.find( shader );
+	if ( shaderResource == _shaderResources.end() )
+	{
+		throw;
+	}
+	map<UINT16, ID3D11ShaderResourceView*>::iterator resourceSlot =
+		shaderResource->second.find( slot );
+	if ( resourceSlot == shaderResource->second.end() )
+	{
+		shaderResource->second.insert(
+			pair<UINT16, ID3D11ShaderResourceView*>(
+				slot,
+				resource
+			)
+		);
+	}
+	else
+	{
+		resourceSlot->second->Release();
+		resourceSlot->second = resource;
+	}
 };
 void services::Direct3D11Graphics::setCamera(
 	float eyeX, float eyeY, float eyeZ,
@@ -115,8 +203,8 @@ void services::Direct3D11Graphics::updateConstantBuffer(
 )
 {
 	map<UINT16, map<UINT16, ID3D11Buffer*>>::const_iterator constBuffer =
-		_constantsBuffers.find( shader );
-	if ( constBuffer == _constantsBuffers.end() )
+		_constantBuffers.find( shader );
+	if ( constBuffer == _constantBuffers.end() )
 	{
 		throw;
 	}
@@ -147,8 +235,8 @@ void services::Direct3D11Graphics::createConstantBuffer(
 	pair<map<UINT16, ID3D11Buffer*>::const_iterator, bool> ret;
 
 	map<UINT16, map<UINT16, ID3D11Buffer*>>::iterator constBuffer =
-		_constantsBuffers.find( shader );
-	if ( constBuffer == _constantsBuffers.end() )
+		_constantBuffers.find( shader );
+	if ( constBuffer == _constantBuffers.end() )
 	{
 		throw;
 	}
@@ -195,10 +283,22 @@ template<class Shader> void services::Direct3D11Graphics::loadShader( UINT16 key
 	{
 		throw "Shader already inserted";
 	}
-	_constantsBuffers.insert(
+	_constantBuffers.insert(
 		pair<UINT16, map<UINT16, ID3D11Buffer*>>(
 			key,
 			map<UINT16, ID3D11Buffer*>()
+		)
+	);
+	_shaderResources.insert(
+		pair<UINT16, map<UINT16, ID3D11ShaderResourceView*>>(
+			key,
+			map<UINT16, ID3D11ShaderResourceView*>()
+		)
+	);
+	_samplerStates.insert(
+		pair<UINT16, map<UINT16, ID3D11SamplerState*>>(
+			key,
+			map<UINT16, ID3D11SamplerState*>()
 		)
 	);
 };
@@ -209,16 +309,34 @@ template<class Shader> void services::Direct3D11Graphics::useShader(
 	map<UINT16, ID3D11DeviceChild*>::const_iterator element =
 		_shaders.find( key );
 	map<UINT16, map<UINT16, ID3D11Buffer*>>::const_iterator constBuffers =
-		_constantsBuffers.find( key );
+		_constantBuffers.find( key );
+	map<
+		UINT16,
+		map<UINT16, ID3D11ShaderResourceView*>
+	>::const_iterator shaderResources = _shaderResources.find( key );
+	map<
+		UINT16,
+		map<UINT16, ID3D11SamplerState*>
+	>::const_iterator samplerStates = _samplerStates.find( key );
 	
-	if ( element != _shaders.end() && constBuffers != _constantsBuffers.end() )
+	if ( element != _shaders.end()
+		&& constBuffers != _constantBuffers.end()
+		&& shaderResources != _shaderResources.end()
+		&& samplerStates != _samplerStates.end() )
 	{
-		_useShader( (Shader*)(element->second), constBuffers->second );
+		_useShader(
+			(Shader*)(element->second),
+			constBuffers->second,
+			shaderResources->second,
+			samplerStates->second
+		);
 	}
 };
 void services::Direct3D11Graphics::_useShader(
 	ID3D11VertexShader* shader,
-	const map<UINT16, ID3D11Buffer*>& buffers
+	const map<UINT16, ID3D11Buffer*>& buffers,
+	const map<UINT16, ID3D11ShaderResourceView*>& resources,
+	const map<UINT16, ID3D11SamplerState*>& states
 )
 {
 	_deviceContext->VSSetShader( shader, 0, 0 );
@@ -230,10 +348,29 @@ void services::Direct3D11Graphics::_useShader(
 	{
 		_deviceContext->VSSetConstantBuffers( it->first, 1, &it->second );
 	}
+	for (
+		map<UINT16,
+			ID3D11ShaderResourceView*>::const_iterator it = resources.begin();
+		it != resources.end();
+		++it
+	)
+	{
+		_deviceContext->VSSetShaderResources( it->first, 1, &it->second );
+	}
+	for (
+		map<UINT16, ID3D11SamplerState*>::const_iterator it = states.begin();
+		it != states.end();
+		++it
+	)
+	{
+		_deviceContext->VSSetSamplers( it->first, 1, &it->second );
+	}
 };
 void services::Direct3D11Graphics::_useShader(
 	ID3D11HullShader* shader,
-	const map<UINT16, ID3D11Buffer*>& buffers
+	const map<UINT16, ID3D11Buffer*>& buffers,
+	const map<UINT16, ID3D11ShaderResourceView*>& resources,
+	const map<UINT16, ID3D11SamplerState*>& states
 )
 {
 	_deviceContext->HSSetShader( shader, 0, 0 );
@@ -245,10 +382,29 @@ void services::Direct3D11Graphics::_useShader(
 	{
 		_deviceContext->HSSetConstantBuffers( it->first, 1, &it->second );
 	}
+	for (
+		map<UINT16,
+			ID3D11ShaderResourceView*>::const_iterator it = resources.begin();
+		it != resources.end();
+		++it
+	)
+	{
+		_deviceContext->HSSetShaderResources( it->first, 1, &it->second );
+	}
+	for (
+		map<UINT16, ID3D11SamplerState*>::const_iterator it = states.begin();
+		it != states.end();
+		++it
+	)
+	{
+		_deviceContext->HSSetSamplers( it->first, 1, &it->second );
+	}
 };
 void services::Direct3D11Graphics::_useShader(
 	ID3D11DomainShader* shader,
-	const map<UINT16, ID3D11Buffer*>& buffers
+	const map<UINT16, ID3D11Buffer*>& buffers,
+	const map<UINT16, ID3D11ShaderResourceView*>& resources,
+	const map<UINT16, ID3D11SamplerState*>& states
 )
 {
 	_deviceContext->DSSetShader( shader, 0, 0 );
@@ -260,10 +416,29 @@ void services::Direct3D11Graphics::_useShader(
 	{
 		_deviceContext->DSSetConstantBuffers( it->first, 1, &it->second );
 	}
+	for (
+		map<UINT16,
+			ID3D11ShaderResourceView*>::const_iterator it = resources.begin();
+		it != resources.end();
+		++it
+	)
+	{
+		_deviceContext->DSSetShaderResources( it->first, 1, &it->second );
+	}
+	for (
+		map<UINT16, ID3D11SamplerState*>::const_iterator it = states.begin();
+		it != states.end();
+		++it
+	)
+	{
+		_deviceContext->DSSetSamplers( it->first, 1, &it->second );
+	}
 };
 void services::Direct3D11Graphics::_useShader(
 	ID3D11GeometryShader* shader,
-	const map<UINT16, ID3D11Buffer*>& buffers
+	const map<UINT16, ID3D11Buffer*>& buffers,
+	const map<UINT16, ID3D11ShaderResourceView*>& resources,
+	const map<UINT16, ID3D11SamplerState*>& states
 )
 {
 	_deviceContext->GSSetShader( shader, 0, 0 );
@@ -275,10 +450,29 @@ void services::Direct3D11Graphics::_useShader(
 	{
 		_deviceContext->GSSetConstantBuffers( it->first, 1, &it->second );
 	}
+	for (
+		map<UINT16,
+			ID3D11ShaderResourceView*>::const_iterator it = resources.begin();
+		it != resources.end();
+		++it
+	)
+	{
+		_deviceContext->GSSetShaderResources( it->first, 1, &it->second );
+	}
+	for (
+		map<UINT16, ID3D11SamplerState*>::const_iterator it = states.begin();
+		it != states.end();
+		++it
+	)
+	{
+		_deviceContext->GSSetSamplers( it->first, 1, &it->second );
+	}
 };
 void services::Direct3D11Graphics::_useShader(
 	ID3D11PixelShader* shader,
-	const map<UINT16, ID3D11Buffer*>& buffers
+	const map<UINT16, ID3D11Buffer*>& buffers,
+	const map<UINT16, ID3D11ShaderResourceView*>& resources,
+	const map<UINT16, ID3D11SamplerState*>& states
 )
 {
 	_deviceContext->PSSetShader( shader, 0, 0 );
@@ -289,6 +483,23 @@ void services::Direct3D11Graphics::_useShader(
 	)
 	{
 		_deviceContext->PSSetConstantBuffers( it->first, 1, &it->second );
+	}
+	for (
+		map<UINT16,
+			ID3D11ShaderResourceView*>::const_iterator it = resources.begin();
+		it != resources.end();
+		++it
+	)
+	{
+		_deviceContext->PSSetShaderResources( it->first, 1, &it->second );
+	}
+	for (
+		map<UINT16, ID3D11SamplerState*>::const_iterator it = states.begin();
+		it != states.end();
+		++it
+	)
+	{
+		_deviceContext->PSSetSamplers( it->first, 1, &it->second );
 	}
 };
 void services::Direct3D11Graphics::_createInputLayout( ID3D10Blob* shaderBlob )

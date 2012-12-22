@@ -62,7 +62,7 @@ void game::Element::spawn( void )
 	_spawnTime = GetTickCount64();
 	_currentTime = _spawnTime;
 };
-void game::Element::update( ULONGLONG elapsedTime )
+void game::Element::update( LONGLONG elapsedTime )
 {
 	_currentTime = GetTickCount64();
 	_position += _direction;
@@ -73,11 +73,11 @@ void game::Element::update( ULONGLONG elapsedTime )
 		**it += _direction;
 	}
 };
-unsigned long long game::Element::getCurrentTime( void ) const
+LONGLONG game::Element::getCurrentTime( void ) const
 {
 	return _currentTime;
 };
-unsigned long long game::Element::getSpawnTime( void ) const
+LONGLONG game::Element::getSpawnTime( void ) const
 {
 	return _spawnTime;
 };

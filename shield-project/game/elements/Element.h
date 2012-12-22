@@ -19,12 +19,12 @@ namespace game {
 		Element( const Element& );
 		~Element();
 		void spawn( void );
-		ULONGLONG getCurrentTime( void ) const;
-		ULONGLONG getSpawnTime( void ) const;
+		LONGLONG getCurrentTime( void ) const;
+		LONGLONG getSpawnTime( void ) const;
 		structs::Point getPosition( void ) const;
 		std::vector<Mesh*> getMesh();
 
-		virtual void update( ULONGLONG );
+		virtual void update( LONGLONG );
 		virtual bool hit( const Element& ) const = 0;
 
 	protected:
@@ -33,8 +33,8 @@ namespace game {
 	private:
 		structs::Point _position;
 		structs::Vector3 _direction;
-		ULONGLONG _spawnTime;
-		ULONGLONG _currentTime;
+		LONGLONG _spawnTime;
+		LONGLONG _currentTime;
 		std::vector<Mesh*> _meshes;
 	};
 };

@@ -169,10 +169,6 @@ void Game::create()
 {
 	load(
 		"save"
-		/*new game::Hope(
-			structs::Point( 0.f, 0.f, 0.f ),
-			settings::player::BASE_LIFE
-		)*/
 	);
 };
 void Game::reset( void )
@@ -181,19 +177,29 @@ void Game::reset( void )
 };
 void Game::run( void )
 {
+	LARGE_INTEGER tick;
+	LARGE_INTEGER overhead;
+	LONGLONG elapsedTime;
+
+	QueryPerformanceCounter( &tick );
+	QueryPerformanceCounter( &overhead );
+
+	_lastTick.QuadPart = overhead.QuadPart;
+	overhead.QuadPart -= tick.QuadPart;
+
 	while ( true )
 	{
-		ULONGLONG currentTick = GetTickCount64();
-		ULONGLONG elapsedTime = currentTick - _lastTick;
+		QueryPerformanceCounter( &tick );
+		elapsedTime = tick.QuadPart - _lastTick.QuadPart;
 		
 		_input( elapsedTime );
 		_update( elapsedTime );
 		_draw( elapsedTime );
 
-		_lastTick = currentTick;
+		_lastTick.QuadPart = tick.QuadPart;
 	}
 };
-void Game::_input( ULONGLONG elapsedTime )
+void Game::_input( LONGLONG elapsedTime )
 {
 	if ( _moves[UP] )
 	{
@@ -217,18 +223,6 @@ void Game::_input( ULONGLONG elapsedTime )
 		_actionsQueue.pop();
 		switch ( a )
 		{
-		/*case MOVE_LEFT:
-			_getPlayer()->move( structs::Vector3(-1.f, 0.f, 0.f) );
-			break;
-		case MOVE_RIGHT:
-			_getPlayer()->move( structs::Vector3(1.f, 0.f, 0.f) );
-			break;
-		case MOVE_UP:
-			_getPlayer()->move( structs::Vector3(0.f, 0.f, 1.f) );
-			break;
-		case MOVE_DOWN:
-			_getPlayer()->move( structs::Vector3(0.f, 0.f, -1.f) );
-			break;*/
 		case DASH_LEFT:
 			_getPlayer()->dash( structs::Vector3(-1.f, 0.f, 0.f) );
 			break;
@@ -245,29 +239,40 @@ void Game::_input( ULONGLONG elapsedTime )
 			);
 			break;
 		case BURST:
+			_bullets.splice(
+				_bullets.end(),
+				_getPlayer()->burst()
+			);
+			break;
 		case SLASH:
+			_getPlayer()->slash();
+			break;
 		case SHIELD:
+			_getPlayer()->shield( elapsedTime );
 			break;
 		}
 	}
 };
-void Game::_update( ULONGLONG elapsedTime )
+void Game::_update( LONGLONG elapsedTime )
 {
+	// Update scrolling
 	_getPlayer()->update( elapsedTime );
 	_updateElements( elapsedTime, _elements );
 	_updateElements( elapsedTime, _bullets );
 
-	// Faire avancer la camera
-	structs::Point p = _getPlayer()->getPosition();
-
-	Service::getGraphics()->setCamera(
-		0.f, -5.f + p.y/2, 0.f,
-		0.f, 0.f + p.y/2, 0.f,
-		0.f, 0.f, 1.f
-	);
+	// Resolve collisions
+	for ( std::list<Element*>::iterator it = _bullets.begin();
+		it != _bullets.end();
+		++it )
+	{
+		if ( (*it)->hit(*_getPlayer()) )
+		{
+			// Hit
+		}
+	}
 };
 void Game::_updateElements(
-	ULONGLONG elapsedTime,
+	LONGLONG elapsedTime,
 	std::list<Element*>& elements
 )
 {
@@ -278,20 +283,22 @@ void Game::_updateElements(
 		(*it)->update( elapsedTime );
 	}
 };
-void Game::_draw( ULONGLONG elapsedTime )
+void Game::_draw( LONGLONG elapsedTime )
 {
-	render();
-};
-void Game::render()
-{
-	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, .1f, 100.f );
-	
+	structs::Point p = _getPlayer()->getPosition();
+	Service::getGraphics()->setCamera(
+		0.f, -5.f + p.y/2, 0.f,
+		0.f, 0.f + p.y/2, 0.f,
+		0.f, 0.f, 1.f
+	);
+	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, .1f, 1000.f );
+
 	Service::getGraphics()->begin();
 	_drawMeshes( _getPlayer()->getMesh() );
 	_drawElements( _elements );
 	_drawElements( _bullets );
 	//((Direct3D11Graphics*)Service::getGraphics())->write("");
-	
+
 	Service::getGraphics()->end();
 
 	// Draw game
@@ -319,25 +326,21 @@ void Game::_drawMeshes( const std::vector<Mesh*>& meshes )
 		);
 	}
 };
-void Game::MoveLeft()
+void Game::MoveLeft( void )
 {
 	_moves[LEFT] = true;
-	//_actionsQueue.push( MOVE_LEFT );
 };
-void Game::MoveRight()
+void Game::MoveRight( void )
 {
 	_moves[RIGHT] = true;
-	//_actionsQueue.push( MOVE_RIGHT );
 };
-void Game::MoveUp()
+void Game::MoveUp( void )
 {
 	_moves[UP] = true;
-	//_actionsQueue.push( MOVE_UP );
 };
-void Game::MoveDown()
+void Game::MoveDown( void )
 {
 	_moves[DOWN] = true;
-	//_actionsQueue.push( MOVE_DOWN );
 };
 void Game::DashLeft( void )
 {
@@ -347,55 +350,46 @@ void Game::DashRight( void )
 {
 	_actionsQueue.push( DASH_RIGHT );
 };
-void Game::Charge()
+void Game::Charge( void )
 {
 	_actionsQueue.push( CHARGE );
-	//_getPlayer()->charge();
 };
-void Game::Shoot()
+void Game::Shoot( void )
 {
 	_actionsQueue.push( SHOOT );
-	/*_bullets.splice(
-		_bullets.end(),
-		_getPlayer()->shoot()
-	);*/
 };
-void Game::Burst()
+void Game::Burst( void )
 {
 	_actionsQueue.push( BURST );
-	/*_bullets.splice(
-		_bullets.end(),
-		_getPlayer()->burst()
-	);*/
 };
-void Game::Slash()
+void Game::Slash( void )
 {
 	_actionsQueue.push( SLASH );
 };
-void Game::Shield()
+void Game::Shield( void )
 {
 	_actionsQueue.push( SHIELD );
 };
-void Game::SwapForm()
+void Game::SwapForm( void )
 {
 };
-Hope* Game::_getPlayer()
+Hope* Game::_getPlayer( void )
 {
 	return _player;
 };
-void shield::Game::MoveUpUp()
+void shield::Game::MoveUpUp( void )
 {
 	_moves[UP] = false;
 };
-void shield::Game::MoveDownUp()
+void shield::Game::MoveDownUp( void )
 {
 	_moves[DOWN] = false;
 };
-void shield::Game::MoveRightUp()
+void shield::Game::MoveRightUp( void )
 {
 	_moves[RIGHT] = false;
 };
-void shield::Game::MoveLeftUp()
+void shield::Game::MoveLeftUp( void )
 {
 	_moves[LEFT] = false;
 };

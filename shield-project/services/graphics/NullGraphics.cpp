@@ -17,7 +17,7 @@ void services::NullGraphics::end( void )
 	cout << "End draw ..." << endl;
 };
 void services::NullGraphics::draw( const Point vertexes[], int vertexesSize,
-								  const std::string& texture )
+								  const wchar_t* texture )
 {
 	cout << "Drawing ..." << endl;
 };

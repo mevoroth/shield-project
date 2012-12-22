@@ -11,7 +11,7 @@ namespace services {
 		NullGraphics();
 		void begin( void );
 		void end( void );
-		void draw( const Point[], int, const std::string& );
+		void draw( const Point[], int, const wchar_t* );
 		void setCamera(
 			float, float, float,
 			float, float, float,
