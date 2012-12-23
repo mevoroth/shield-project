@@ -5,7 +5,10 @@
 
 #include <fbxsdk.h>
 #include <fbxsdk\fileio\fbxiosettings.h>
+#include <map>
 #include "IMeshLoader.h"
+
+using namespace std;
 
 namespace shield {
 namespace services {
@@ -14,10 +17,11 @@ namespace services {
 	public:
 		FbxMeshLoader();
 		~FbxMeshLoader();
-		std::vector<Mesh*> load( const std::string& );
+		vector<Mesh*> load( const string& );
 	private:
 		FbxManager* _sdkManager;
 		FbxImporter* _importer;
+		map<string, vector<Mesh*>> _cache;
 
 		/**
 		 * @param[in] Mesh
@@ -55,6 +59,16 @@ namespace services {
 			const FbxVector2&,
 			structs::Vertex&
 		) const;
+		/**
+		 * @param[in] Fichier
+		 * @param[out] Mesh
+		 */
+		void FbxMeshLoader::_createMeshes(
+			const string&,
+			vector<Mesh*>&
+		);
+
+		vector<Mesh*> _clone( const vector<Mesh*>& );
 	};
 };
 };

@@ -24,17 +24,53 @@ FbxMeshLoader::~FbxMeshLoader()
 	_importer->Destroy();
 	_sdkManager->Destroy();
 };
-std::vector<Mesh*> FbxMeshLoader::load( const std::string& filename )
+vector<Mesh*> FbxMeshLoader::load( const string& filename )
+{
+	vector<Mesh*> meshes;
+
+	map<string, vector<Mesh*>>::iterator mesh = _cache.find( filename );
+
+	if ( mesh == _cache.end() )
+	{
+		_createMeshes( filename, meshes );
+		_cache.insert(
+			pair<string, vector<Mesh*>>(
+				filename,
+				meshes
+			)
+		);
+	}
+	else
+	{
+		meshes = mesh->second;
+	}
+
+	return _clone( meshes );
+};
+vector<Mesh*> FbxMeshLoader::_clone( const vector<Mesh*>& meshes )
+{
+	vector<Mesh*> clone;
+
+	for ( vector<Mesh*>::const_iterator it = meshes.begin();
+		it != meshes.end();
+		++it )
+	{
+		FbxMesh* mesh = new FbxMesh( *(FbxMesh*)*it );
+		clone.push_back( mesh );
+	}
+
+	return clone;
+};
+void FbxMeshLoader::_createMeshes( const string& filename, vector<Mesh*>& meshes )
 {
 	FbxScene* scene = FbxScene::Create( _sdkManager, "scene" );
-	std::vector<Mesh*> meshes;
 
 	_importer->Initialize(
 		filename.c_str(),
 		-1,
 		_sdkManager->GetIOSettings()
 	);
-	_importer->Import(scene);
+	_importer->Import( scene );
 	for ( int i = 0, c = scene->GetNodeCount(); i < c; ++i )
 	{
 		if ( !scene->GetNode(i)->GetNodeAttribute()
@@ -45,7 +81,7 @@ std::vector<Mesh*> FbxMeshLoader::load( const std::string& filename )
 		}
 		FbxMesh* mesh = new FbxMesh();
 
-		std::string fname = std::string( scene->GetNode(i)->GetName() );
+		string fname = string( scene->GetNode(i)->GetName() );
 		wchar_t* fnamewide = new wchar_t[fname.size() + 1];
 		mbstowcs( fnamewide, fname.c_str(), 255 );
 		mesh->setTexture( fnamewide );
@@ -98,7 +134,6 @@ std::vector<Mesh*> FbxMeshLoader::load( const std::string& filename )
 		meshes.push_back( mesh );
 		delete normals;
 	}
-	return meshes;
 };
 void FbxMeshLoader::_createVertex(
 	const FbxVector4* vertexes,
