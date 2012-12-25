@@ -90,6 +90,7 @@ namespace services {
 		map<const wchar_t*, ID3D11ShaderResourceView*> _textures;
 		ID3D11InputLayout* _inputLayout;
 		ID3D11Buffer* _matrixBuffer;
+		ID3D11DepthStencilView* _depthStencilView;
 		DirectX::XMMATRIX _worldMatrix;
 		DirectX::XMMATRIX _viewMatrix;
 		DirectX::XMMATRIX _projectionMatrix;

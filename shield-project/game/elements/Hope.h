@@ -6,6 +6,9 @@
 #include <list>
 #include "Ship.h"
 #include "..\..\structs\Vector3.h"
+#include "..\..\patterns\Observer.h"
+#include "..\..\services\events\EventsState.h"
+#include "..\..\services\events\HopeAction.h"
 
 using namespace std;
 
@@ -15,7 +18,7 @@ namespace game {
 	 * Espoir
 	 * Vaisseau du héros
 	 */
-	class Hope : public Ship
+	class Hope : public Ship, public Observer<EventsState, HopeAction>
 	{
 	public:
 		enum
@@ -45,7 +48,7 @@ namespace game {
 			int,
 			int
 		);
-		void refresh( void );
+		void update( LONGLONG );
 		bool hit( const Element& ) const;
 		void move( const structs::Vector3& );
 		void dash( const structs::Vector3& );
@@ -58,6 +61,9 @@ namespace game {
 		int getEnergy( void );
 		void addWeapon( Weapon* );
 		void setCurrentWeapon( int );
+
+		// Observer<EventsState, HopeAction>
+		void update();
 
 	private:
 		LONGLONG _shield;

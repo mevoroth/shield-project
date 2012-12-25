@@ -5,6 +5,7 @@
 #include "services\controls\IControls.h"
 #include "services\graphics\IGraphics.h"
 #include "services\meshloader\IMeshLoader.h"
+#include "services\events\EventsManager.h"
 
 namespace shield
 {
@@ -30,12 +31,15 @@ namespace shield
 		static void setControls( services::IControls* );
 		static services::IMeshLoader* getMeshLoader();
 		static void setMeshLoader( services::IMeshLoader* );
+		static services::EventsManager* getEventsManager();
+		static void setEventsManager( services::EventsManager* );
 
 	private:
 		static services::ISound* _sound;
 		static services::IGraphics* _graphics;
 		static services::IControls* _controls;
 		static services::IMeshLoader* _meshLoader;
+		static services::EventsManager* _eventsManager;
 
 	};
 };

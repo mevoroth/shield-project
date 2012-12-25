@@ -26,9 +26,9 @@ game::Hope::Hope(
 	_currentWeapon( 0 )
 {
 };
-void game::Hope::refresh( void )
+void game::Hope::update( LONGLONG elapsedTime )
 {
-	//game::Element::refresh();
+	game::Element::update( elapsedTime );
 	if ( getCurrentTime() - _shieldLastTick > SHIELD_TIMEOUT )
 	{
 		 _shield = 0;
@@ -133,4 +133,8 @@ void game::Hope::addWeapon( Weapon* w )
 void game::Hope::setCurrentWeapon( int weapon )
 {
 	_currentWeapon = weapon;
+};
+void game::Hope::update()
+{
+
 };

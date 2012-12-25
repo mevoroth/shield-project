@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <map>
 #include "IControls.h"
-#include "State.h"
+#include "ControlsState.h"
 
 namespace shield {
 namespace services {
@@ -35,13 +35,13 @@ namespace services {
 		/**
 		 * Binds
 		 */
-		std::map<std::pair<WPARAM, State>, Action*> _binds;
+		std::map<std::pair<WPARAM, ControlsState>, Action*> _binds;
 		/**
 		 * Appel d'action
 		 * @param Touche
 		 * @param Etat de pression
 		 */
-		inline void _call( WPARAM, State );
+		inline void _call( WPARAM, ControlsState );
 	};
 };
 };

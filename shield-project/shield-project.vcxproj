@@ -167,6 +167,8 @@
     <ClInclude Include="libs\pch.h" />
     <ClInclude Include="libs\PlatformHelpers.h" />
     <ClInclude Include="patterns\Cloneable.h" />
+    <ClInclude Include="patterns\Observable.h" />
+    <ClInclude Include="patterns\Observer.h" />
     <ClInclude Include="savegame\ElementBlock.h" />
     <ClInclude Include="savegame\HopeBlock.h" />
     <ClInclude Include="Service.h" />
@@ -174,7 +176,11 @@
     <ClInclude Include="services\controls\IControls.h" />
     <ClInclude Include="services\controls\KeyboardControls.h" />
     <ClInclude Include="services\controls\NullControls.h" />
-    <ClInclude Include="services\controls\State.h" />
+    <ClInclude Include="services\controls\ControlsState.h" />
+    <ClInclude Include="services\events\EventsManager.h" />
+    <ClInclude Include="services\events\GameAction.h" />
+    <ClInclude Include="services\events\EventsState.h" />
+    <ClInclude Include="services\events\HopeAction.h" />
     <ClInclude Include="services\graphics\Direct3D11Graphics.h" />
     <ClInclude Include="services\graphics\IGraphics.h" />
     <ClInclude Include="services\graphics\NullGraphics.h" />

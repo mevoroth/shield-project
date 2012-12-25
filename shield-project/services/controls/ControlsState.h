@@ -1,9 +1,10 @@
-#ifndef _STATE_H_
-#define _STATE_H_
+#ifndef _CONTROLSSTATE_H_
+#define _CONTROLSSTATE_H_
 
 namespace shield {
 namespace services {
-	enum State {
+	enum ControlsState
+	{
 		RELEASED = 0,
 		PRESSED
 	};

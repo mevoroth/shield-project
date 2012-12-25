@@ -5,7 +5,7 @@
 #include "Service.h"
 #include "Settings.h"
 #include "game\actions\ActionFactory.h"
-#include "services\controls\State.h"
+#include "services\controls\ControlsState.h"
 #include "game\elements\ElementFactory.h"
 #include "savegame\ElementBlock.h"
 #include "savegame\HopeBlock.h"
@@ -21,65 +21,67 @@ Game::Game( void )
 
 	// Default binding
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_LEFT, PRESSED),
+		new pair<WPARAM, ControlsState>(VK_LEFT, PRESSED),
 		ActionFactory::getMoveLeft()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_LEFT, RELEASED),
+		new pair<WPARAM, ControlsState>(VK_LEFT, RELEASED),
 		ActionFactory::getMoveLeftUp()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_RIGHT, PRESSED),
+		new pair<WPARAM, ControlsState>(VK_RIGHT, PRESSED),
 		ActionFactory::getMoveRight()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_RIGHT, RELEASED),
+		new pair<WPARAM, ControlsState>(VK_RIGHT, RELEASED),
 		ActionFactory::getMoveRightUp()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_UP, PRESSED),
+		new pair<WPARAM, ControlsState>(VK_UP, PRESSED),
 		ActionFactory::getMoveUp()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_UP, RELEASED),
+		new pair<WPARAM, ControlsState>(VK_UP, RELEASED),
 		ActionFactory::getMoveUpUp()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_DOWN, PRESSED),
+		new pair<WPARAM, ControlsState>(VK_DOWN, PRESSED),
 		ActionFactory::getMoveDown()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>(VK_DOWN, RELEASED),
+		new pair<WPARAM, ControlsState>(VK_DOWN, RELEASED),
 		ActionFactory::getMoveDownUp()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>('W', PRESSED),
+		new pair<WPARAM, ControlsState>('W', PRESSED),
 		ActionFactory::getBurst()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>('Q', PRESSED),
+		new pair<WPARAM, ControlsState>('Q', PRESSED),
 		ActionFactory::getDashLeft()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>('D', PRESSED),
+		new pair<WPARAM, ControlsState>('D', PRESSED),
 		ActionFactory::getDashRight()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>('S', PRESSED),
+		new pair<WPARAM, ControlsState>('S', PRESSED),
 		ActionFactory::getShield()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>('X', PRESSED),
+		new pair<WPARAM, ControlsState>('X', PRESSED),
 		ActionFactory::getCharge()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>('X', RELEASED),
+		new pair<WPARAM, ControlsState>('X', RELEASED),
 		ActionFactory::getShoot()
 	);
 	Service::getControls()->bind(
-		new pair<WPARAM, State>('C', PRESSED),
+		new pair<WPARAM, ControlsState>('C', PRESSED),
 		ActionFactory::getSlash()
 	);
+
+	// Init directions
 	for ( int i = 0; i < 4; ++i )
 	{
 		_moves[i] = false;
@@ -117,6 +119,8 @@ void Game::load( const std::string& save )
 	);
 	_player->setCurrentWeapon( hope.currentWeapon );
 	//TODO: Add Weapon
+	
+	Service::getEventsManager()->bind( AFTER, MOVE, _player );
 
 	for ( int i = 0; i < elementsCount; ++i )
 	{
@@ -179,10 +183,12 @@ void Game::run( void )
 {
 	LARGE_INTEGER tick;
 	LARGE_INTEGER overhead;
+	LARGE_INTEGER freq;
 	LONGLONG elapsedTime;
 
 	QueryPerformanceCounter( &tick );
 	QueryPerformanceCounter( &overhead );
+	QueryPerformanceFrequency( &freq );
 
 	_lastTick.QuadPart = overhead.QuadPart;
 	overhead.QuadPart -= tick.QuadPart;
@@ -190,7 +196,7 @@ void Game::run( void )
 	while ( true )
 	{
 		QueryPerformanceCounter( &tick );
-		elapsedTime = tick.QuadPart - _lastTick.QuadPart;
+		elapsedTime = (tick.QuadPart - _lastTick.QuadPart)/freq.QuadPart;
 		
 		_input( elapsedTime );
 		_update( elapsedTime );
@@ -201,6 +207,7 @@ void Game::run( void )
 };
 void Game::_input( LONGLONG elapsedTime )
 {
+	//beforeMove
 	if ( _moves[UP] )
 	{
 		_getPlayer()->move( structs::Vector3(0.f, 0.f, .001f) );
@@ -217,6 +224,8 @@ void Game::_input( LONGLONG elapsedTime )
 	{
 		_getPlayer()->move( structs::Vector3(.001f, 0.f, 0.f) );
 	}
+	Service::getEventsManager()->notify( AFTER, MOVE );
+
 	while ( !_actionsQueue.empty() )
 	{
 		Action a = _actionsQueue.front();

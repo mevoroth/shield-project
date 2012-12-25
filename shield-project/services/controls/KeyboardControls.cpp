@@ -11,7 +11,7 @@ services::KeyboardControls::KeyboardControls( void )
 };
 services::KeyboardControls::~KeyboardControls( void )
 {
-	for ( map<pair<WPARAM, State>, Action*>::iterator it = _binds.begin();
+	for ( map<pair<WPARAM, ControlsState>, Action*>::iterator it = _binds.begin();
 		it != _binds.end();
 		++it )
 	{
@@ -29,17 +29,17 @@ void services::KeyboardControls::keyUp( const void* key, const void* params )
 void services::KeyboardControls::bind( const void* state, Action* action )
 {
 	_binds.insert(
-		pair<pair<WPARAM, State>, Action*>(
-			*(pair<WPARAM, State>*)state,
+		pair<pair<WPARAM, ControlsState>, Action*>(
+			*(pair<WPARAM, ControlsState>*)state,
 			action
 		)
 	);
 };
 
-inline void services::KeyboardControls::_call( WPARAM key, State s )
+inline void services::KeyboardControls::_call( WPARAM key, ControlsState s )
 {
-	map<pair<WPARAM, State>, Action*>::const_iterator element = _binds.find(
-		pair<WPARAM, State>(key, s)
+	map<pair<WPARAM, ControlsState>, Action*>::const_iterator element = _binds.find(
+		pair<WPARAM, ControlsState>(key, s)
 	);
 	if ( element != _binds.end() )
 	{

@@ -48,6 +48,9 @@
     <Filter Include="shield.savegame">
       <UniqueIdentifier>{9516b429-f100-4238-aaeb-0d28afba786f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shield.services\events">
+      <UniqueIdentifier>{19909ea1-cd94-460c-ad44-15e677a546d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="structs\Point.cpp">
@@ -295,9 +298,6 @@
     <ClInclude Include="services\controls\NullControls.h">
       <Filter>shield.services\controls</Filter>
     </ClInclude>
-    <ClInclude Include="services\controls\State.h">
-      <Filter>shield.services\controls</Filter>
-    </ClInclude>
     <ClInclude Include="services\graphics\Direct3D11Graphics.h">
       <Filter>shield.services\graphics</Filter>
     </ClInclude>
@@ -396,6 +396,27 @@
     </ClInclude>
     <ClInclude Include="game\actions\MoveDownUp.h">
       <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="patterns\Observable.h">
+      <Filter>shield.patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="patterns\Observer.h">
+      <Filter>shield.patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="services\events\EventsManager.h">
+      <Filter>shield.services\events</Filter>
+    </ClInclude>
+    <ClInclude Include="services\events\GameAction.h">
+      <Filter>shield.services\events</Filter>
+    </ClInclude>
+    <ClInclude Include="services\controls\ControlsState.h">
+      <Filter>shield.services\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="services\events\EventsState.h">
+      <Filter>shield.services\events</Filter>
+    </ClInclude>
+    <ClInclude Include="services\events\HopeAction.h">
+      <Filter>shield.services\events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

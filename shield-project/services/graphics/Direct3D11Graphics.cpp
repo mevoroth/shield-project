@@ -58,6 +58,7 @@ void services::Direct3D11Graphics::begin( void )
 {
 	float color[] = { 0.f, 0.f, 0.f, 0.f };
 	_deviceContext->ClearRenderTargetView( _renderTarget, color );
+	_deviceContext->ClearDepthStencilView( _depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
 };
 void services::Direct3D11Graphics::end( void )
 {
@@ -666,7 +667,7 @@ void services::Direct3D11Graphics::_initDeviceAndSwapChain( void )
 void services::Direct3D11Graphics::_initRenderTarget( void )
 {
 	ID3D11Texture2D* buffer = 0;
-
+	
 	HRESULT hr = _swapChain->GetBuffer(
 		0,
 		__uuidof(ID3D11Texture2D),
@@ -677,7 +678,7 @@ void services::Direct3D11Graphics::_initRenderTarget( void )
 	{
 		throw "Impossible de récupérer le buffer du swap chain";
 	}
-
+	
 	hr = _device->CreateRenderTargetView(
 		buffer,
 		0,
@@ -685,10 +686,33 @@ void services::Direct3D11Graphics::_initRenderTarget( void )
 	);
 	buffer->Release();
 
+	D3D11_TEXTURE2D_DESC tex2DDesc;
+	tex2DDesc.Width = 1920;
+	tex2DDesc.Height = 1080;
+	tex2DDesc.MipLevels = 1;
+	tex2DDesc.ArraySize = 1;
+	tex2DDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	tex2DDesc.SampleDesc.Count = 1;
+	tex2DDesc.SampleDesc.Quality = 0;
+	tex2DDesc.Usage = D3D11_USAGE_DEFAULT;
+	tex2DDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	tex2DDesc.CPUAccessFlags = 0;
+	tex2DDesc.MiscFlags = 0;
+
+	_device->CreateTexture2D( &tex2DDesc, 0, &buffer );
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	depthStencilViewDesc.Format = tex2DDesc.Format;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Flags = 0;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+
+	_device->CreateDepthStencilView( buffer, &depthStencilViewDesc, &_depthStencilView );
+
 	_deviceContext->OMSetRenderTargets(
 		1,
 		&_renderTarget,
-		0	// Depth stencil buffer
+		_depthStencilView	// Depth stencil buffer
 	);
 };
 void services::Direct3D11Graphics::_initViewport( void )

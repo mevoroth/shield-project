@@ -5,6 +5,7 @@
 #include "services\graphics\Direct3D11Graphics.h"
 #include "services\sound\NullSound.h"
 #include "services\meshloader\FbxMeshLoader.h"
+#include "services\events\EventsManager.h"
 
 #include "Game.h"
 #include "Settings.h"
@@ -32,6 +33,7 @@ Engine::Engine( HINSTANCE hInst, int nCmdShow )
 	Service::setGraphics( new services::Direct3D11Graphics(_window) );
 	Service::setSound( new services::NullSound() );
 	Service::setMeshLoader( new services::FbxMeshLoader() );
+	Service::setEventsManager( new services::EventsManager() );
 };
 
 void Engine::run()
