@@ -7,7 +7,6 @@
 #include "Ship.h"
 #include "..\..\structs\Vector3.h"
 #include "..\..\patterns\Observer.h"
-#include "..\..\services\events\EventsState.h"
 #include "..\..\services\events\HopeAction.h"
 
 using namespace std;
@@ -18,12 +17,13 @@ namespace game {
 	 * Espoir
 	 * Vaisseau du héros
 	 */
-	class Hope : public Ship, public Observer<EventsState, HopeAction>
+	class Hope : public Ship, public Observer<HopeAction>
 	{
 	public:
 		enum
 		{
 			SHIELD_TIMEOUT = 1000l,
+			SHIELD_MIRROR = 100,
 			DEFAULT_MAX_ENERGY = 100,
 			DEFAULT_ENERGY = 100,
 			LV_0_CHARGE = 1,
@@ -61,9 +61,10 @@ namespace game {
 		int getEnergy( void );
 		void addWeapon( Weapon* );
 		void setCurrentWeapon( int );
+		void damage( int );
 
-		// Observer<EventsState, HopeAction>
-		void update();
+		// Observer<HopeAction>
+		void update( const HopeAction&, void* );
 
 	private:
 		LONGLONG _shield;

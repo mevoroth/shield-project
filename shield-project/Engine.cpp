@@ -45,7 +45,7 @@ void Engine::run()
 	structs::GameCallable callable = structs::GameCallable( &g );
 
 	g.create();
-	boost::thread th = boost::thread( callable );
+	boost::thread th( callable );
 
 	MSG msg = {0};
 	while ( msg.message != WM_QUIT )

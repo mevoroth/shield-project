@@ -40,6 +40,7 @@ namespace game {
 		virtual std::list<Element*> shoot() const = 0;
 		int getHpMax( void ) const;
 		int getHp( void ) const;
+		virtual void damage( int );
 
 	private:
 		int _maxHp;

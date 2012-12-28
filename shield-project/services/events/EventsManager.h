@@ -2,23 +2,30 @@
 #define _EVENTSMANAGER_H_
 
 #include "..\..\patterns\Observable.h"
-#include "EventsState.h"
 #include "GameAction.h"
 #include "HopeAction.h"
+#include "EnemyAction.h"
+#include "BulletAction.h"
 
 using namespace shield::patterns;
 
 namespace shield {
 namespace services {
 	class EventsManager :
-		public Observable<EventsState, GameAction>,
-		public Observable<EventsState, HopeAction>
+		public Observable<GameAction>,
+		public Observable<HopeAction>,
+		public Observable<EnemyAction>,
+		public Observable<BulletAction>
 	{
 	public:
-		using Observable<EventsState, GameAction>::bind;
-		using Observable<EventsState, HopeAction>::bind;
-		using Observable<EventsState, GameAction>::notify;
-		using Observable<EventsState, HopeAction>::notify;
+		using Observable<GameAction>::bind;
+		using Observable<HopeAction>::bind;
+		using Observable<EnemyAction>::bind;
+		using Observable<BulletAction>::bind;
+		using Observable<GameAction>::notify;
+		using Observable<HopeAction>::notify;
+		using Observable<EnemyAction>::notify;
+		using Observable<BulletAction>::notify;
 	};
 };
 };

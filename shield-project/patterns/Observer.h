@@ -3,11 +3,11 @@
 
 namespace shield {
 namespace patterns {
-	template <typename State, typename Action>
+	template <typename Action>
 	class Observer
 	{
 	public:
-		virtual void update() = 0;
+		virtual void update( const Action&, void* ) = 0;
 	};
 };
 };

@@ -4,16 +4,21 @@
 #include <list>
 #include <queue>
 #include <Windows.h>
-//#include <boost\thread.hpp>
+#include <boost\thread\mutex.hpp>
 #include "game\elements\Element.h"
 #include "game\elements\Hope.h"
 #include "structs\Vector3.h"
+#include "patterns\Observable.h"
+#include "services\events\HopeAction.h"
+#include "services\events\BulletAction.h"
 
 using namespace shield::game;
 
 namespace shield
 {
-	class Game
+	class Game :
+		public Observer<HopeAction>,
+		public Observer<BulletAction>
 	{
 	public:
 		enum Action
@@ -22,12 +27,30 @@ namespace shield
 			MOVE_RIGHT,
 			MOVE_UP,
 			MOVE_DOWN,
+			/**
+			 * Déplacement rapide (forme mecha)
+			 */
 			DASH_LEFT,
 			DASH_RIGHT,
+			/**
+			 * Charge l'arme principal (forme mecha)
+			 */
 			CHARGE,
+			/**
+			 * Tire avec l'arme principal (forme mecha)
+			 */
 			SHOOT,
+			/**
+			 * Tire avec l'arme secondaire (forme mecha)
+			 */
 			BURST,
+			/**
+			 * Frappe avec l'arme corps-à-corps (forme mecha)
+			 */
 			SLASH,
+			/**
+			 * Protection (forme mecha)
+			 */
 			SHIELD
 		};
 		enum
@@ -61,44 +84,26 @@ namespace shield
 		void MoveRightUp( void );
 		void MoveUpUp( void );
 		void MoveDownUp( void );
-		/**
-		 * Déplacement rapide (forme mecha)
-		 */
-		void DashLeft( void );
-		void DashRight( void );
-		/**
-		 * Charge l'arme principal (forme mecha)
-		 */
-		void Charge( void );
-		/**
-		 * Tire avec l'arme principal (forme mecha)
-		 */
-		void Shoot( void );
-		/**
-		 * Tire avec l'arme secondaire (forme mecha)
-		 */
-		void Burst( void );
-		/**
-		 * Frappe avec l'arme corps-à-corps (forme mecha)
-		 */
-		void Slash( void );
-		/**
-		 * Protection (forme mecha)
-		 */
-		void Shield( void );
+		void action( const Action& );
 		/**
 		 * Switch entre forme mecha et forme vaisseau
 		 */
 		void SwapForm( void );
+
+		void update( const HopeAction&, void* );
+		void update( const BulletAction&, void* );
 
 	private:
 		Hope* _player;
 		std::list<Element*> _elements;
 		std::list<Element*> _bullets;
 		std::queue<Action> _actionsQueue;
-		//std::list<boost::mutex> _elementsMutex;
 		LARGE_INTEGER _lastTick;
 		bool _moves[4];
+		boost::mutex _elementsMutex;
+		boost::mutex _bulletsMutex;
+
+		bool _bulletReflected;
 
 		Hope* _getPlayer();
 		/**
@@ -116,6 +121,7 @@ namespace shield
 		void _drawElements( const std::list<Element*>& );
 		void _drawMeshes( const std::vector<Mesh*>& );
 		void _updateElements( LONGLONG, std::list<Element*>& );
+		void _resolveCollisions( std::list<Element*>&, std::list<Element*>& );
 	};
 };
 

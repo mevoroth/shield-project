@@ -1,6 +1,5 @@
 #include "Slash.h"
 
-using namespace shield;
 using namespace shield::game::actions;
 
 Slash::Slash( Game* g )
@@ -9,5 +8,5 @@ Slash::Slash( Game* g )
 };
 void Slash::call()
 {
-	_game->Slash();
+	_game->Action( Game::Action::SLASH );
 };

@@ -2,57 +2,53 @@
 #define _OBSERVABLE_H_
 
 #include <map>
+#include <boost\thread.hpp>
 #include "Observer.h"
+#include "..\structs\NotifyCallable.h"
 
 using namespace std;
 
 namespace shield {
 namespace patterns {
-	template<typename State, typename Action>
+	template<typename Action>
 	class Observable
 	{
 	public:
 		/**/
-		void bind( const State&, const Action&, Observer<State, Action>* );
-		void notify( const State&, const Action& );
+		void bind( const Action&, Observer<Action>* );
+		void notify( const Action&, void* );
 
 	private:
-		multimap<pair<State, Action>, Observer<State, Action>*> _observers;
+		multimap<Action, Observer<Action>*> _observers;
 	};
-	template <typename State, typename Action>
-	void Observable<State, Action>::bind(
-		const State& state,
+	template <typename Action>
+	void Observable<Action>::bind(
 		const Action& action,
-		Observer<State, Action>* observer
+		Observer<Action>* observer
 	)
 	{
 		_observers.insert(
-			pair<pair<State, Action>, Observer<State, Action>*>(
-				pair<State, Action>(state, action),
+			pair<Action, Observer<Action>*>(
+				action,
 				observer
 			)
 		);
 	};
-	template <typename State, typename Action>
-	void Observable<State, Action>::notify(
-		const State& state,
-		const Action& action
-	)
+	template <typename Action>
+	void Observable<Action>::notify( const Action& action, void* params )
 	{
 		pair<
-			multimap<pair<State, Action>, Observer<State, Action>*>::iterator,
-			multimap<pair<State, Action>, Observer<State, Action>*>::iterator
-		> ret = _observers.equal_range(
-			pair<State, Action>(state, action)
-		);
-		for ( multimap<
-				pair<State, Action>,
-				Observer<State, Action>*
-			>::iterator it = ret.first;
+			multimap<Action, Observer<Action>*>::iterator,
+			multimap<Action, Observer<Action>*>::iterator
+		> ret = _observers.equal_range( action );
+		for ( multimap<Action, Observer<Action>*>::iterator it =
+				ret.first;
 			it != ret.second;
 			++it )
 		{
-			it->second->update();
+			NotifyCallable<Action> callable( it->second, action, params );
+			boost::thread th( callable );
+			//it->second->update( action, params );
 		}
 	};
 };

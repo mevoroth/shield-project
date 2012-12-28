@@ -3,8 +3,9 @@
 #include "..\..\Service.h"
 
 using namespace shield;
+using namespace shield::game;
 
-game::Hope::Hope(
+Hope::Hope(
 	const structs::Point& p,
 	const structs::Vector3& dir,
 	int hp,
@@ -26,10 +27,10 @@ game::Hope::Hope(
 	_currentWeapon( 0 )
 {
 };
-void game::Hope::update( LONGLONG elapsedTime )
+void Hope::update( LONGLONG elapsedTime )
 {
-	game::Element::update( elapsedTime );
-	if ( getCurrentTime() - _shieldLastTick > SHIELD_TIMEOUT )
+	Element::update( elapsedTime );
+	/*if ( getCurrentTime() - _shieldLastTick > SHIELD_TIMEOUT )
 	{
 		 _shield = 0;
 	}
@@ -40,13 +41,13 @@ void game::Hope::update( LONGLONG elapsedTime )
 	if ( _energy > getMaxEnergy() )
 	{
 		_energy = getMaxEnergy();
-	}
+	}*/
 };
-bool game::Hope::hit( const Element& e ) const
+bool Hope::hit( const Element& e ) const
 {
 	return false;
 };
-void game::Hope::move( const structs::Vector3& direction )
+void Hope::move( const structs::Vector3& direction )
 {
 	_moveTo( getPosition() + direction );
 	std::vector<Mesh*> mesh = getMesh();
@@ -57,12 +58,12 @@ void game::Hope::move( const structs::Vector3& direction )
 		**it += direction;
 	}
 };
-void game::Hope::dash( const structs::Vector3& direction )
+void Hope::dash( const structs::Vector3& direction )
 {
 	// Change
 	move(direction);
 };
-void game::Hope::charge( void )
+void Hope::charge( void )
 {
 	if ( _energy > 0 && _accumulator < LV_MAX_CHARGE )
 	{
@@ -70,9 +71,9 @@ void game::Hope::charge( void )
 		++_accumulator;
 	}
 };
-std::list<game::Element*> game::Hope::shoot( void ) const
+std::list<Element*> Hope::shoot( void ) const
 {
-	std::list<game::Element*> bullets;
+	std::list<Element*> bullets;
 	// TODO: Rendu énergie
 	if ( _accumulator <= LV_0_CHARGE )
 	{
@@ -100,14 +101,14 @@ std::list<game::Element*> game::Hope::shoot( void ) const
 	}
 	return bullets;
 };
-std::list<game::Element*> game::Hope::burst( void ) const
+std::list<Element*> Hope::burst( void ) const
 {
 	return _weapons[_currentWeapon]->shoot( getPosition() );
 };
-void game::Hope::slash()
+void Hope::slash()
 {
 };
-void game::Hope::shield( LONGLONG elapsedTime )
+void Hope::shield( LONGLONG elapsedTime )
 {
 	unsigned long long prevTick = _shieldLastTick;
 	_shieldLastTick = GetTickCount64();
@@ -118,23 +119,40 @@ void game::Hope::shield( LONGLONG elapsedTime )
 	}
 	_energy -= _shieldLastTick - prevTick;
 };
-int game::Hope::getEnergy( void )
+int Hope::getEnergy( void )
 {
 	return _energy;
 };
-int game::Hope::getMaxEnergy( void )
+int Hope::getMaxEnergy( void )
 {
 	return _maxEnergy;
 };
-void game::Hope::addWeapon( Weapon* w )
+void Hope::addWeapon( Weapon* w )
 {
 	_weapons.push_back( w );
 };
-void game::Hope::setCurrentWeapon( int weapon )
+void Hope::setCurrentWeapon( int weapon )
 {
 	_currentWeapon = weapon;
 };
-void game::Hope::update()
+void Hope::update( const HopeAction& action, void* params )
 {
 
+};
+void Hope::damage( int damage )
+{
+	if ( _shield > 0 )
+	{
+		if ( _shield > SHIELD_MIRROR )
+		{
+			Service::getEventsManager()->notify(
+				BULLET_REFLECTED,
+				(void*)damage
+			);
+		}
+	}
+	else
+	{
+		Ship::damage( damage );
+	}
 };

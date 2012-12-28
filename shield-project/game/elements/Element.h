@@ -27,10 +27,8 @@ namespace game {
 		);
 		Element( const Element& );
 		~Element();
-		void spawn( void );
-		LONGLONG getCurrentTime( void ) const;
-		LONGLONG getSpawnTime( void ) const;
 		structs::Point getPosition( void ) const;
+		structs::Vector3 getDirection( void ) const;
 		std::vector<Mesh*> getMesh();
 
 		virtual void update( LONGLONG );
@@ -42,8 +40,6 @@ namespace game {
 	private:
 		structs::Point _position;
 		structs::Vector3 _direction;
-		LONGLONG _spawnTime;
-		LONGLONG _currentTime;
 		std::vector<Mesh*> _meshes;
 	};
 };

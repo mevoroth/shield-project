@@ -1,6 +1,5 @@
 #include "Charge.h"
 
-using namespace shield;
 using namespace shield::game::actions;
 
 Charge::Charge( Game* g )
@@ -9,5 +8,5 @@ Charge::Charge( Game* g )
 };
 void Charge::call()
 {
-	_game->Charge();
+	_game->Action( Game::Action::CHARGE );
 };

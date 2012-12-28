@@ -8,5 +8,5 @@ DashLeft::DashLeft( Game* g )
 };
 void DashLeft::call()
 {
-	_game->DashLeft();
+	_game->Action( Game::Action::DASH_LEFT );
 };

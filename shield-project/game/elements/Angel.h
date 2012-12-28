@@ -1,21 +1,26 @@
 #ifndef _ANGEL_H_
 #define _ANGEL_H_
 
-#include "Enemy.h"
+#include "Ship.h"
 
 namespace shield {
 namespace game {
-	class Angel : public Enemy
+	class Angel : public Ship
 	{
 	public:
 		Angel( const structs::Point&, const structs::Vector3&, int, int );
 		void update( LONGLONG );
 		bool hit( const Element& ) const;
 		std::vector<Mesh*> getMesh();
+		std::list<Element*> shoot() const;
 
 	private:
-		int _hp;
-		int _maxHp;
+		/**
+		 * Vérifie la collision
+		 * @param L'Ange
+		 * @param L'objet
+		 */
+		bool _collide( const structs::Point&, const structs::Point& ) const;
 	};
 };
 };

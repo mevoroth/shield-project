@@ -1,4 +1,5 @@
 #include "Ship.h"
+#include "..\..\Service.h"
 
 using namespace shield;
 
@@ -35,4 +36,12 @@ int game::Ship::getHp( void ) const
 int game::Ship::getHpMax( void ) const
 {
 	return _maxHp;
+};
+void game::Ship::damage( int damage )
+{
+	_hp -= damage;
+	if ( _hp <= 0 )
+	{
+		//Service::getEventsManager()->notify( HOPE_DEATH, this );
+	}
 };

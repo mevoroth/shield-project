@@ -5,7 +5,8 @@ namespace shield {
 namespace services {
 	enum HopeAction
 	{
-		MOVE
+		HOPE_MOVE,
+		HOPE_DEATH
 	};
 };
 };

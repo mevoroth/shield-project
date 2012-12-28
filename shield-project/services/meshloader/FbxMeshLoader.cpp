@@ -205,18 +205,20 @@ void FbxMeshLoader::_getNormal(
 		{
 			FbxVector4 fbxNormal = normalEl->GetDirectArray()
 				.GetAt( normalIndex );
-			DirectX::XMVECTOR length = DirectX::XMVectorSet(
-				fbxNormal[0],
-				fbxNormal[1],
-				fbxNormal[2],
-				0.f
+			float length = DirectX::XMVectorGetX(
+				DirectX::XMVector3Length(
+					DirectX::XMVectorSet(
+						fbxNormal[0],
+						fbxNormal[1],
+						fbxNormal[2],
+						0.f
+					)
+				)
 			);
-			
-			length = DirectX::XMVector3Length( length );
 
-			normal.x = fbxNormal[0]/length.vector4_f32[0];
-			normal.y = fbxNormal[1]/length.vector4_f32[0];
-			normal.z = fbxNormal[2]/length.vector4_f32[0];
+			normal.x = fbxNormal[0]/length;
+			normal.y = fbxNormal[1]/length;
+			normal.z = fbxNormal[2]/length;
 		}
 	}
 	else if ( normalEl->GetMappingMode()

@@ -191,9 +191,6 @@
     <ClCompile Include="game\elements\Virtue.cpp">
       <Filter>shield.game\elements</Filter>
     </ClCompile>
-    <ClCompile Include="game\elements\Enemy.cpp">
-      <Filter>shield.game\elements</Filter>
-    </ClCompile>
     <ClCompile Include="game\actions\MoveUpUp.cpp">
       <Filter>shield.game\actions</Filter>
     </ClCompile>
@@ -370,9 +367,6 @@
     <ClInclude Include="game\elements\Dominion.h">
       <Filter>shield.game\elements</Filter>
     </ClInclude>
-    <ClInclude Include="game\elements\Enemy.h">
-      <Filter>shield.game\elements</Filter>
-    </ClInclude>
     <ClInclude Include="game\elements\Ruler.h">
       <Filter>shield.game\elements</Filter>
     </ClInclude>
@@ -418,12 +412,24 @@
     <ClInclude Include="services\events\HopeAction.h">
       <Filter>shield.services\events</Filter>
     </ClInclude>
+    <ClInclude Include="services\events\EnemyAction.h">
+      <Filter>shield.services\events</Filter>
+    </ClInclude>
+    <ClInclude Include="services\events\BulletAction.h">
+      <Filter>shield.services\events</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\NotifyCallable.h">
+      <Filter>shield.structs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="testps.hlsl">
       <Filter>Fichiers de ressources</Filter>
     </FxCompile>
     <FxCompile Include="testvs.hlsl">
+      <Filter>Fichiers de ressources</Filter>
+    </FxCompile>
+    <FxCompile Include="testgs.hlsl">
       <Filter>Fichiers de ressources</Filter>
     </FxCompile>
   </ItemGroup>

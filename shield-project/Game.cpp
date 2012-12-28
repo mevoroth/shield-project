@@ -7,6 +7,7 @@
 #include "game\actions\ActionFactory.h"
 #include "services\controls\ControlsState.h"
 #include "game\elements\ElementFactory.h"
+#include "game\elements\BulletFactory.h"
 #include "savegame\ElementBlock.h"
 #include "savegame\HopeBlock.h"
 
@@ -16,8 +17,11 @@ using namespace shield::services;
 using namespace shield::savegame;
 
 Game::Game( void )
+	: _bulletReflected( false )
 {
 	ActionFactory::setGame( this );
+	BulletFactory::setGame( this );
+	//ElementFactory::setGame( this );
 
 	// Default binding
 	Service::getControls()->bind(
@@ -91,7 +95,7 @@ Game::~Game( void )
 {
 	// TODO: Dealloc
 };
-void Game::load( const std::string& save )
+void Game::load( const string& save )
 {
 	//_player = s;
 
@@ -120,8 +124,6 @@ void Game::load( const std::string& save )
 	_player->setCurrentWeapon( hope.currentWeapon );
 	//TODO: Add Weapon
 	
-	Service::getEventsManager()->bind( AFTER, MOVE, _player );
-
 	for ( int i = 0; i < elementsCount; ++i )
 	{
 		// Read other elements
@@ -207,24 +209,22 @@ void Game::run( void )
 };
 void Game::_input( LONGLONG elapsedTime )
 {
-	//beforeMove
 	if ( _moves[UP] )
 	{
-		_getPlayer()->move( structs::Vector3(0.f, 0.f, .001f) );
+		_getPlayer()->move( structs::Vector3(0.f, 0.f, .005f) );
 	}
 	if ( _moves[DOWN] )
 	{
-		_getPlayer()->move( structs::Vector3(0.f, 0.f, -.001f) );
+		_getPlayer()->move( structs::Vector3(0.f, 0.f, -.005f) );
 	}
 	if ( _moves[LEFT] )
 	{
-		_getPlayer()->move( structs::Vector3(-.001f, 0.f, 0.f) );
+		_getPlayer()->move( structs::Vector3(-.005f, 0.f, 0.f) );
 	}
 	if ( _moves[RIGHT] )
 	{
-		_getPlayer()->move( structs::Vector3(.001f, 0.f, 0.f) );
+		_getPlayer()->move( structs::Vector3(.005f, 0.f, 0.f) );
 	}
-	Service::getEventsManager()->notify( AFTER, MOVE );
 
 	while ( !_actionsQueue.empty() )
 	{
@@ -267,25 +267,46 @@ void Game::_update( LONGLONG elapsedTime )
 	// Update scrolling
 	_getPlayer()->update( elapsedTime );
 	_updateElements( elapsedTime, _elements );
+	
+	_bulletsMutex.lock();
 	_updateElements( elapsedTime, _bullets );
 
 	// Resolve collisions
-	for ( std::list<Element*>::iterator it = _bullets.begin();
-		it != _bullets.end();
-		++it )
+	list<Element*> player;
+	player.push_back( _getPlayer() );
+	_resolveCollisions( player, _bullets );
+	_resolveCollisions( _elements, _bullets );
+	_bulletsMutex.unlock();
+	_resolveCollisions( player, _elements );
+};
+void Game::_resolveCollisions(
+	list<Element*>& hittables,
+	list<Element*>& hitters
+)
+{
+	for ( list<Element*>::iterator hitter = hitters.begin();
+		hitter != hitters.end();
+		++hitter )
 	{
-		if ( (*it)->hit(*_getPlayer()) )
+		for ( list<Element*>::iterator hittable = hittables.begin();
+			hittable != hittables.end();
+			++hittable )
 		{
-			// Hit
+			if ( (*hitter)->hit(**hittable) )
+			{
+				((Ship*)*hittable)->damage( 1 );
+				if ( _bulletReflected )
+				{
+
+				}
+				break;
+			}
 		}
 	}
 };
-void Game::_updateElements(
-	LONGLONG elapsedTime,
-	std::list<Element*>& elements
-)
+void Game::_updateElements( LONGLONG elapsedTime, list<Element*>& elements )
 {
-	for ( std::list<Element*>::iterator it = elements.begin();
+	for ( list<Element*>::iterator it = elements.begin();
 		it != elements.end();
 		++it )
 	{
@@ -300,31 +321,33 @@ void Game::_draw( LONGLONG elapsedTime )
 		0.f, 0.f + p.y/2, 0.f,
 		0.f, 0.f, 1.f
 	);
-	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, .1f, 1000.f );
+	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, 3.f, 1000.f );
 
 	Service::getGraphics()->begin();
 	_drawMeshes( _getPlayer()->getMesh() );
 	_drawElements( _elements );
+
+	_bulletsMutex.lock();
 	_drawElements( _bullets );
-	//((Direct3D11Graphics*)Service::getGraphics())->write("");
+	_bulletsMutex.unlock();
 
 	Service::getGraphics()->end();
 
 	// Draw game
 	// Draw HUD
 };
-void Game::_drawElements( const std::list<Element*>& elements )
+void Game::_drawElements( const list<Element*>& elements )
 {
-	for ( std::list<Element*>::const_iterator it = elements.begin();
+	for ( list<Element*>::const_iterator it = elements.begin();
 		it != elements.end();
 		++it )
 	{
 		_drawMeshes( (*it)->getMesh() );
 	}
 };
-void Game::_drawMeshes( const std::vector<Mesh*>& meshes )
+void Game::_drawMeshes( const vector<Mesh*>& meshes )
 {
-	for ( std::vector<Mesh*>::const_iterator it = meshes.begin();
+	for ( vector<Mesh*>::const_iterator it = meshes.begin();
 		it != meshes.end();
 		++it )
 	{
@@ -334,6 +357,30 @@ void Game::_drawMeshes( const std::vector<Mesh*>& meshes )
 			(*it)->getTexture()
 		);
 	}
+};
+void Game::update( const HopeAction& action, void* params )
+{
+	//throw;
+};
+void Game::update( const BulletAction& action, void* params )
+{
+	switch (action)
+	{
+	case BULLET_REFLECTED:
+		_bulletReflected = true;
+		break;
+	case BULLET_DEATH:
+		_bulletsMutex.lock();
+		Element* el = (Element*)params;
+		//delete params;
+		_bullets.remove( (Element*)params );
+		_bulletsMutex.unlock();
+		break;
+	}
+};
+void Game::action( const Action& action )
+{
+	_actionsQueue.push( action );
 };
 void Game::MoveLeft( void )
 {
@@ -350,34 +397,6 @@ void Game::MoveUp( void )
 void Game::MoveDown( void )
 {
 	_moves[DOWN] = true;
-};
-void Game::DashLeft( void )
-{
-	_actionsQueue.push( DASH_LEFT );
-};
-void Game::DashRight( void )
-{
-	_actionsQueue.push( DASH_RIGHT );
-};
-void Game::Charge( void )
-{
-	_actionsQueue.push( CHARGE );
-};
-void Game::Shoot( void )
-{
-	_actionsQueue.push( SHOOT );
-};
-void Game::Burst( void )
-{
-	_actionsQueue.push( BURST );
-};
-void Game::Slash( void )
-{
-	_actionsQueue.push( SLASH );
-};
-void Game::Shield( void )
-{
-	_actionsQueue.push( SHIELD );
 };
 void Game::SwapForm( void )
 {

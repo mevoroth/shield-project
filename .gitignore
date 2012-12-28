@@ -1,6 +1,8 @@
 
 /Debug
 /shield-project/Debug
+/Release
+/shield-project/Release
 *.suo
 
 /shield-project.sdf

@@ -1,5 +1,6 @@
 #include "LaserBeamBullet.h"
 #include "..\..\Service.h"
+#include "..\..\services\events\BulletAction.h"
 
 using namespace shield;
 
@@ -17,7 +18,8 @@ game::LaserBeamBullet::LaserBeamBullet(
 	),
 	_ray( ray ),
 	_length( len ),
-	_damage( damage )
+	_damage( damage ),
+	_elapsedTime( 0l )
 {
 };
 game::LaserBeamBullet::LaserBeamBullet( const game::LaserBeamBullet& e )
@@ -32,10 +34,9 @@ bool game::LaserBeamBullet::hit( const Element& p ) const
 		spawn.x,
 		spawn.y + diff,
 		spawn.z
-	);
+	);*/
 	// Collision
-	return _collide(current, p);*/
-	return false;
+	return getDirection().dy < 0 && _collide( getPosition(), p.getPosition() );
 };
 bool game::LaserBeamBullet::_collide(
 	const structs::Point& bullet,
@@ -50,4 +51,13 @@ bool game::LaserBeamBullet::_collide(
 	// TODO: Check optimisation multiplication vs comparaison
 	return dx*dx + dz*dz < _ray*_ray
 		&& dy*dy < _length*_length;
+};
+void game::LaserBeamBullet::update( LONGLONG elapsedTime )
+{
+	Element::update( elapsedTime );
+	_elapsedTime += 1;
+	if ( _elapsedTime >= 20 )
+	{
+		Service::getEventsManager()->notify( BULLET_DEATH, this );
+	}
 };

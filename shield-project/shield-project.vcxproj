@@ -62,16 +62,24 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_51_0;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FBXSDK_SHARED;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Program Files\boost\boost_1_51_0\lib;C:\Users\skana\Documents\Visual Studio 2012\Libs;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\lib\vs2010\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>D3D11.lib;DXGI.lib;D3dcompiler.lib;fbxsdk-2013.3.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp" />
@@ -100,7 +108,6 @@
     <ClCompile Include="game\elements\Dominion.cpp" />
     <ClCompile Include="game\elements\Element.cpp" />
     <ClCompile Include="game\elements\ElementFactory.cpp" />
-    <ClCompile Include="game\elements\Enemy.cpp" />
     <ClCompile Include="game\elements\Hope.cpp" />
     <ClCompile Include="game\elements\LaserBeamBullet.cpp" />
     <ClCompile Include="game\elements\Ruler.cpp" />
@@ -153,7 +160,6 @@
     <ClInclude Include="game\elements\Dominion.h" />
     <ClInclude Include="game\elements\Element.h" />
     <ClInclude Include="game\elements\ElementFactory.h" />
-    <ClInclude Include="game\elements\Enemy.h" />
     <ClInclude Include="game\elements\Hope.h" />
     <ClInclude Include="game\elements\LaserBeamBullet.h" />
     <ClInclude Include="game\elements\Ruler.h" />
@@ -177,6 +183,8 @@
     <ClInclude Include="services\controls\KeyboardControls.h" />
     <ClInclude Include="services\controls\NullControls.h" />
     <ClInclude Include="services\controls\ControlsState.h" />
+    <ClInclude Include="services\events\BulletAction.h" />
+    <ClInclude Include="services\events\EnemyAction.h" />
     <ClInclude Include="services\events\EventsManager.h" />
     <ClInclude Include="services\events\GameAction.h" />
     <ClInclude Include="services\events\EventsState.h" />
@@ -194,22 +202,30 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="structs\Callable.h" />
     <ClInclude Include="structs\GameCallable.h" />
+    <ClInclude Include="structs\NotifyCallable.h" />
     <ClInclude Include="structs\Point.h" />
     <ClInclude Include="structs\Vector3.h" />
     <ClInclude Include="structs\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="testgs.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">GS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="testvs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
     </FxCompile>
     <FxCompile Include="testps.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PS</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -9,5 +9,5 @@ Shoot::Shoot( Game* g )
 };
 void Shoot::call()
 {
-	_game->Shoot();
+	_game->Action( Game::Action::SHOOT );
 };

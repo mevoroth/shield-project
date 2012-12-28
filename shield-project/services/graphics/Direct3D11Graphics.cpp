@@ -25,6 +25,7 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 	// TODO: REMOVE SHADERS
 	ID3D10Blob* vertexShader = 0;
 	ID3D10Blob* pixelShader = 0;
+	ID3D10Blob* geometryShader = 0;
 	ID3D10Blob* errors = 0;
 	HRESULT hr = D3DCompileFromFile( L"testvs.hlsl", 0, 0, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
 	if ( FAILED(hr) )
@@ -46,6 +47,14 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 		throw "Erreur";
 	}
 	loadShader<ID3D11PixelShader>(1, pixelShader);
+	hr = D3DCompileFromFile( L"testgs.hlsl", 0, 0, "GS", "gs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &geometryShader, &errors );
+	if ( FAILED(hr) )
+	{
+		int strsize = errors->GetBufferSize();
+		std::string str = (char*)errors->GetBufferPointer();
+		throw "Erreur";
+	}
+	loadShader<ID3D11GeometryShader>(2, geometryShader);
 };
 services::Direct3D11Graphics::~Direct3D11Graphics( void )
 {
@@ -93,6 +102,7 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 
 	useShader<ID3D11VertexShader>(0);
 	useShader<ID3D11PixelShader>(1);
+	useShader<ID3D11GeometryShader>(2);
 
 	_createVertexBuffer( vertexes, vertexesSize, vertexBuffer );
 

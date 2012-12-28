@@ -26,13 +26,9 @@ namespace game {
 		LaserBeamBullet( const LaserBeamBullet& );
 		bool hit( const Element& ) const;
 		std::vector<Mesh*> getMesh();
+		void update( LONGLONG );
+
 	private:
-		/**
-		 * Vérifie la collision
-		 * @param Le laser
-		 * @param L'objet
-		 */
-		bool _collide( const structs::Point&, const structs::Point& ) const;
 		/**
 		 * Rayon du laser (pixel)
 		 */
@@ -45,6 +41,14 @@ namespace game {
 		 * Dégâts
 		 */
 		int _damage;
+		LONGLONG _elapsedTime;
+
+		/**
+		 * Vérifie la collision
+		 * @param Le laser
+		 * @param L'objet
+		 */
+		bool _collide( const structs::Point&, const structs::Point& ) const;
 	};
 };
 };

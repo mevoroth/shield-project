@@ -7,9 +7,7 @@ game::Element::Element(
 	const structs::Vector3& direction,
 	const std::vector<Mesh*>& meshes
 )
-	: _currentTime( 0l ),
-	_spawnTime( 0l ),
-	_position( structs::Point(x, y, z) ),
+	: _position( structs::Point(x, y, z) ),
 	_direction( direction ),
 	_meshes( meshes )
 {
@@ -29,9 +27,7 @@ game::Element::Element(
 	const structs::Vector3& direction,
 	const std::vector<Mesh*>& meshes
 )
-	: _currentTime( 0l ),
-	_spawnTime( 0l ),
-	_position( p ),
+	: _position( p ),
 	_direction( direction ),
 	_meshes( meshes )
 {
@@ -43,7 +39,7 @@ game::Element::Element(
 			_position.x,
 			_position.y,
 			_position.z
-			);
+		);
 	}
 };
 game::Element::Element( const game::Element& e )
@@ -51,20 +47,12 @@ game::Element::Element( const game::Element& e )
 	_direction( e._direction ),
 	_meshes( e._meshes )
 {
-	_spawnTime = e._spawnTime;
-	_currentTime = e._currentTime;
 };
 game::Element::~Element()
 {
 };
-void game::Element::spawn( void )
-{
-	_spawnTime = GetTickCount64();
-	_currentTime = _spawnTime;
-};
 void game::Element::update( LONGLONG elapsedTime )
 {
-	_currentTime = GetTickCount64();
 	_position += _direction;
 	for ( std::vector<Mesh*>::iterator it = _meshes.begin();
 		it != _meshes.end();
@@ -73,17 +61,13 @@ void game::Element::update( LONGLONG elapsedTime )
 		**it += _direction;
 	}
 };
-LONGLONG game::Element::getCurrentTime( void ) const
-{
-	return _currentTime;
-};
-LONGLONG game::Element::getSpawnTime( void ) const
-{
-	return _spawnTime;
-};
 structs::Point game::Element::getPosition( void ) const
 {
 	return _position;
+};
+structs::Vector3 game::Element::getDirection( void ) const
+{
+	return _direction;
 };
 void game::Element::_moveTo( const structs::Point& p )
 {

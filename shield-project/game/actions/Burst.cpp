@@ -1,6 +1,5 @@
 #include "Burst.h"
 
-using namespace shield;
 using namespace shield::game::actions;
 
 Burst::Burst( Game* g )
@@ -9,5 +8,5 @@ Burst::Burst( Game* g )
 };
 void Burst::call( void )
 {
-	_game->Burst();
+	_game->Action( Game::Action::BURST );
 };
