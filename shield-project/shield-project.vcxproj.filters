@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Fichiers de ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="shield">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -50,6 +46,19 @@
     </Filter>
     <Filter Include="shield.services\events">
       <UniqueIdentifier>{19909ea1-cd94-460c-ad44-15e677a546d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="shaders\pixel">
+      <UniqueIdentifier>{d4b620f2-bb9b-4e20-9752-9e217054e589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\geometry">
+      <UniqueIdentifier>{1d20232c-98e3-4983-977c-aa49a86f7bb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\vertex">
+      <UniqueIdentifier>{9c9b3427-40fe-4885-8530-1ca8156f2f35}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -191,16 +200,16 @@
     <ClCompile Include="game\elements\Virtue.cpp">
       <Filter>shield.game\elements</Filter>
     </ClCompile>
-    <ClCompile Include="game\actions\MoveUpUp.cpp">
+    <ClCompile Include="game\actions\StopLeft.cpp">
       <Filter>shield.game\actions</Filter>
     </ClCompile>
-    <ClCompile Include="game\actions\MoveDownUp.cpp">
+    <ClCompile Include="game\actions\StopDown.cpp">
       <Filter>shield.game\actions</Filter>
     </ClCompile>
-    <ClCompile Include="game\actions\MoveLeftUp.cpp">
+    <ClCompile Include="game\actions\StopRight.cpp">
       <Filter>shield.game\actions</Filter>
     </ClCompile>
-    <ClCompile Include="game\actions\MoveRightUp.cpp">
+    <ClCompile Include="game\actions\StopUp.cpp">
       <Filter>shield.game\actions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -379,18 +388,6 @@
     <ClInclude Include="game\elements\Virtue.h">
       <Filter>shield.game\elements</Filter>
     </ClInclude>
-    <ClInclude Include="game\actions\MoveLeftUp.h">
-      <Filter>shield.game\actions</Filter>
-    </ClInclude>
-    <ClInclude Include="game\actions\MoveRightUp.h">
-      <Filter>shield.game\actions</Filter>
-    </ClInclude>
-    <ClInclude Include="game\actions\MoveUpUp.h">
-      <Filter>shield.game\actions</Filter>
-    </ClInclude>
-    <ClInclude Include="game\actions\MoveDownUp.h">
-      <Filter>shield.game\actions</Filter>
-    </ClInclude>
     <ClInclude Include="patterns\Observable.h">
       <Filter>shield.patterns</Filter>
     </ClInclude>
@@ -421,16 +418,34 @@
     <ClInclude Include="structs\NotifyCallable.h">
       <Filter>shield.structs</Filter>
     </ClInclude>
+    <ClInclude Include="game\actions\StopLeft.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\StopDown.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\StopRight.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actions\StopUp.h">
+      <Filter>shield.game\actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="testps.hlsl">
-      <Filter>Fichiers de ressources</Filter>
+    <FxCompile Include="resources\shaders\pixel\testps.hlsl">
+      <Filter>shaders\pixel</Filter>
     </FxCompile>
-    <FxCompile Include="testvs.hlsl">
-      <Filter>Fichiers de ressources</Filter>
+    <FxCompile Include="resources\shaders\geometry\testgs.hlsl">
+      <Filter>shaders\geometry</Filter>
     </FxCompile>
-    <FxCompile Include="testgs.hlsl">
-      <Filter>Fichiers de ressources</Filter>
+    <FxCompile Include="resources\shaders\vertex\testvs.hlsl">
+      <Filter>shaders\vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shaders\vertex\direct.hlsl">
+      <Filter>shaders\vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shaders\pixel\direct.hlsl">
+      <Filter>shaders\pixel</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

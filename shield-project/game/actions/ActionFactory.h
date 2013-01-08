@@ -23,10 +23,10 @@ namespace game {
 		static services::Action* getShield();
 		static services::Action* getShoot();
 		static services::Action* getSlash();
-		static services::Action* getMoveLeftUp();
-		static services::Action* getMoveRightUp();
-		static services::Action* getMoveDownUp();
-		static services::Action* getMoveUpUp();
+		static services::Action* getStopLeft();
+		static services::Action* getStopRight();
+		static services::Action* getStopDown();
+		static services::Action* getStopUp();
 	private:
 		static Game* _g;
 	};

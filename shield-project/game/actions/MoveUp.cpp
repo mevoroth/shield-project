@@ -8,5 +8,5 @@ MoveUp::MoveUp( Game* g )
 };
 void MoveUp::call()
 {
-	_game->MoveUp();
+	_game->move( Game::Direction::UP, true );
 };

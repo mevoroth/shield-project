@@ -16,8 +16,14 @@ void services::NullGraphics::end( void )
 {
 	cout << "End draw ..." << endl;
 };
-void services::NullGraphics::draw( const Point vertexes[], int vertexesSize,
-								  const wchar_t* texture )
+void services::NullGraphics::draw(
+	const Point vertexes[],
+	int vertexesSize,
+	const wchar_t* texture,
+	void* vertex,
+	void* geometry,
+	void* pixel
+)
 {
 	cout << "Drawing ..." << endl;
 };
@@ -40,4 +46,8 @@ void services::NullGraphics::setPerspective( float fovAngleY, float ratio,
 	cout << "Ratio : " << ratio << endl;
 	cout << "NearZ : " << nearZ << endl;
 	cout << "FarZ : " << farZ << endl;
+};
+void services::NullGraphics::updateMatrix()
+{
+	cout << "Update matrix ..." << endl;
 };

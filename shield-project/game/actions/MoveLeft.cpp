@@ -8,5 +8,5 @@ MoveLeft::MoveLeft( Game* g )
 };
 void MoveLeft::call()
 {
-	_game->MoveLeft();
+	_game->move( Game::Direction::LEFT, true );
 };

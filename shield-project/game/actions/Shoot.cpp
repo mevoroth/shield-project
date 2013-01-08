@@ -1,6 +1,5 @@
 #include "Shoot.h"
 
-using namespace shield;
 using namespace shield::game::actions;
 
 Shoot::Shoot( Game* g )
@@ -9,5 +8,5 @@ Shoot::Shoot( Game* g )
 };
 void Shoot::call()
 {
-	_game->Action( Game::Action::SHOOT );
+	_game->action( Game::Action::SHOOT );
 };

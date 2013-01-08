@@ -15,6 +15,8 @@ namespace game {
 		static Element* getLaserBeamBulletLv1( const structs::Point& );
 		static Element* getLaserBeamBulletLv2( const structs::Point& );
 		static Element* getLaserBeamBulletLvMax( const structs::Point& );
+		static Element* getAngelBullet( const structs::Point& );
+
 	private:
 		static Game* _g;
 	};

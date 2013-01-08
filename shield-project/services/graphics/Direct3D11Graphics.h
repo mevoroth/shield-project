@@ -4,6 +4,7 @@
 #include <map>
 #include <d3d11_1.h>
 #include "IGraphics.h"
+#include "..\..\Settings.h"
 
 using namespace std;
 
@@ -18,8 +19,8 @@ namespace services {
 	public:
 		enum
 		{
-			WIDTH			= 1920,
-			HEIGHT			= 1080,
+			WIDTH			= settings::system::WIDTH,
+			HEIGHT			= settings::system::HEIGHT,
 			FRAMERATE_NUM	= 60,
 			FRAMERATE_DEN	= 1
 		};
@@ -27,7 +28,7 @@ namespace services {
 		~Direct3D11Graphics( void );
 		void begin( void );
 		void end( void );
-		void draw( const Vertex[], int, const wchar_t* );
+		void draw( const Vertex[], int, const wchar_t*, void*, void*, void* );
 		void setCamera(
 			float, float, float,
 			float, float, float,
@@ -60,6 +61,7 @@ namespace services {
 		);
 		template<class Shader> void loadShader( UINT16, ID3D10Blob* );
 		template<class Shader> void useShader( UINT16 );
+		void updateMatrix();
 
 	private:
 		HWND _window;
@@ -101,6 +103,7 @@ namespace services {
 		void _initDeviceAndSwapChain( void );
 		void _initRenderTarget( void );
 		void _initViewport( void );
+		void _setBlendState( void );
 		/**
 		 * Load vertex shader
 		 */

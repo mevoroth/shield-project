@@ -30,7 +30,7 @@ Game::Game( void )
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>(VK_LEFT, RELEASED),
-		ActionFactory::getMoveLeftUp()
+		ActionFactory::getStopLeft()
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>(VK_RIGHT, PRESSED),
@@ -38,7 +38,7 @@ Game::Game( void )
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>(VK_RIGHT, RELEASED),
-		ActionFactory::getMoveRightUp()
+		ActionFactory::getStopRight()
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>(VK_UP, PRESSED),
@@ -46,7 +46,7 @@ Game::Game( void )
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>(VK_UP, RELEASED),
-		ActionFactory::getMoveUpUp()
+		ActionFactory::getStopUp()
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>(VK_DOWN, PRESSED),
@@ -54,7 +54,7 @@ Game::Game( void )
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>(VK_DOWN, RELEASED),
-		ActionFactory::getMoveDownUp()
+		ActionFactory::getStopDown()
 	);
 	Service::getControls()->bind(
 		new pair<WPARAM, ControlsState>('W', PRESSED),
@@ -111,6 +111,9 @@ void Game::load( const string& save )
 
 	// Read player
 	savegame >> hope;
+	hope.x = 0.f;
+	hope.y = 0.f;
+	hope.z = 0.f;
 	savegame.read((char*)&elementsCount, sizeof(int));
 
 	_player = new Hope(
@@ -211,11 +214,11 @@ void Game::_input( LONGLONG elapsedTime )
 {
 	if ( _moves[UP] )
 	{
-		_getPlayer()->move( structs::Vector3(0.f, 0.f, .005f) );
+		_getPlayer()->move( structs::Vector3(0.f, 0.f, .01f) );
 	}
 	if ( _moves[DOWN] )
 	{
-		_getPlayer()->move( structs::Vector3(0.f, 0.f, -.005f) );
+		_getPlayer()->move( structs::Vector3(0.f, 0.f, -.01f) );
 	}
 	if ( _moves[LEFT] )
 	{
@@ -264,6 +267,9 @@ void Game::_input( LONGLONG elapsedTime )
 };
 void Game::_update( LONGLONG elapsedTime )
 {
+	list<Element*> player;
+	player.push_back( _getPlayer() );
+
 	// Update scrolling
 	_getPlayer()->update( elapsedTime );
 	_updateElements( elapsedTime, _elements );
@@ -272,12 +278,34 @@ void Game::_update( LONGLONG elapsedTime )
 	_updateElements( elapsedTime, _bullets );
 
 	// Resolve collisions
-	list<Element*> player;
-	player.push_back( _getPlayer() );
 	_resolveCollisions( player, _bullets );
 	_resolveCollisions( _elements, _bullets );
 	_bulletsMutex.unlock();
 	_resolveCollisions( player, _elements );
+
+	// Shooting
+	for ( list<Element*>::iterator it = _elements.begin();
+		it != _elements.end();
+		++it )
+	{
+		std::list<Element*> els = ((Ship*)*it)->shoot();
+		_bulletsMutex.lock();
+		_bullets.splice(
+			_bullets.end(),
+			els
+		);
+		_bulletsMutex.unlock();
+	}
+
+	// Clean
+	_elements.remove_if( death_elements );
+	_bulletsMutex.lock();
+	_bullets.remove_if( death_elements );
+	_bulletsMutex.unlock();
+};
+bool shield::death_elements( const Element* e )
+{
+	return e->isDead();
 };
 void Game::_resolveCollisions(
 	list<Element*>& hittables,
@@ -297,7 +325,7 @@ void Game::_resolveCollisions(
 				((Ship*)*hittable)->damage( 1 );
 				if ( _bulletReflected )
 				{
-
+					// Bullet reflected
 				}
 				break;
 			}
@@ -317,11 +345,16 @@ void Game::_draw( LONGLONG elapsedTime )
 {
 	structs::Point p = _getPlayer()->getPosition();
 	Service::getGraphics()->setCamera(
-		0.f, -5.f + p.y/2, 0.f,
-		0.f, 0.f + p.y/2, 0.f,
+		0.f, -5.f + p.y, 0.f,
+		0.f, 0.f + p.y, 0.f,
 		0.f, 0.f, 1.f
 	);
-	Service::getGraphics()->setPerspective( DirectX::XM_PIDIV4, 16.f/9.f, 3.f, 1000.f );
+	Service::getGraphics()->setPerspective(
+		DirectX::XM_PIDIV4/4,
+		settings::system::RATIO,
+		1.f,
+		500.f
+	);
 
 	Service::getGraphics()->begin();
 	_drawMeshes( _getPlayer()->getMesh() );
@@ -331,10 +364,31 @@ void Game::_draw( LONGLONG elapsedTime )
 	_drawElements( _bullets );
 	_bulletsMutex.unlock();
 
-	Service::getGraphics()->end();
-
-	// Draw game
 	// Draw HUD
+	structs::Vertex hud[6];
+	hud[0].pos = DirectX::XMFLOAT3( -1.f, 1.f, 0.f );
+	hud[0].tex = DirectX::XMFLOAT2( 0.f, 0.f );
+	hud[1].pos = DirectX::XMFLOAT3( 1.f, 1.f, 0.f );
+	hud[1].tex = DirectX::XMFLOAT2( 1.f, 0.f );
+	hud[2].pos = DirectX::XMFLOAT3( -1.f, -1.f, 0.f );
+	hud[2].tex = DirectX::XMFLOAT2( 0.f, 1.f );
+	hud[3].pos = DirectX::XMFLOAT3( 1.f, 1.f, 0.f );
+	hud[3].tex = DirectX::XMFLOAT2( 1.f, 0.f );
+	hud[4].pos = DirectX::XMFLOAT3( 1.f, -1.f, 0.f );
+	hud[4].tex = DirectX::XMFLOAT2( 1.f, 1.f );
+	hud[5].pos = DirectX::XMFLOAT3( -1.f, -1.f, 0.f );
+	hud[5].tex = DirectX::XMFLOAT2( 0.f, 1.f );
+
+	Service::getGraphics()->draw(
+		hud,
+		6,
+		L"hud",
+		(void*)3,
+		(void*)-1,
+		(void*)4
+	);
+
+	Service::getGraphics()->end();
 };
 void Game::_drawElements( const list<Element*>& elements )
 {
@@ -351,10 +405,14 @@ void Game::_drawMeshes( const vector<Mesh*>& meshes )
 		it != meshes.end();
 		++it )
 	{
+	Service::getGraphics()->updateMatrix();
 		Service::getGraphics()->draw(
 			&(*it)->getVertexes()[0],
 			(*it)->getVertexes().size(),
-			(*it)->getTexture()
+			(*it)->getTexture(),
+			(void*)0,
+			(void*)2,
+			(void*)1
 		);
 	}
 };
@@ -369,34 +427,22 @@ void Game::update( const BulletAction& action, void* params )
 	case BULLET_REFLECTED:
 		_bulletReflected = true;
 		break;
-	case BULLET_DEATH:
-		_bulletsMutex.lock();
+	/*case BULLET_DEATH:
 		Element* el = (Element*)params;
+		_bulletsMutex.lock();
 		//delete params;
 		_bullets.remove( (Element*)params );
 		_bulletsMutex.unlock();
-		break;
+		break;*/
 	}
 };
 void Game::action( const Action& action )
 {
 	_actionsQueue.push( action );
 };
-void Game::MoveLeft( void )
+void Game::move( const Direction& dir, bool moving )
 {
-	_moves[LEFT] = true;
-};
-void Game::MoveRight( void )
-{
-	_moves[RIGHT] = true;
-};
-void Game::MoveUp( void )
-{
-	_moves[UP] = true;
-};
-void Game::MoveDown( void )
-{
-	_moves[DOWN] = true;
+	_moves[dir] = moving;
 };
 void Game::SwapForm( void )
 {
@@ -404,20 +450,4 @@ void Game::SwapForm( void )
 Hope* Game::_getPlayer( void )
 {
 	return _player;
-};
-void shield::Game::MoveUpUp( void )
-{
-	_moves[UP] = false;
-};
-void shield::Game::MoveDownUp( void )
-{
-	_moves[DOWN] = false;
-};
-void shield::Game::MoveRightUp( void )
-{
-	_moves[RIGHT] = false;
-};
-void shield::Game::MoveLeftUp( void )
-{
-	_moves[LEFT] = false;
 };

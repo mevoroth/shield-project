@@ -13,7 +13,14 @@ namespace settings {
 		const int BASE_LIFE = 3;
 	};
 	namespace game {
+		const int WIDTH = 5;
+		const int HEIGHT = 5;
+	};
+	namespace system {
 		const char WINDOW[] = "Shield";
+		const int WIDTH = 1024;
+		const int HEIGHT = 768;
+		const float RATIO = (float)WIDTH/HEIGHT;
 	};
 };
 };

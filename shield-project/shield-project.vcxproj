@@ -89,13 +89,13 @@
     <ClCompile Include="game\actions\DashLeft.cpp" />
     <ClCompile Include="game\actions\DashRight.cpp" />
     <ClCompile Include="game\actions\MoveDown.cpp" />
-    <ClCompile Include="game\actions\MoveDownUp.cpp" />
+    <ClCompile Include="game\actions\StopDown.cpp" />
     <ClCompile Include="game\actions\MoveLeft.cpp" />
-    <ClCompile Include="game\actions\MoveLeftUp.cpp" />
+    <ClCompile Include="game\actions\StopLeft.cpp" />
     <ClCompile Include="game\actions\MoveRight.cpp" />
-    <ClCompile Include="game\actions\MoveRightUp.cpp" />
+    <ClCompile Include="game\actions\StopRight.cpp" />
     <ClCompile Include="game\actions\MoveUp.cpp" />
-    <ClCompile Include="game\actions\MoveUpUp.cpp" />
+    <ClCompile Include="game\actions\StopUp.cpp" />
     <ClCompile Include="game\actions\Shield.cpp" />
     <ClCompile Include="game\actions\Shoot.cpp" />
     <ClCompile Include="game\actions\Slash.cpp" />
@@ -142,13 +142,13 @@
     <ClInclude Include="game\actions\DashLeft.h" />
     <ClInclude Include="game\actions\DashRight.h" />
     <ClInclude Include="game\actions\MoveDown.h" />
-    <ClInclude Include="game\actions\MoveDownUp.h" />
+    <ClInclude Include="game\actions\StopDown.h" />
     <ClInclude Include="game\actions\MoveLeft.h" />
-    <ClInclude Include="game\actions\MoveLeftUp.h" />
+    <ClInclude Include="game\actions\StopLeft.h" />
     <ClInclude Include="game\actions\MoveRight.h" />
-    <ClInclude Include="game\actions\MoveRightUp.h" />
+    <ClInclude Include="game\actions\StopRight.h" />
     <ClInclude Include="game\actions\MoveUp.h" />
-    <ClInclude Include="game\actions\MoveUpUp.h" />
+    <ClInclude Include="game\actions\StopUp.h" />
     <ClInclude Include="game\actions\Shield.h" />
     <ClInclude Include="game\actions\Shoot.h" />
     <ClInclude Include="game\actions\Slash.h" />
@@ -208,24 +208,37 @@
     <ClInclude Include="structs\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="testgs.hlsl">
+    <FxCompile Include="resources\shaders\geometry\testgs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">GS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="testvs.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
-    </FxCompile>
-    <FxCompile Include="testps.hlsl">
+    <FxCompile Include="resources\shaders\pixel\direct.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\shaders\pixel\testps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="resources\shaders\vertex\direct.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\shaders\vertex\testvs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

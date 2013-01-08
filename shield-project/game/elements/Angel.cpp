@@ -1,6 +1,7 @@
 #include "Angel.h"
 
 #include "..\..\Service.h"
+#include "BulletFactory.h"
 
 using namespace shield;
 using namespace shield::game;
@@ -13,12 +14,13 @@ Angel::Angel(
 )
 	: Ship(
 		p,
-		dir,
+		structs::Vector3(0.f, 0.f, 0.f),
 		Service::getMeshLoader()->load("resources\\meshes\\AlphaEnemy.fbx"),
 		hp,
 		maxHp
 	)
 {
+	srand(time(0));
 };
 void Angel::update( LONGLONG elapsedTime )
 {
@@ -38,9 +40,16 @@ bool Angel::_collide(
 	float dy = p.y - bullet.y;
 	float dz = p.z - bullet.z;
 
-	return dx*dx + dz*dz + dy*dy < 8;
+	return dx*dx + dz*dz + dy*dy < 16;
 };
 std::list<Element*> Angel::shoot() const
 {
-	return std::list<Element*>();
+	std::list<Element*> bullets;
+	if ( rand() < 0.005f*RAND_MAX )
+	{
+		bullets.push_back(
+			BulletFactory::getAngelBullet(getPosition())
+		);
+	}
+	return bullets;
 };

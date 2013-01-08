@@ -39,9 +39,13 @@ int game::Ship::getHpMax( void ) const
 };
 void game::Ship::damage( int damage )
 {
-	_hp -= damage;
-	if ( _hp <= 0 )
+	if ( _hp > 0 )
 	{
 		//Service::getEventsManager()->notify( HOPE_DEATH, this );
+		_hp -= damage;
 	}
+};
+bool game::Ship::isDead() const
+{
+	return _hp == 0;
 };

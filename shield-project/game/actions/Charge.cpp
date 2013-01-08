@@ -8,5 +8,5 @@ Charge::Charge( Game* g )
 };
 void Charge::call()
 {
-	_game->Action( Game::Action::CHARGE );
+	_game->action( Game::Action::CHARGE );
 };

@@ -25,8 +25,18 @@ namespace services {
 		 * @param[in] Vertexes
 		 * @param[in] Vertexes count
 		 * @param[in] Texture
+		 * @param[in] Vertex shader
+		 * @param[in] Geometry shader
+		 * @param[in] Pixel shader
 		 */
-		virtual void draw( const Vertex[], int, const wchar_t* ) = 0;
+		virtual void draw(
+			const Vertex[],
+			int,
+			const wchar_t*,
+			void*,
+			void*,
+			void*
+		) = 0;
 		/**
 		 * Look at
 		 * @param[in] Eye X
@@ -52,6 +62,7 @@ namespace services {
 		 * @param[in] Position plan éloigné
 		 */
 		virtual void setPerspective( float, float, float, float ) = 0;
+		virtual void updateMatrix() = 0;
 	};
 };
 };

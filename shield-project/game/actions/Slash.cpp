@@ -8,5 +8,5 @@ Slash::Slash( Game* g )
 };
 void Slash::call()
 {
-	_game->Action( Game::Action::SLASH );
+	_game->action( Game::Action::SLASH );
 };

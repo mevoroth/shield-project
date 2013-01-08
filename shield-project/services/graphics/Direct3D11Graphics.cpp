@@ -22,12 +22,15 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 	_initDeviceAndSwapChain();
 	_initRenderTarget();
 	_initViewport();
+	_setBlendState();
 	// TODO: REMOVE SHADERS
 	ID3D10Blob* vertexShader = 0;
 	ID3D10Blob* pixelShader = 0;
 	ID3D10Blob* geometryShader = 0;
+	ID3D10Blob* directVertex = 0;
+	ID3D10Blob* directPixel = 0;
 	ID3D10Blob* errors = 0;
-	HRESULT hr = D3DCompileFromFile( L"testvs.hlsl", 0, 0, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
+	HRESULT hr = D3DCompileFromFile( L"resources\\shaders\\vertex\\testvs.hlsl", 0, 0, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
 	if ( FAILED(hr) )
 	{
 		int strsize = errors->GetBufferSize();
@@ -40,14 +43,16 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 		0,
 		sizeof(WVPMatrix)
 	);
-	hr = D3DCompileFromFile( L"testps.hlsl", 0, 0, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &pixelShader, &errors );
+	
+	hr = D3DCompileFromFile( L"resources\\shaders\\pixel\\testps.hlsl", 0, 0, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &pixelShader, &errors );
 	if ( FAILED(hr) )
 	{
 		char* str = (char*)errors->GetBufferPointer();
 		throw "Erreur";
 	}
 	loadShader<ID3D11PixelShader>(1, pixelShader);
-	hr = D3DCompileFromFile( L"testgs.hlsl", 0, 0, "GS", "gs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &geometryShader, &errors );
+	
+	hr = D3DCompileFromFile( L"resources\\shaders\\geometry\\testgs.hlsl", 0, 0, "GS", "gs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &geometryShader, &errors );
 	if ( FAILED(hr) )
 	{
 		int strsize = errors->GetBufferSize();
@@ -55,6 +60,24 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 		throw "Erreur";
 	}
 	loadShader<ID3D11GeometryShader>(2, geometryShader);
+	
+	hr = D3DCompileFromFile( L"resources\\shaders\\vertex\\direct.hlsl", 0, 0, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &directVertex, &errors );
+	if ( FAILED(hr) )
+	{
+		int strsize = errors->GetBufferSize();
+		std::string str = (char*)errors->GetBufferPointer();
+		throw "Erreur";
+	}
+	loadShader<ID3D11VertexShader>(3, directVertex);
+
+	hr = D3DCompileFromFile( L"resources\\shaders\\pixel\\direct.hlsl", 0, 0, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &directPixel, &errors );
+	if ( FAILED(hr) )
+	{
+		int strsize = errors->GetBufferSize();
+		std::string str = (char*)errors->GetBufferPointer();
+		throw "Erreur";
+	}
+	loadShader<ID3D11PixelShader>(4, directPixel);
 };
 services::Direct3D11Graphics::~Direct3D11Graphics( void )
 {
@@ -73,16 +96,20 @@ void services::Direct3D11Graphics::end( void )
 {
 	_swapChain->Present(0, 0);
 };
-void services::Direct3D11Graphics::draw( const Vertex vertexes[],
-										int vertexesSize,
-										const wchar_t* texture )
+void services::Direct3D11Graphics::draw(
+	const Vertex vertexes[],
+	int vertexesSize,
+	const wchar_t* texture,
+	void* vertex,
+	void* geometry,
+	void* pixel
+)
 {
 	ID3D11Buffer* vertexBuffer;
-	WVPMatrix mat;
 	ID3D11ShaderResourceView* texResource;
 	
 	loadTexture( texture, texResource );
-	setShaderResource( 1, 0, texResource );
+	setShaderResource( (UINT16)pixel, 0, texResource );
 
 	D3D11_SAMPLER_DESC samplerDesc;
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -98,16 +125,22 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 	samplerDesc.BorderColor[3] = 0.f;
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	setSamplerState( 1, 0, samplerDesc );
+	setSamplerState( (UINT16)pixel, 0, samplerDesc );
 
-	useShader<ID3D11VertexShader>(0);
-	useShader<ID3D11PixelShader>(1);
-	useShader<ID3D11GeometryShader>(2);
+	if ( vertex >= 0 )
+	{
+		useShader<ID3D11VertexShader>( (UINT16)vertex );
+	}
+	if ( geometry >= 0 )
+	{
+		useShader<ID3D11GeometryShader>( (UINT16)geometry );
+	}
+	if ( pixel >= 0 )
+	{
+		useShader<ID3D11PixelShader>( (UINT16)pixel );
+	}
 
 	_createVertexBuffer( vertexes, vertexesSize, vertexBuffer );
-
-	mat.mat = _projectionMatrix*_viewMatrix;
-	updateConstantBuffer( 0, 0, &mat );
 
 	_deviceContext->IASetPrimitiveTopology(
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
@@ -118,6 +151,12 @@ void services::Direct3D11Graphics::draw( const Vertex vertexes[],
 
 	// Clean
 	vertexBuffer->Release();
+};
+void services::Direct3D11Graphics::updateMatrix()
+{
+	WVPMatrix mat;
+	mat.mat = _projectionMatrix*_viewMatrix;
+	updateConstantBuffer( 0, 0, &mat );
 };
 void services::Direct3D11Graphics::loadTexture(
 	const wchar_t* texture,
@@ -224,7 +263,7 @@ void services::Direct3D11Graphics::setCamera(
 )
 {
 	_viewMatrix = DirectX::XMMatrixTranspose(
-		DirectX::XMMatrixLookAtLH(
+		DirectX::XMMatrixLookAtRH(
 			DirectX::XMVectorSet( eyeX, eyeY, eyeZ, 0.f ),
 			DirectX::XMVectorSet( atX, atY, atZ, 0.f ),
 			DirectX::XMVectorSet( upX, upY, upZ, 0.f )
@@ -236,7 +275,7 @@ void services::Direct3D11Graphics::setPerspective(
 )
 {
 	_projectionMatrix = DirectX::XMMatrixTranspose(
-		DirectX::XMMatrixPerspectiveFovLH(
+		DirectX::XMMatrixPerspectiveFovRH(
 			fovAngleY, ratio, nearZ, farZ
 		)
 	);
@@ -697,8 +736,8 @@ void services::Direct3D11Graphics::_initRenderTarget( void )
 	buffer->Release();
 
 	D3D11_TEXTURE2D_DESC tex2DDesc;
-	tex2DDesc.Width = 1920;
-	tex2DDesc.Height = 1080;
+	tex2DDesc.Width = WIDTH;
+	tex2DDesc.Height = HEIGHT;
 	tex2DDesc.MipLevels = 1;
 	tex2DDesc.ArraySize = 1;
 	tex2DDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -739,6 +778,26 @@ void services::Direct3D11Graphics::_initViewport( void )
 		1,
 		&viewport
 	);
+};
+void services::Direct3D11Graphics::_setBlendState( void )
+{
+	D3D11_BLEND_DESC blendDesc;
+	blendDesc.AlphaToCoverageEnable = false;
+	blendDesc.IndependentBlendEnable = false;
+	blendDesc.RenderTarget[0].BlendEnable = true;
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	ID3D11BlendState* blendState;
+	const float blendFactor[4] = {0.f, 0.f, 0.f, 0.f};
+
+	_device->CreateBlendState( &blendDesc, &blendState );
+	_deviceContext->OMSetBlendState( blendState, blendFactor, 0xffffffff );
 };
 IDXGIFactory* services::Direct3D11Graphics::_getFactory( void )
 {

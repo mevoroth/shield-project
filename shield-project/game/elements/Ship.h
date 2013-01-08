@@ -41,6 +41,7 @@ namespace game {
 		int getHpMax( void ) const;
 		int getHp( void ) const;
 		virtual void damage( int );
+		bool isDead() const;
 
 	private:
 		int _maxHp;

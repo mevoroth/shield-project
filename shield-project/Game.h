@@ -23,10 +23,6 @@ namespace shield
 	public:
 		enum Action
 		{
-			MOVE_LEFT,
-			MOVE_RIGHT,
-			MOVE_UP,
-			MOVE_DOWN,
 			/**
 			 * Déplacement rapide (forme mecha)
 			 */
@@ -53,7 +49,7 @@ namespace shield
 			 */
 			SHIELD
 		};
-		enum
+		enum Direction
 		{
 			UP = 0,
 			DOWN = 1,
@@ -73,17 +69,10 @@ namespace shield
 		/**
 		 * Déplacement (forme mecha)
 		 */
-		void MoveLeft( void );
-		void MoveRight( void );
-		void MoveUp( void );
-		void MoveDown( void );
+		void move( const Direction&, bool );
 		/**
-		 * Déplacement (forme mecha) stop
+		 * Action
 		 */
-		void MoveLeftUp( void );
-		void MoveRightUp( void );
-		void MoveUpUp( void );
-		void MoveDownUp( void );
 		void action( const Action& );
 		/**
 		 * Switch entre forme mecha et forme vaisseau
@@ -97,6 +86,8 @@ namespace shield
 		Hope* _player;
 		std::list<Element*> _elements;
 		std::list<Element*> _bullets;
+		std::list<boost::mutex> _elementsMutexes;
+		std::list<boost::mutex> _bulletsMutexes;
 		std::queue<Action> _actionsQueue;
 		LARGE_INTEGER _lastTick;
 		bool _moves[4];
@@ -123,6 +114,7 @@ namespace shield
 		void _updateElements( LONGLONG, std::list<Element*>& );
 		void _resolveCollisions( std::list<Element*>&, std::list<Element*>& );
 	};
+	bool death_elements( const Element* );
 };
 
 #endif

@@ -8,5 +8,5 @@ MoveRight::MoveRight( Game* g )
 };
 void MoveRight::call()
 {
-	_game->MoveRight();
+	_game->move( Game::Direction::RIGHT, true );
 };

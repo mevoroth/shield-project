@@ -19,15 +19,13 @@ Element* BulletFactory::getLaserBeamBulletLv0( const Point& spawn )
 	{
 		throw;
 	}
-	LaserBeamBullet* bullet = new LaserBeamBullet(
+	return new LaserBeamBullet(
 		spawn,
 		structs::Vector3(0.f, 2.f, 0.f),
 		1,
 		1,
 		settings::weapons::LASER_BEAM_LV0
 	);
-	Service::getEventsManager()->bind( BULLET_DEATH, _g );
-	return bullet;
 };
 Element* BulletFactory::getLaserBeamBulletLv1( const Point& spawn )
 {
@@ -71,4 +69,17 @@ Element* BulletFactory::getLaserBeamBulletLvMax( const Point& spawn )
 		settings::weapons::LASER_BEAM_LVMAX
 	);
 };
-
+Element* BulletFactory::getAngelBullet( const structs::Point& spawn )
+{
+	if ( _g == 0 )
+	{
+		throw;
+	}
+	return new LaserBeamBullet(
+		spawn,
+		structs::Vector3(0.f, -2.f, 0.f),
+		1,
+		1,
+		settings::weapons::LASER_BEAM_LV0
+	);
+};

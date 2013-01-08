@@ -8,5 +8,5 @@ Shield::Shield( Game* g )
 };
 void Shield::call()
 {
-	_game->Action( Game::Action::SHIELD );
+	_game->action( Game::Action::SHIELD );
 };

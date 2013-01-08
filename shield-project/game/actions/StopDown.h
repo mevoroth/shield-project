@@ -1,5 +1,5 @@
-#ifndef _MOVERIGHTUP_H_
-#define _MOVERIGHTUP_H_
+#ifndef _STOPDOWN_H_
+#define _STOPDOWN_H_
 
 #include "..\..\services\controls\Action.h"
 #include "..\..\Game.h"
@@ -9,10 +9,10 @@ using namespace shield;
 namespace shield {
 namespace game {
 namespace actions {
-	class MoveRightUp : public services::Action
+	class StopDown : public services::Action
 	{
 	public:
-		MoveRightUp( Game* );
+		StopDown( Game* );
 		void call();
 
 	private:

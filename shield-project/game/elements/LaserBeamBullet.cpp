@@ -35,8 +35,10 @@ bool game::LaserBeamBullet::hit( const Element& p ) const
 		spawn.y + diff,
 		spawn.z
 	);*/
+	int beamdy = (getDirection().dy > 0 ? 1 : -1);
+	int shipdy = (p.getDirection().dy > 0 ? 1 : -1);
 	// Collision
-	return getDirection().dy < 0 && _collide( getPosition(), p.getPosition() );
+	return beamdy != shipdy && _collide( getPosition(), p.getPosition() );
 };
 bool game::LaserBeamBullet::_collide(
 	const structs::Point& bullet,
@@ -49,15 +51,19 @@ bool game::LaserBeamBullet::_collide(
 	// Vérifie si l'objet est dans le rayon et
 	// si l'objet se trouve dans la longueur du laser
 	// TODO: Check optimisation multiplication vs comparaison
-	return dx*dx + dz*dz < _ray*_ray
-		&& dy*dy < _length*_length;
+	return dx*dx + dz*dz < /*_ray*_ray*/9
+		&& dy*dy < /*_length*_length*/25;
 };
 void game::LaserBeamBullet::update( LONGLONG elapsedTime )
 {
 	Element::update( elapsedTime );
-	_elapsedTime += 1;
-	if ( _elapsedTime >= 20 )
+	if ( _elapsedTime < 100 )
 	{
-		Service::getEventsManager()->notify( BULLET_DEATH, this );
+		//Service::getEventsManager()->notify( BULLET_DEATH, this );
+		++_elapsedTime;
 	}
+};
+bool game::LaserBeamBullet::isDead() const
+{
+	return _elapsedTime == 100;
 };

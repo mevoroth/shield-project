@@ -33,6 +33,7 @@ vector<Mesh*> FbxMeshLoader::load( const string& filename )
 	if ( mesh == _cache.end() )
 	{
 		_createMeshes( filename, meshes );
+		_normalize( meshes );
 		_cache.insert(
 			pair<string, vector<Mesh*>>(
 				filename,
@@ -46,6 +47,46 @@ vector<Mesh*> FbxMeshLoader::load( const string& filename )
 	}
 
 	return _clone( meshes );
+};
+void FbxMeshLoader::_normalize( vector<Mesh*>& meshes )
+{
+	float xmin = std::numeric_limits<float>::infinity();
+	float xmax = -xmin;
+	float ymin = xmin;
+	float ymax = xmax;
+	float zmin = xmin;
+	float zmax = xmax;
+
+	for ( vector<Mesh*>::const_iterator mesh = meshes.begin();
+		mesh != meshes.end();
+		++mesh )
+	{
+		vector<structs::Vertex> vertexes = (*mesh)->getVertexes();
+		for ( vector<structs::Vertex>::const_iterator vertex = vertexes.begin();
+			vertex != vertexes.end();
+			++vertex )
+		{
+			xmin = min( xmin, vertex->pos.x );
+			ymin = min( ymin, vertex->pos.y );
+			zmin = min( zmin, vertex->pos.z );
+			xmax = max( xmax, vertex->pos.x );
+			ymax = max( ymax, vertex->pos.y );
+			zmax = max( zmax, vertex->pos.z );
+		}
+	}
+	xmin = abs( xmin );
+	ymin = abs( ymin );
+	zmin = abs( zmin );
+	xmax = abs( xmax ) + xmin;
+	ymax = abs( ymax ) + ymin;
+	zmax = abs( zmax ) + zmin;
+	xmax = max( max(xmax, ymax), zmax );
+	for ( vector<Mesh*>::iterator mesh = meshes.begin();
+		mesh != meshes.end();
+		++mesh )
+	{
+		((FbxMesh*)*mesh)->normalize( xmax, structs::Point(xmin, ymin, zmin) );
+	}
 };
 vector<Mesh*> FbxMeshLoader::_clone( const vector<Mesh*>& meshes )
 {

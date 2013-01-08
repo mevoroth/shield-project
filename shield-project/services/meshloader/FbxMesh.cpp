@@ -33,6 +33,17 @@ void FbxMesh::setTexture( wchar_t* texture )
 {
 	_texture = texture;
 };
+void FbxMesh::normalize( float max, const structs::Point& min )
+{
+	for ( std::vector<structs::Vertex>::iterator vertex = _vertexes.begin();
+		vertex != _vertexes.end();
+		++vertex )
+	{
+		vertex->pos.x = (vertex->pos.x + min.x)/(max*2.5f);
+		vertex->pos.y = (vertex->pos.y + min.y)/(max*2.5f);
+		vertex->pos.z = (vertex->pos.z + min.z)/(max*2.5f);
+	}
+};
 FbxMesh& FbxMesh::operator+=( const structs::Vector3& p )
 {
 	for ( std::vector<structs::Vertex>::iterator it = _vertexes.begin();

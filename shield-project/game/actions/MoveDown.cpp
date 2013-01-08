@@ -8,5 +8,5 @@ MoveDown::MoveDown( Game* g )
 };
 void MoveDown::call()
 {
-	_game->MoveDown();
+	_game->move( Game::Direction::DOWN, true );
 };

@@ -26,6 +26,7 @@ namespace game {
 		LaserBeamBullet( const LaserBeamBullet& );
 		bool hit( const Element& ) const;
 		std::vector<Mesh*> getMesh();
+		bool isDead() const;
 		void update( LONGLONG );
 
 	private:

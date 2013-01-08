@@ -69,6 +69,7 @@ namespace services {
 		);
 
 		vector<Mesh*> _clone( const vector<Mesh*>& );
+		void _normalize( vector<Mesh*>& );
 	};
 };
 };

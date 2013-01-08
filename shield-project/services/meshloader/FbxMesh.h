@@ -20,6 +20,7 @@ namespace services {
 		);
 		void setTexture( wchar_t* );
 		FbxMesh& operator+=( const structs::Vector3& );
+		void normalize( float, const structs::Point& );
 
 	private:
 		//std::vector<int> _indices;

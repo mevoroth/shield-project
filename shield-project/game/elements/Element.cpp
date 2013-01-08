@@ -1,4 +1,5 @@
 #include "Element.h"
+#include <limits>
 
 using namespace shield;
 
@@ -19,7 +20,7 @@ game::Element::Element(
 			_position.x,
 			_position.y,
 			_position.z
-			);
+		);
 	}
 };
 game::Element::Element(

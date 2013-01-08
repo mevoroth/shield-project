@@ -8,5 +8,5 @@ Burst::Burst( Game* g )
 };
 void Burst::call( void )
 {
-	_game->Action( Game::Action::BURST );
+	_game->action( Game::Action::BURST );
 };
