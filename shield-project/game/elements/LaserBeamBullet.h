@@ -24,7 +24,7 @@ namespace game {
 			int
 		);
 		LaserBeamBullet( const LaserBeamBullet& );
-		bool hit( const Element& ) const;
+		bool hit( const Element& );
 		std::vector<Mesh*> getMesh();
 		bool isDead() const;
 		void update( LONGLONG );
@@ -43,6 +43,7 @@ namespace game {
 		 */
 		int _damage;
 		LONGLONG _elapsedTime;
+		bool _hit;
 
 		/**
 		 * Vérifie la collision

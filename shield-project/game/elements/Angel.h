@@ -8,9 +8,9 @@ namespace game {
 	class Angel : public Ship
 	{
 	public:
-		Angel( const structs::Point&, const structs::Vector3&, int, int );
+		Angel( const structs::Point&, int, int );
 		void update( LONGLONG );
-		bool hit( const Element& ) const;
+		bool hit( const Element& );
 		std::vector<Mesh*> getMesh();
 		std::list<Element*> shoot() const;
 

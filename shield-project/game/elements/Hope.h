@@ -49,7 +49,7 @@ namespace game {
 			int
 		);
 		void update( LONGLONG );
-		bool hit( const Element& ) const;
+		bool hit( const Element& );
 		void move( const structs::Vector3& );
 		void dash( const structs::Vector3& );
 		void charge( void );
@@ -74,6 +74,8 @@ namespace game {
 		int _accumulator;
 		int _currentWeapon;
 		vector<Weapon*> _weapons;
+
+		bool _isOutOfBounds( const structs::Point&, const structs::Vector3& );
 	};
 };
 };

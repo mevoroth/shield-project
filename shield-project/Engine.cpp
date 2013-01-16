@@ -46,7 +46,7 @@ void Engine::run()
 
 	g.create();
 	boost::thread th( callable );
-
+	
 	MSG msg = {0};
 	while ( msg.message != WM_QUIT )
 	{
@@ -56,6 +56,7 @@ void Engine::run()
 			DispatchMessage( &msg );
 		}
 	}
+	/*system("pause");*/
 };
 void Engine::_registerClass()
 {
@@ -127,6 +128,7 @@ LRESULT CALLBACK shield::WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM
 
 		default:
 			return DefWindowProc( hWnd, message, wParam, lParam );
+			break;
     }
 
     return 0;

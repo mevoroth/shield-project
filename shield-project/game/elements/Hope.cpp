@@ -43,16 +43,31 @@ void Hope::update( LONGLONG elapsedTime )
 		_energy = getMaxEnergy();
 	}*/
 };
-bool Hope::hit( const Element& e ) const
+bool Hope::hit( const Element& e )
 {
 	return false;
 };
+bool Hope::_isOutOfBounds(
+	const structs::Point& p,
+	const structs::Vector3& d
+)
+{
+	float x = p.x + d.dx;
+	float z = p.z + d.dz;
+	return x < 0.f || x >= 4.f
+		|| z < 0.f || z >= 4.f;
+};
 void Hope::move( const structs::Vector3& direction )
 {
+	structs::Point p = getPosition();
+	if ( _isOutOfBounds(p, direction) )
+	{
+		return;
+	}
 	_moveTo( getPosition() + direction );
-	std::vector<Mesh*> mesh = getMesh();
-	for ( std::vector<Mesh*>::iterator it = mesh.begin();
-		it != mesh.end();
+	std::vector<Mesh*>* mesh = getMesh();
+	for ( std::vector<Mesh*>::iterator it = mesh->begin();
+		it != mesh->end();
 		++it )
 	{
 		**it += direction;

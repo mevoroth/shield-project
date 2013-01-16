@@ -15,16 +15,14 @@ using namespace shield::game;
 
 Element* ElementFactory::getAngel(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
 {
-	return new Angel( p, dir, hp, maxHp );
+	return new Angel( p, hp, maxHp );
 };
 Element* ElementFactory::getArchangel(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -34,7 +32,6 @@ Element* ElementFactory::getArchangel(
 };
 Element* ElementFactory::getRuler(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -44,7 +41,6 @@ Element* ElementFactory::getRuler(
 };
 Element* ElementFactory::getAuthority(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -54,7 +50,6 @@ Element* ElementFactory::getAuthority(
 };
 Element* ElementFactory::getVirtue(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -64,7 +59,6 @@ Element* ElementFactory::getVirtue(
 };
 Element* ElementFactory::getDominion(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -74,7 +68,6 @@ Element* ElementFactory::getDominion(
 };
 Element* ElementFactory::getThrone(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -84,7 +77,6 @@ Element* ElementFactory::getThrone(
 };
 Element* ElementFactory::getCherub(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -94,7 +86,6 @@ Element* ElementFactory::getCherub(
 };
 Element* ElementFactory::getSeraph(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )

@@ -61,9 +61,9 @@ void FbxMeshLoader::_normalize( vector<Mesh*>& meshes )
 		mesh != meshes.end();
 		++mesh )
 	{
-		vector<structs::Vertex> vertexes = (*mesh)->getVertexes();
-		for ( vector<structs::Vertex>::const_iterator vertex = vertexes.begin();
-			vertex != vertexes.end();
+		vector<structs::Vertex>* vertexes = (*mesh)->getVertexes();
+		for ( vector<structs::Vertex>::const_iterator vertex = vertexes->begin();
+			vertex != vertexes->end();
 			++vertex )
 		{
 			xmin = min( xmin, vertex->pos.x );
@@ -80,12 +80,16 @@ void FbxMeshLoader::_normalize( vector<Mesh*>& meshes )
 	xmax = abs( xmax ) + xmin;
 	ymax = abs( ymax ) + ymin;
 	zmax = abs( zmax ) + zmin;
-	xmax = max( max(xmax, ymax), zmax );
+	ymax = max( max(xmax, ymax), zmax );
 	for ( vector<Mesh*>::iterator mesh = meshes.begin();
 		mesh != meshes.end();
 		++mesh )
 	{
-		((FbxMesh*)*mesh)->normalize( xmax, structs::Point(xmin, ymin, zmin) );
+		((FbxMesh*)*mesh)->normalize(
+			ymax,
+			structs::Vector3(xmin, ymin, zmin),
+			structs::Vector3((ymax - xmax)/2.f, 0.f, (ymax - zmax)/2.f)
+		);
 	}
 };
 vector<Mesh*> FbxMeshLoader::_clone( const vector<Mesh*>& meshes )

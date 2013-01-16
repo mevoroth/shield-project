@@ -12,15 +12,16 @@ game::Element::Element(
 	_direction( direction ),
 	_meshes( meshes )
 {
+	structs::Vector3 v(
+		x,
+		y,
+		z
+	);
 	for ( std::vector<Mesh*>::iterator it = _meshes.begin();
 		it != _meshes.end();
 		++it )
 	{
-		**it += structs::Vector3(
-			_position.x,
-			_position.y,
-			_position.z
-		);
+		**it += v;
 	}
 };
 game::Element::Element(
@@ -32,15 +33,16 @@ game::Element::Element(
 	_direction( direction ),
 	_meshes( meshes )
 {
+	structs::Vector3 v(
+		p.x,
+		p.y,
+		p.z
+	);
 	for ( std::vector<Mesh*>::iterator it = _meshes.begin();
 		it != _meshes.end();
 		++it )
 	{
-		**it += structs::Vector3(
-			_position.x,
-			_position.y,
-			_position.z
-		);
+		**it += v;
 	}
 };
 game::Element::Element( const game::Element& e )
@@ -62,6 +64,10 @@ void game::Element::update( LONGLONG elapsedTime )
 		**it += _direction;
 	}
 };
+bool game::Element::isVisible( const structs::Point& p )
+{
+	return _position.y < p.y + 50.f && p.y < _position.y;
+};
 structs::Point game::Element::getPosition( void ) const
 {
 	return _position;
@@ -74,7 +80,7 @@ void game::Element::_moveTo( const structs::Point& p )
 {
 	_position = p;
 };
-std::vector<Mesh*> game::Element::getMesh()
+std::vector<Mesh*>* game::Element::getMesh()
 {
-	return _meshes;
+	return &_meshes;
 };

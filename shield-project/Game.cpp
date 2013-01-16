@@ -95,11 +95,13 @@ Game::~Game( void )
 {
 	// TODO: Dealloc
 };
-void Game::load( const string& save )
+void Game::load( const string& save, const string& map )
 {
 	//_player = s;
 
 	ifstream savegame( save + ".sav", ifstream::in );
+	ifstream mapfile( map + ".map", ifstream::in );
+
 	if ( !savegame )
 	{
 		throw;
@@ -111,11 +113,12 @@ void Game::load( const string& save )
 
 	// Read player
 	savegame >> hope;
-	hope.x = 0.f;
-	hope.y = 0.f;
-	hope.z = 0.f;
-	savegame.read((char*)&elementsCount, sizeof(int));
-
+	savegame.close();
+	
+	hope.x = 2.f;
+	hope.y = 2.f;
+	hope.z = 2.f;
+	
 	_player = new Hope(
 		structs::Point( hope.x, hope.y, hope.z ),
 		structs::Vector3( hope.dx, hope.dy, hope.dz ),
@@ -127,10 +130,12 @@ void Game::load( const string& save )
 	_player->setCurrentWeapon( hope.currentWeapon );
 	//TODO: Add Weapon
 	
+	mapfile.read((char*)&elementsCount, sizeof(int));
+
 	for ( int i = 0; i < elementsCount; ++i )
 	{
 		// Read other elements
-		savegame >> element;
+		mapfile >> element;
 
 		Element* el;
 		
@@ -139,7 +144,6 @@ void Game::load( const string& save )
 		case savegame::ElementBlock::ANGEL:
 			el = ElementFactory::getAngel(
 				structs::Point( element.x, element.y, element.z ),
-				structs::Vector3( element.dx, element.dy, element.dz ),
 				element.hp,
 				element.hpmax
 			);
@@ -172,12 +176,13 @@ void Game::load( const string& save )
 
 		_elements.push_back( el );
 	}
-	savegame.close();
+	mapfile.close();
 };
 void Game::create()
 {
 	load(
-		"save"
+		"save",
+		"map"
 	);
 };
 void Game::reset( void )
@@ -212,22 +217,13 @@ void Game::run( void )
 };
 void Game::_input( LONGLONG elapsedTime )
 {
-	if ( _moves[UP] )
-	{
-		_getPlayer()->move( structs::Vector3(0.f, 0.f, .01f) );
-	}
-	if ( _moves[DOWN] )
-	{
-		_getPlayer()->move( structs::Vector3(0.f, 0.f, -.01f) );
-	}
-	if ( _moves[LEFT] )
-	{
-		_getPlayer()->move( structs::Vector3(-.005f, 0.f, 0.f) );
-	}
-	if ( _moves[RIGHT] )
-	{
-		_getPlayer()->move( structs::Vector3(.005f, 0.f, 0.f) );
-	}
+	_getPlayer()->move(
+		structs::Vector3(
+			(_moves[LEFT] ? -.1f : 0.f) + (_moves[RIGHT] ? .1f : 0.f),
+			0.f,
+			(_moves[UP] ? .1f : 0.f) + (_moves[DOWN] ? -.1f : 0.f)
+		)
+	);
 
 	while ( !_actionsQueue.empty() )
 	{
@@ -284,7 +280,7 @@ void Game::_update( LONGLONG elapsedTime )
 	_resolveCollisions( player, _elements );
 
 	// Shooting
-	for ( list<Element*>::iterator it = _elements.begin();
+	/*for ( list<Element*>::iterator it = _elements.begin();
 		it != _elements.end();
 		++it )
 	{
@@ -295,7 +291,7 @@ void Game::_update( LONGLONG elapsedTime )
 			els
 		);
 		_bulletsMutex.unlock();
-	}
+	}*/
 
 	// Clean
 	_elements.remove_if( death_elements );
@@ -344,20 +340,22 @@ void Game::_updateElements( LONGLONG elapsedTime, list<Element*>& elements )
 void Game::_draw( LONGLONG elapsedTime )
 {
 	structs::Point p = _getPlayer()->getPosition();
+	float camera = 10.f/(tan(DirectX::XM_PI/36.f)*3);
 	Service::getGraphics()->setCamera(
-		0.f, -5.f + p.y, 0.f,
-		0.f, 0.f + p.y, 0.f,
+		2.5f, -camera + p.y, 2.5f,
+		2.5f, 0.f + p.y, 2.5f,
 		0.f, 0.f, 1.f
 	);
+
 	Service::getGraphics()->setPerspective(
-		DirectX::XM_PIDIV4/4,
+		DirectX::XM_PI/18.f,
 		settings::system::RATIO,
-		1.f,
-		500.f
+		0.01f,
+		50.f
 	);
 
 	Service::getGraphics()->begin();
-	_drawMeshes( _getPlayer()->getMesh() );
+	_drawMeshes( *_getPlayer()->getMesh() );
 	_drawElements( _elements );
 
 	_bulletsMutex.lock();
@@ -392,23 +390,28 @@ void Game::_draw( LONGLONG elapsedTime )
 };
 void Game::_drawElements( const list<Element*>& elements )
 {
+	Point player = _getPlayer()->getPosition();
 	for ( list<Element*>::const_iterator it = elements.begin();
 		it != elements.end();
 		++it )
 	{
-		_drawMeshes( (*it)->getMesh() );
+		if ( (*it)->isVisible(player) )
+		{
+			_drawMeshes( *(*it)->getMesh() );
+		}
 	}
 };
 void Game::_drawMeshes( const vector<Mesh*>& meshes )
 {
+	Service::getGraphics()->updateMatrix();
 	for ( vector<Mesh*>::const_iterator it = meshes.begin();
 		it != meshes.end();
 		++it )
 	{
-	Service::getGraphics()->updateMatrix();
+		std::vector<structs::Vertex>* vertexes = (*it)->getVertexes();
 		Service::getGraphics()->draw(
-			&(*it)->getVertexes()[0],
-			(*it)->getVertexes().size(),
+			&(*vertexes)[0],
+			vertexes->size(),
 			(*it)->getTexture(),
 			(void*)0,
 			(void*)2,

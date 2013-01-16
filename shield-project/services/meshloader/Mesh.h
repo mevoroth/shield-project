@@ -10,7 +10,7 @@ namespace services {
 	class Mesh
 	{
 	public:
-		virtual std::vector<structs::Vertex> getVertexes() const = 0;
+		virtual std::vector<structs::Vertex>* getVertexes() = 0;
 		virtual const wchar_t* getTexture() const = 0;
 		virtual Mesh& operator+=( const structs::Vector3& ) = 0;
 		/*virtual const std::vector<int>& getIndices() const = 0;*/

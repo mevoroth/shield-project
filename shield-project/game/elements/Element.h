@@ -29,11 +29,12 @@ namespace game {
 		~Element();
 		structs::Point getPosition( void ) const;
 		structs::Vector3 getDirection( void ) const;
-		std::vector<Mesh*> getMesh();
+		std::vector<Mesh*>* getMesh();
 		
 		virtual void update( LONGLONG );
+		virtual bool isVisible( const structs::Point& );
+		virtual bool hit( const Element& ) = 0;
 		virtual bool isDead() const = 0;
-		virtual bool hit( const Element& ) const = 0;
 
 	protected:
 		void _moveTo( const structs::Point& );

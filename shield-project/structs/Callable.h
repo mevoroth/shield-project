@@ -6,7 +6,7 @@ namespace structs {
 	class Callable
 	{
 	public:
-		virtual void operator()() = 0;
+		virtual void operator()( void ) = 0;
 	};
 };
 };

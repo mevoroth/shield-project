@@ -61,7 +61,7 @@ namespace shield
 		/**
 		 * Charger une partie
 		 */
-		void load( const std::string& );
+		void load( const std::string&, const std::string& );
 		void create( void );
 		void run( void );
 		void reset( void );
@@ -113,6 +113,8 @@ namespace shield
 		void _drawMeshes( const std::vector<Mesh*>& );
 		void _updateElements( LONGLONG, std::list<Element*>& );
 		void _resolveCollisions( std::list<Element*>&, std::list<Element*>& );
+		void _resolvePlayerCollision( void );
+		void _resolveGameBorderCollision( float& ) const;
 	};
 	bool death_elements( const Element* );
 };

@@ -8,7 +8,6 @@ using namespace shield::game;
 
 Angel::Angel(
 	const structs::Point& p,
-	const structs::Vector3& dir,
 	int hp,
 	int maxHp
 )
@@ -24,9 +23,9 @@ Angel::Angel(
 };
 void Angel::update( LONGLONG elapsedTime )
 {
-	Element::update( elapsedTime );
+	//Element::update( elapsedTime );
 };
-bool Angel::hit( const Element& p ) const
+bool Angel::hit( const Element& p )
 {
 	// Collision
 	return /*getDirection().dy < 0 && */_collide( getPosition(), p.getPosition() );

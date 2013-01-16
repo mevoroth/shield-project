@@ -97,6 +97,10 @@ namespace services {
 		DirectX::XMMATRIX _viewMatrix;
 		DirectX::XMMATRIX _projectionMatrix;
 
+		UINT16 currentVertex;
+		UINT16 currentGeometry;
+		UINT16 currentPixel;
+
 		void _createVertexBuffer( const Vertex[], int, ID3D11Buffer*& );
 		//void _createMatrixBuffer(  );
 		IDXGIFactory* _getFactory( void );

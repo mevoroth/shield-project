@@ -127,16 +127,19 @@ void services::Direct3D11Graphics::draw(
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	setSamplerState( (UINT16)pixel, 0, samplerDesc );
 
-	if ( vertex >= 0 )
+	if ( (UINT16)vertex != currentVertex && vertex >= 0 )
 	{
+		currentVertex = (UINT16)vertex;
 		useShader<ID3D11VertexShader>( (UINT16)vertex );
 	}
-	if ( geometry >= 0 )
+	if ( (UINT16)geometry != currentGeometry && geometry >= 0 )
 	{
+		currentGeometry = (UINT16)geometry;
 		useShader<ID3D11GeometryShader>( (UINT16)geometry );
 	}
-	if ( pixel >= 0 )
+	if ( /*(UINT16)pixel != currentPixel &&*/ pixel >= 0 )
 	{
+		//currentPixel = (UINT16)pixel;
 		useShader<ID3D11PixelShader>( (UINT16)pixel );
 	}
 
