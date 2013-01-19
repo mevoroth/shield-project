@@ -10,7 +10,8 @@ namespace shield
 	{
 	public:
 		Engine( HINSTANCE, int );
-		void run();
+		void run( void );
+		void close( void );
 
 	private:
 		HWND _window;

@@ -10,6 +10,7 @@
 #include "Game.h"
 #include "Settings.h"
 #include "structs\GameCallable.h"
+#include "structs\EndGameCallable.h"
 
 #include <boost\thread.hpp>
 
@@ -36,17 +37,20 @@ Engine::Engine( HINSTANCE hInst, int nCmdShow )
 	Service::setEventsManager( new services::EventsManager() );
 };
 
-void Engine::run()
+void Engine::run( void )
 {
 	// Load menu
 
 	// New game
 	Game g;
-	structs::GameCallable callable = structs::GameCallable( &g );
+	structs::GameCallable runthread = structs::GameCallable( &g );
+	structs::EndGameCallable endthread = structs::EndGameCallable(&g, this);
 
 	g.create();
-	boost::thread th( callable );
-	
+
+	boost::thread rungame( runthread );
+	boost::thread endgame( endthread );
+
 	MSG msg = {0};
 	while ( msg.message != WM_QUIT )
 	{
@@ -56,7 +60,10 @@ void Engine::run()
 			DispatchMessage( &msg );
 		}
 	}
-	/*system("pause");*/
+};
+void Engine::close( void )
+{
+	PostMessage( _window, WM_QUIT, 0, 0 );
 };
 void Engine::_registerClass()
 {

@@ -14,7 +14,7 @@ Angel::Angel(
 	: Ship(
 		p,
 		structs::Vector3(0.f, 0.f, 0.f),
-		Service::getMeshLoader()->load("resources\\meshes\\AlphaEnemy.fbx"),
+		Service::getMeshLoader()->load("resources\\meshes\\angel.fbx"),
 		hp,
 		maxHp
 	)

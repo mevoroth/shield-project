@@ -52,8 +52,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>D3D11.lib;DXGI.lib;D3dcompiler.lib;fbxsdk-2013.3d.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files\boost\boost_1_51_0\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\lib\vs2010\x86;C:\Users\skana\Documents\Visual Studio 2012\Libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>D3D11.lib;DXGI.lib;D3dcompiler.lib;fbxsdk-2013.3d.lib;dxguid.lib;FW1FontWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\boost\boost_1_51_0\lib;C:\Program Files\Autodesk\FBX\FBX SDK\2013.3\lib\vs2010\x86;C:\Users\skana\Documents\Visual Studio 2012\Projects\shield-project\shield-project\libs\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <Profile>true</Profile>
     </Link>
@@ -130,6 +130,7 @@
     <ClCompile Include="services\meshloader\FbxMesh.cpp" />
     <ClCompile Include="services\meshloader\FbxMeshLoader.cpp" />
     <ClCompile Include="services\sound\NullSound.cpp" />
+    <ClCompile Include="structs\EndGameCallable.cpp" />
     <ClCompile Include="structs\GameCallable.cpp" />
     <ClCompile Include="structs\Point.cpp" />
     <ClCompile Include="structs\Vector3.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="services\sound\NullSound.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="structs\Callable.h" />
+    <ClInclude Include="structs\EndGameCallable.h" />
     <ClInclude Include="structs\GameCallable.h" />
     <ClInclude Include="structs\NotifyCallable.h" />
     <ClInclude Include="structs\Point.h" />

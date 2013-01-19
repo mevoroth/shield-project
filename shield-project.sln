@@ -11,6 +11,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tutorial02", "..\Direct3D T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shield-tools", "..\shield-tools\shield-tools\shield-tools.csproj", "{F75834A9-28E0-44AE-A75C-8074596B65AB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mapper", "..\shield-tools\mapper\mapper.vcxproj", "{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{044AA72A-B166-4583-93C1-11C807CD9BE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,8 +127,29 @@ Global
 		{F75834A9-28E0-44AE-A75C-8074596B65AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F75834A9-28E0-44AE-A75C-8074596B65AB}.Release|Win32.ActiveCfg = Release|Any CPU
 		{F75834A9-28E0-44AE-A75C-8074596B65AB}.Release|x64.ActiveCfg = Release|Any CPU
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Debug|Win32.Build.0 = Debug|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Debug|x64.ActiveCfg = Debug|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Profile|Any CPU.ActiveCfg = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Profile|Mixed Platforms.ActiveCfg = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Profile|Mixed Platforms.Build.0 = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Profile|Win32.ActiveCfg = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Profile|Win32.Build.0 = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Profile|x64.ActiveCfg = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Release|Any CPU.ActiveCfg = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Release|Win32.ActiveCfg = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Release|Win32.Build.0 = Release|Win32
+		{0208F87E-4C03-4F78-9D5A-4CCDA2FD1D27}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

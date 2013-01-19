@@ -11,13 +11,16 @@
 #include "savegame\ElementBlock.h"
 #include "savegame\HopeBlock.h"
 
+#include "services\graphics\Direct3D11Graphics.h"
+
 using namespace std;
 using namespace shield;
 using namespace shield::services;
 using namespace shield::savegame;
 
 Game::Game( void )
-	: _bulletReflected( false )
+	: _bulletReflected( false ),
+	_end( false )
 {
 	ActionFactory::setGame( this );
 	BulletFactory::setGame( this );
@@ -176,6 +179,10 @@ void Game::load( const string& save, const string& map )
 
 		_elements.push_back( el );
 	}
+
+	//mapfile >> _triggerEnd;
+	_triggerEnd = 20.f;
+
 	mapfile.close();
 };
 void Game::create()
@@ -203,7 +210,7 @@ void Game::run( void )
 	_lastTick.QuadPart = overhead.QuadPart;
 	overhead.QuadPart -= tick.QuadPart;
 
-	while ( true )
+	while ( !_end )
 	{
 		QueryPerformanceCounter( &tick );
 		elapsedTime = (tick.QuadPart - _lastTick.QuadPart)/freq.QuadPart;
@@ -214,6 +221,11 @@ void Game::run( void )
 
 		_lastTick.QuadPart = tick.QuadPart;
 	}
+};
+bool Game::end( void )
+{
+	_end = (_getPlayer()->getPosition().y > _triggerEnd);
+	return _end;
 };
 void Game::_input( LONGLONG elapsedTime )
 {
@@ -355,6 +367,7 @@ void Game::_draw( LONGLONG elapsedTime )
 	);
 
 	Service::getGraphics()->begin();
+
 	_drawMeshes( *_getPlayer()->getMesh() );
 	_drawElements( _elements );
 
@@ -385,6 +398,7 @@ void Game::_draw( LONGLONG elapsedTime )
 		(void*)-1,
 		(void*)4
 	);
+	((Direct3D11Graphics*)Service::getGraphics())->write( "trololo" );
 
 	Service::getGraphics()->end();
 };

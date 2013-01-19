@@ -17,12 +17,18 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 	_device( 0 ),
 	_deviceContext( 0 ),
 	_swapChain( 0 ),
-	_renderTarget( 0 )
+	_renderTarget( 0 ),
+	_currentGeometry( -1 ),
+	_currentVertex( -1 )
 {
 	_initDeviceAndSwapChain();
 	_initRenderTarget();
 	_initViewport();
 	_setBlendState();
+
+	HRESULT hr = FW1CreateFactory(FW1_VERSION, &_fw1Factory);
+	hr = _fw1Factory->CreateFontWrapper(_device, L"Arial", &_fontWrapper);
+
 	// TODO: REMOVE SHADERS
 	ID3D10Blob* vertexShader = 0;
 	ID3D10Blob* pixelShader = 0;
@@ -30,7 +36,7 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 	ID3D10Blob* directVertex = 0;
 	ID3D10Blob* directPixel = 0;
 	ID3D10Blob* errors = 0;
-	HRESULT hr = D3DCompileFromFile( L"resources\\shaders\\vertex\\testvs.hlsl", 0, 0, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
+	hr = D3DCompileFromFile( L"resources\\shaders\\vertex\\testvs.hlsl", 0, 0, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS|D3DCOMPILE_DEBUG, 0, &vertexShader, &errors );
 	if ( FAILED(hr) )
 	{
 		int strsize = errors->GetBufferSize();
@@ -81,6 +87,8 @@ services::Direct3D11Graphics::Direct3D11Graphics( HWND window )
 };
 services::Direct3D11Graphics::~Direct3D11Graphics( void )
 {
+	_fontWrapper->Release();
+	_fw1Factory->Release();
 	_factory->Release();
 	_swapChain->Release();
 	_device->Release();
@@ -127,21 +135,17 @@ void services::Direct3D11Graphics::draw(
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	setSamplerState( (UINT16)pixel, 0, samplerDesc );
 
-	if ( (UINT16)vertex != currentVertex && vertex >= 0 )
+	if ( (UINT16)vertex != _currentVertex && vertex >= 0 )
 	{
-		currentVertex = (UINT16)vertex;
+		_currentVertex = (UINT16)vertex;
 		useShader<ID3D11VertexShader>( (UINT16)vertex );
 	}
-	if ( (UINT16)geometry != currentGeometry && geometry >= 0 )
+	if ( (UINT16)geometry != _currentGeometry && geometry >= 0 )
 	{
-		currentGeometry = (UINT16)geometry;
+		_currentGeometry = (UINT16)geometry;
 		useShader<ID3D11GeometryShader>( (UINT16)geometry );
 	}
-	if ( /*(UINT16)pixel != currentPixel &&*/ pixel >= 0 )
-	{
-		//currentPixel = (UINT16)pixel;
-		useShader<ID3D11PixelShader>( (UINT16)pixel );
-	}
+	useShader<ID3D11PixelShader>( (UINT16)pixel );
 
 	_createVertexBuffer( vertexes, vertexesSize, vertexBuffer );
 
@@ -160,6 +164,18 @@ void services::Direct3D11Graphics::updateMatrix()
 	WVPMatrix mat;
 	mat.mat = _projectionMatrix*_viewMatrix;
 	updateConstantBuffer( 0, 0, &mat );
+};
+void services::Direct3D11Graphics::write( const std::string& text )
+{
+	_fontWrapper->DrawString(
+		_deviceContext,
+		L"TROLOLO",
+		20.f,
+		50.f,
+		50.f,
+		0xff0099ff,
+		FW1_RESTORESTATE
+	);
 };
 void services::Direct3D11Graphics::loadTexture(
 	const wchar_t* texture,

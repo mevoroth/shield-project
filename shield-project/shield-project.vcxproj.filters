@@ -215,6 +215,9 @@
     <ClCompile Include="structs\VertexAddCallable.cpp">
       <Filter>shield.structs</Filter>
     </ClCompile>
+    <ClCompile Include="structs\EndGameCallable.cpp">
+      <Filter>shield.structs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Service.h">
@@ -434,6 +437,9 @@
       <Filter>shield.game\actions</Filter>
     </ClInclude>
     <ClInclude Include="structs\VertexAddCallable.h">
+      <Filter>shield.structs</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\EndGameCallable.h">
       <Filter>shield.structs</Filter>
     </ClInclude>
   </ItemGroup>

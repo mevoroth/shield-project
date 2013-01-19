@@ -16,7 +16,7 @@ Hope::Hope(
 	: Ship(
 		p,
 		structs::Vector3(0.f, .1f, 0.f),
-		Service::getMeshLoader()->load("resources/meshes/AlphaHope.fbx"),
+		Service::getMeshLoader()->load("resources/meshes/hope.fbx"),
 		hp,
 		hpmax
 	),

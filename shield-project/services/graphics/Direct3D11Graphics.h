@@ -6,6 +6,8 @@
 #include "IGraphics.h"
 #include "..\..\Settings.h"
 
+#include "..\..\libs\FW1FontWrapper.h"
+
 using namespace std;
 
 namespace shield {
@@ -62,6 +64,7 @@ namespace services {
 		template<class Shader> void loadShader( UINT16, ID3D10Blob* );
 		template<class Shader> void useShader( UINT16 );
 		void updateMatrix();
+		void write( const std::string& );
 
 	private:
 		HWND _window;
@@ -93,13 +96,14 @@ namespace services {
 		ID3D11InputLayout* _inputLayout;
 		ID3D11Buffer* _matrixBuffer;
 		ID3D11DepthStencilView* _depthStencilView;
+		IFW1Factory* _fw1Factory;
+		IFW1FontWrapper* _fontWrapper;
 		DirectX::XMMATRIX _worldMatrix;
 		DirectX::XMMATRIX _viewMatrix;
 		DirectX::XMMATRIX _projectionMatrix;
 
-		UINT16 currentVertex;
-		UINT16 currentGeometry;
-		UINT16 currentPixel;
+		UINT16 _currentVertex;
+		UINT16 _currentGeometry;
 
 		void _createVertexBuffer( const Vertex[], int, ID3D11Buffer*& );
 		//void _createMatrixBuffer(  );

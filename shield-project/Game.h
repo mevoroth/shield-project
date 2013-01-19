@@ -82,7 +82,10 @@ namespace shield
 		void update( const HopeAction&, void* );
 		void update( const BulletAction&, void* );
 
+		bool end( void );
+
 	private:
+		bool _end;
 		Hope* _player;
 		std::list<Element*> _elements;
 		std::list<Element*> _bullets;
@@ -93,6 +96,8 @@ namespace shield
 		bool _moves[4];
 		boost::mutex _elementsMutex;
 		boost::mutex _bulletsMutex;
+
+		float _triggerEnd;
 
 		bool _bulletReflected;
 
