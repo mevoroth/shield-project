@@ -17,6 +17,7 @@ using namespace std;
 using namespace shield;
 using namespace shield::services;
 using namespace shield::savegame;
+using namespace DirectX;
 
 Game::Game( void )
 	: _bulletReflected( false ),
@@ -292,7 +293,7 @@ void Game::_update( LONGLONG elapsedTime )
 	_resolveCollisions( player, _elements );
 
 	// Shooting
-	/*for ( list<Element*>::iterator it = _elements.begin();
+	for ( list<Element*>::iterator it = _elements.begin();
 		it != _elements.end();
 		++it )
 	{
@@ -303,7 +304,7 @@ void Game::_update( LONGLONG elapsedTime )
 			els
 		);
 		_bulletsMutex.unlock();
-	}*/
+	}
 
 	// Clean
 	_elements.remove_if( death_elements );
@@ -352,7 +353,7 @@ void Game::_updateElements( LONGLONG elapsedTime, list<Element*>& elements )
 void Game::_draw( LONGLONG elapsedTime )
 {
 	structs::Point p = _getPlayer()->getPosition();
-	float camera = 10.f/(tan(DirectX::XM_PI/36.f)*3);
+	float camera = 10.f/(tan(XM_PI/36.f)*3);
 	Service::getGraphics()->setCamera(
 		2.5f, -camera + p.y, 2.5f,
 		2.5f, 0.f + p.y, 2.5f,
@@ -360,13 +361,84 @@ void Game::_draw( LONGLONG elapsedTime )
 	);
 
 	Service::getGraphics()->setPerspective(
-		DirectX::XM_PI/18.f,
+		XM_PI/18.f,
 		settings::system::RATIO,
 		0.01f,
-		50.f
+		5000.f
 	);
 
 	Service::getGraphics()->begin();
+	
+	XMFLOAT3 null_v( 0.f, 0.f, 0.f );
+
+	XMFLOAT3 cube[8];
+	cube[0] = XMFLOAT3(-10.f, -10.f + p.y, 10.f);
+	cube[1] = XMFLOAT3(10.f, -10.f + p.y, 10.f);
+	cube[2] = XMFLOAT3(10.f, -10.f + p.y, -10.f);
+	cube[3] = XMFLOAT3(-10.f, -10.f + p.y, -10.f);
+	cube[4] = XMFLOAT3(-10.f, 10.f + p.y, 10.f);
+	cube[5] = XMFLOAT3(10.f, 10.f + p.y, 10.f);
+	cube[6] = XMFLOAT3(10.f, 10.f + p.y, -10.f);
+	cube[7] = XMFLOAT3(-10.f, 10.f + p.y, -10.f);
+
+	XMFLOAT2 square[4];
+	square[0] = XMFLOAT2( 0.f, 0.f );
+	square[1] = XMFLOAT2( 4.f, 0.f );
+	square[2] = XMFLOAT2( 4.f, 4.f );
+	square[3] = XMFLOAT2( 0.f, 4.f );
+
+	// Draw stars
+	structs::Vertex space[30] = {
+		/*{ cube[0], null_v, square[0] },
+		{ cube[1], null_v, square[1] },
+		{ cube[2], null_v, square[2] },
+		{ cube[0], null_v, square[0] },
+		{ cube[1], null_v, square[1] },
+		{ cube[3], null_v, square[3] },*/
+		
+		{ cube[5], null_v, square[0] },
+		{ cube[1], null_v, square[1] },
+		{ cube[2], null_v, square[2] },
+		{ cube[5], null_v, square[0] },
+		{ cube[1], null_v, square[1] },
+		{ cube[6], null_v, square[3] },
+		
+		{ cube[4], null_v, square[0] },
+		{ cube[5], null_v, square[1] },
+		{ cube[6], null_v, square[2] },
+		{ cube[4], null_v, square[0] },
+		{ cube[6], null_v, square[1] },
+		{ cube[7], null_v, square[3] },
+		
+		{ cube[0], null_v, square[0] },
+		{ cube[4], null_v, square[1] },
+		{ cube[7], null_v, square[2] },
+		{ cube[0], null_v, square[0] },
+		{ cube[7], null_v, square[1] },
+		{ cube[3], null_v, square[3] },
+		
+		{ cube[0], null_v, square[0] },
+		{ cube[1], null_v, square[1] },
+		{ cube[5], null_v, square[2] },
+		{ cube[0], null_v, square[0] },
+		{ cube[5], null_v, square[1] },
+		{ cube[4], null_v, square[3] },
+		
+		{ cube[7], null_v, square[0] },
+		{ cube[6], null_v, square[1] },
+		{ cube[2], null_v, square[2] },
+		{ cube[7], null_v, square[0] },
+		{ cube[2], null_v, square[1] },
+		{ cube[3], null_v, square[3] }
+	};
+	Service::getGraphics()->draw(
+		space,
+		30,
+		L"stars",
+		(void*)0,
+		(void*)-1,
+		(void*)4
+	);
 
 	_drawMeshes( *_getPlayer()->getMesh() );
 	_drawElements( _elements );
@@ -377,18 +449,18 @@ void Game::_draw( LONGLONG elapsedTime )
 
 	// Draw HUD
 	structs::Vertex hud[6];
-	hud[0].pos = DirectX::XMFLOAT3( -1.f, 1.f, 0.f );
-	hud[0].tex = DirectX::XMFLOAT2( 0.f, 0.f );
-	hud[1].pos = DirectX::XMFLOAT3( 1.f, 1.f, 0.f );
-	hud[1].tex = DirectX::XMFLOAT2( 1.f, 0.f );
-	hud[2].pos = DirectX::XMFLOAT3( -1.f, -1.f, 0.f );
-	hud[2].tex = DirectX::XMFLOAT2( 0.f, 1.f );
-	hud[3].pos = DirectX::XMFLOAT3( 1.f, 1.f, 0.f );
-	hud[3].tex = DirectX::XMFLOAT2( 1.f, 0.f );
-	hud[4].pos = DirectX::XMFLOAT3( 1.f, -1.f, 0.f );
-	hud[4].tex = DirectX::XMFLOAT2( 1.f, 1.f );
-	hud[5].pos = DirectX::XMFLOAT3( -1.f, -1.f, 0.f );
-	hud[5].tex = DirectX::XMFLOAT2( 0.f, 1.f );
+	hud[0].pos = XMFLOAT3( -1.f, 1.f, 0.f );
+	hud[0].tex = XMFLOAT2( 0.f, 0.f );
+	hud[1].pos = XMFLOAT3( 1.f, 1.f, 0.f );
+	hud[1].tex = XMFLOAT2( 1.f, 0.f );
+	hud[2].pos = XMFLOAT3( -1.f, -1.f, 0.f );
+	hud[2].tex = XMFLOAT2( 0.f, 1.f );
+	hud[3].pos = XMFLOAT3( 1.f, 1.f, 0.f );
+	hud[3].tex = XMFLOAT2( 1.f, 0.f );
+	hud[4].pos = XMFLOAT3( 1.f, -1.f, 0.f );
+	hud[4].tex = XMFLOAT2( 1.f, 1.f );
+	hud[5].pos = XMFLOAT3( -1.f, -1.f, 0.f );
+	hud[5].tex = XMFLOAT2( 0.f, 1.f );
 
 	Service::getGraphics()->draw(
 		hud,
