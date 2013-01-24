@@ -353,7 +353,7 @@ void Game::_updateElements( LONGLONG elapsedTime, list<Element*>& elements )
 void Game::_draw( LONGLONG elapsedTime )
 {
 	structs::Point p = _getPlayer()->getPosition();
-	float camera = 10.f/(tan(XM_PI/36.f)*3);
+	float camera = 4.5f*settings::system::WIDTH/(tan(XM_PI/36.f)*settings::system::HEIGHT*2.f);
 	Service::getGraphics()->setCamera(
 		2.5f, -camera + p.y, 2.5f,
 		2.5f, 0.f + p.y, 2.5f,
@@ -448,29 +448,7 @@ void Game::_draw( LONGLONG elapsedTime )
 	_bulletsMutex.unlock();
 
 	// Draw HUD
-	structs::Vertex hud[6];
-	hud[0].pos = XMFLOAT3( -1.f, 1.f, 0.f );
-	hud[0].tex = XMFLOAT2( 0.f, 0.f );
-	hud[1].pos = XMFLOAT3( 1.f, 1.f, 0.f );
-	hud[1].tex = XMFLOAT2( 1.f, 0.f );
-	hud[2].pos = XMFLOAT3( -1.f, -1.f, 0.f );
-	hud[2].tex = XMFLOAT2( 0.f, 1.f );
-	hud[3].pos = XMFLOAT3( 1.f, 1.f, 0.f );
-	hud[3].tex = XMFLOAT2( 1.f, 0.f );
-	hud[4].pos = XMFLOAT3( 1.f, -1.f, 0.f );
-	hud[4].tex = XMFLOAT2( 1.f, 1.f );
-	hud[5].pos = XMFLOAT3( -1.f, -1.f, 0.f );
-	hud[5].tex = XMFLOAT2( 0.f, 1.f );
-
-	Service::getGraphics()->draw(
-		hud,
-		6,
-		L"hud",
-		(void*)3,
-		(void*)-1,
-		(void*)4
-	);
-	((Direct3D11Graphics*)Service::getGraphics())->write( "trololo" );
+	_drawHud();
 
 	Service::getGraphics()->end();
 };
@@ -504,6 +482,92 @@ void Game::_drawMeshes( const vector<Mesh*>& meshes )
 			(void*)1
 		);
 	}
+};
+void Game::_drawHud( void )
+{
+	// Draw HUD
+	structs::Vertex hud[6];
+	hud[0].pos = XMFLOAT3( -1.f, 1.f, 0.01f );
+	hud[0].tex = XMFLOAT2( 0.f, 0.f );
+	hud[1].pos = XMFLOAT3( 1.f, 1.f, 0.01f );
+	hud[1].tex = XMFLOAT2( 1.f, 0.f );
+	hud[2].pos = XMFLOAT3( -1.f, -1.f, 0.01f );
+	hud[2].tex = XMFLOAT2( 0.f, 1.f );
+	hud[3].pos = XMFLOAT3( 1.f, 1.f, 0.01f );
+	hud[3].tex = XMFLOAT2( 1.f, 0.f );
+	hud[4].pos = XMFLOAT3( 1.f, -1.f, 0.01f );
+	hud[4].tex = XMFLOAT2( 1.f, 1.f );
+	hud[5].pos = XMFLOAT3( -1.f, -1.f, 0.01f );
+	hud[5].tex = XMFLOAT2( 0.f, 1.f );
+	
+	Service::getGraphics()->draw(
+		hud,
+		6,
+		L"hud",
+		(void*)3,
+		(void*)-1,
+		(void*)4
+	);
+
+	// Draw Shield
+	float px = 325.f/(settings::system::WIDTH*6.f);
+	float mx = -px;
+	float py = 425.f/(settings::system::HEIGHT*6.f);
+	float my = -py;
+	px -= 0.70f;
+	mx -= 0.70f;
+	py -= 0.70f;
+	my -= 0.70f;
+	structs::Vertex shield[6];
+	shield[0].pos = XMFLOAT3( mx, py, 0.f );
+	shield[0].tex = XMFLOAT2( 0.f, 0.f );
+	shield[1].pos = XMFLOAT3( px, py, 0.f );
+	shield[1].tex = XMFLOAT2( 1.f, 0.f );
+	shield[2].pos = XMFLOAT3( mx, my, 0.f );
+	shield[2].tex = XMFLOAT2( 0.f, 1.f );
+	shield[3].pos = XMFLOAT3( px, py, 0.f );
+	shield[3].tex = XMFLOAT2( 1.f, 0.f );
+	shield[4].pos = XMFLOAT3( px, my, 0.f );
+	shield[4].tex = XMFLOAT2( 1.f, 1.f );
+	shield[5].pos = XMFLOAT3( mx, my, 0.f );
+	shield[5].tex = XMFLOAT2( 0.f, 1.f );
+
+	Service::getGraphics()->draw(
+		shield,
+		6,
+		L"Logo_Shield_Disabled",
+		(void*)3,
+		(void*)-1,
+		(void*)4
+	);
+
+	// Draw Charge
+	px += 500.f/(settings::system::WIDTH*3.f);
+	mx += 500.f/(settings::system::WIDTH*3.f);
+	structs::Vertex charge[6];
+	charge[0].pos = XMFLOAT3( mx, py, 0.f );
+	charge[0].tex = XMFLOAT2( 0.f, 0.f );
+	charge[1].pos = XMFLOAT3( px, py, 0.f );
+	charge[1].tex = XMFLOAT2( 1.f, 0.f );
+	charge[2].pos = XMFLOAT3( mx, my, 0.f );
+	charge[2].tex = XMFLOAT2( 0.f, 1.f );
+	charge[3].pos = XMFLOAT3( px, py, 0.f );
+	charge[3].tex = XMFLOAT2( 1.f, 0.f );
+	charge[4].pos = XMFLOAT3( px, my, 0.f );
+	charge[4].tex = XMFLOAT2( 1.f, 1.f );
+	charge[5].pos = XMFLOAT3( mx, my, 0.f );
+	charge[5].tex = XMFLOAT2( 0.f, 1.f );
+
+	Service::getGraphics()->draw(
+		charge,
+		6,
+		L"Logo_Charge_Disabled",
+		(void*)3,
+		(void*)-1,
+		(void*)4
+	);
+
+	//((Direct3D11Graphics*)Service::getGraphics())->write( "trololo" );
 };
 void Game::update( const HopeAction& action, void* params )
 {

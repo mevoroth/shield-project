@@ -10,12 +10,15 @@ struct PIn
 float4 PS( PIn input ) : SV_TARGET
 {
 	float4 color = txDiffuse.Sample( samLinear, input.tex );
-	if (color.r == 0.f /*&& color.g == 0.f && color.b == 0.f*/)
+	color.r *= 0.7f;
+	if (color.r == 0.f)
 	{
-		/*color.r = 1.f;
-		color.g = 1.f;
-		color.b = 1.f;*/
 		color.a = 0.f;
+	}
+	else
+	{
+		color.a = (color.r + color.g + color.b)/3.f;
+		//color.a = 0.7f;
 	}
 	return color;
 }

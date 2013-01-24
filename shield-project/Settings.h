@@ -18,8 +18,8 @@ namespace settings {
 	};
 	namespace system {
 		const char WINDOW[] = "Shield";
-		const int WIDTH = 1024;
-		const int HEIGHT = 768;
+		const int WIDTH = 1280;
+		const int HEIGHT = 720;
 		const float RATIO = (float)WIDTH/HEIGHT;
 	};
 };

@@ -116,6 +116,7 @@ namespace shield
 		void _draw( LONGLONG );
 		void _drawElements( const std::list<Element*>& );
 		void _drawMeshes( const std::vector<Mesh*>& );
+		void _drawHud( void );
 		void _updateElements( LONGLONG, std::list<Element*>& );
 		void _resolveCollisions( std::list<Element*>&, std::list<Element*>& );
 		void _resolvePlayerCollision( void );

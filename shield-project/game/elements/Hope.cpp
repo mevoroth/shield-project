@@ -59,18 +59,40 @@ bool Hope::_isOutOfBounds(
 };
 void Hope::move( const structs::Vector3& direction )
 {
+	structs::Vector3 d = direction;
 	structs::Point p = getPosition();
 	if ( _isOutOfBounds(p, direction) )
 	{
-		return;
+		float x = p.x + d.dx;
+		float z = p.z + d.dz;
+		if (x < 0.f)
+		{
+			d.dx = 0.f - p.x;
+		}
+		else if (x >= 4.f)
+		{
+			d.dx = 4.f - p.x;
+		}
+		if (z < 0.f)
+		{
+			d.dz = 0.f - p.z;
+		}
+		else if (z >= 4.f)
+		{
+			d.dz = 4.f - p.z;
+		}
+		if (d.dx == 0.f && d.dz == 0.f)
+		{
+			return;
+		}
 	}
-	_moveTo( getPosition() + direction );
+	_moveTo( getPosition() + d );
 	std::vector<Mesh*>* mesh = getMesh();
 	for ( std::vector<Mesh*>::iterator it = mesh->begin();
 		it != mesh->end();
 		++it )
 	{
-		**it += direction;
+		**it += d;
 	}
 };
 void Hope::dash( const structs::Vector3& direction )
